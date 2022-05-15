@@ -11,8 +11,8 @@ export const getServerSideProps: GetServerSideProps<{data: GetUsersPaginatedQuer
   };
 };
 
-const Home: NextPage<GetUsersPaginatedQuery> = (props) => {
-  console.log({ props });
+const Home: NextPage<{ data: GetUsersPaginatedQuery }> = ({ data }) => {
+  console.log({ data });
   return (
     <>
       <header className="p-4 bg-black text-white mb-3 absolute w-full top-0">
