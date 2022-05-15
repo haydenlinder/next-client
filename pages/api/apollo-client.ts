@@ -1,9 +1,12 @@
 import { ApolloClient, InMemoryCache } from "@apollo/client";
 
+const secret = process.env.HASURA_ADMIN_SECRET || ""
+const uri = process.env.HASURA_URL
+
 const client = new ApolloClient({
-  uri: process.env.LOCAL_HASURA_URL,
+  uri,
   cache: new InMemoryCache(),
-  headers: { "x-hasura-admin-secret": "1234" },
+  headers: { "x-hasura-admin-secret": secret },
 });
 
 export default client;

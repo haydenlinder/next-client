@@ -10,7 +10,7 @@
     "tailwind:build": "touch ./styles/build.css && tailwindcss -o ./styles/build.css --minify",
     "tailwind:watch": "touch ./styles/build.css && tailwindcss -i ./styles/input.css -o ./styles/build.css --watch",
     "generate": "graphql-codegen --config codegen.js",
-    "pretty": "prettier --write ./**/* --skip-unknown"
+    "pretty": "prettier --write ./**/*"
   },
   "dependencies": {
     "@apollo/client": "^3.6.2",
