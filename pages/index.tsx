@@ -5,7 +5,7 @@ import { GetUsersPaginatedQuery } from '../types/generated/graphql'
 
 export const getServerSideProps: GetServerSideProps<{data: GetUsersPaginatedQuery}> = async ({ req, res }) => {
   const { data } = await client.query<GetUsersPaginatedQuery>({ query: GET_USERS });
-  data.users_connection
+
   return {
     props: { data },
   };
