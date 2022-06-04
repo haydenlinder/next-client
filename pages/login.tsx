@@ -4,7 +4,7 @@ import { FormEventHandler } from "react";
 const Home: NextPage = () => {
   const signup: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
-    const response = await fetch("/api/auth/signup");
+    const response = await fetch("/api/session/signup");
     const data = await response.json();
     console.log({ data });
   };

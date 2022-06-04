@@ -1,6 +1,10 @@
 import "../styles/build.css";
-import type { AppProps } from "next/app";
+import type { AppContext, AppInitialProps, AppProps } from "next/app";
 import Head from "next/head";
+import App from "next/app";
+import { getUsers } from "./api/apollo_functions/users";
+import Router from "next/router";
+import { ApolloError } from "@apollo/client";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -22,5 +26,57 @@ function MyApp({ Component, pageProps }: AppProps) {
     </>
   );
 }
+
+const redirect = (res: AppContext['ctx']['res'], location: string) => {
+  if (res) { // server
+    res.writeHead(302, {
+      Location: location
+    }).end();
+
+  } else { // client
+    Router.push(location)
+  }
+}
+
+export const sessionConditionRedirect = async (context: AppContext): Promise<AppInitialProps> => {
+  // these will be available on the server
+  const { req, res } = context.ctx;
+
+  const path = req?.url || context.ctx.pathname;
+  const isProtected = (path !== '/login');
+
+  let isLoggedIn = true;
+
+  try {
+    await getUsers();
+    isLoggedIn = true;
+  } catch (e) {
+    const er: ApolloError = e as ApolloError  
+    if (er.graphQLErrors[0]?.extensions?.code === "access-denied") {
+      isLoggedIn = false;
+    }
+  }
+
+  const appProps = await App.getInitialProps(context)
+  // logged out and requests '/'
+  if (!isLoggedIn && isProtected) {
+    redirect(res, '/login')
+    return appProps
+  }
+  // logged in and requests '/login'
+  else if (isLoggedIn && !isProtected) {
+    redirect(res, '/')
+    return appProps
+  }
+  // they are in the right place
+  else return {
+    pageProps: {
+      appProps
+    },
+  }
+
+}
+
+MyApp.getInitialProps = sessionConditionRedirect
 
 export default MyApp;

@@ -1,26 +1,23 @@
 import type { GetServerSideProps, NextPage } from "next";
-import { GET_USER_BY_EMAIL } from "../graphql/users";
-import client from "./api/apollo-client";
 import {
   GetUserByEmailQuery,
-  GetUserByEmailQueryVariables,
 } from "../types/generated/graphql";
+import { getUsers } from "./api/apollo_functions/users";
 
 export const getServerSideProps: GetServerSideProps<{
-  data: GetUserByEmailQuery;
+  data: GetUserByEmailQuery | null;
 }> = async ({ req, res }) => {
-  const { data } = await client.query<
-    GetUserByEmailQuery,
-    GetUserByEmailQueryVariables
-  >({ query: GET_USER_BY_EMAIL, variables: { _eq: "test@test.com" } });
 
   return {
-    props: { data },
+    props: await getUsers(),
   };
 
 };
 
 const Home: NextPage<{ data: GetUserByEmailQuery }> = ({ data }) => {
+
+  if (!data) return <div>no data</div>
+
   const user = data.users_connection.edges[0].node;
 
   return (
