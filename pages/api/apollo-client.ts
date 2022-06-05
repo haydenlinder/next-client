@@ -1,6 +1,5 @@
 import { ApolloClient, InMemoryCache, from, HttpLink } from "@apollo/client";
 import { onError } from "@apollo/client/link/error";
-import { redirect } from "next/dist/server/api-utils";
 
 const httpLink = new HttpLink({
   uri: process.env.HASURA_URL

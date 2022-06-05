@@ -560,6 +560,15 @@ export type GetUserByIdQueryVariables = Exact<{
 
 export type GetUserByIdQuery = { __typename?: 'query_root', users_connection: { __typename?: 'usersConnection', edges: Array<{ __typename?: 'usersEdge', node: { __typename?: 'users', email: string, id: string, created_at: any, updated_at: any, username: string } }> } };
 
+export type CreateUserMutationVariables = Exact<{
+  email?: InputMaybe<Scalars['String']>;
+  password_hash?: InputMaybe<Scalars['String']>;
+  username?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type CreateUserMutation = { __typename?: 'mutation_root', insert_users_one?: { __typename?: 'users', id: string, email: string, created_at: any, updated_at: any, username: string } | null };
+
 
 export const GetUsersPaginatedDocument = gql`
     query getUsersPaginated($first: Int = 10) {
@@ -615,3 +624,19 @@ export const GetUserByIdDocument = gql`
 }
     `;
 export type GetUserByIdQueryResult = Apollo.QueryResult<GetUserByIdQuery, GetUserByIdQueryVariables>;
+export const CreateUserDocument = gql`
+    mutation createUser($email: String = "", $password_hash: String = "", $username: String = "") {
+  insert_users_one(
+    object: {email: $email, password_hash: $password_hash, username: $username}
+  ) {
+    id
+    email
+    created_at
+    updated_at
+    username
+  }
+}
+    `;
+export type CreateUserMutationFn = Apollo.MutationFunction<CreateUserMutation, CreateUserMutationVariables>;
+export type CreateUserMutationResult = Apollo.MutationResult<CreateUserMutation>;
+export type CreateUserMutationOptions = Apollo.BaseMutationOptions<CreateUserMutation, CreateUserMutationVariables>;

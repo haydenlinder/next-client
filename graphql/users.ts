@@ -51,4 +51,15 @@ query getUserById($_eq: Int = 0) {
       }
     }
   }
+}`;
+
+export const CREATE_USER = gql`
+mutation createUser($email: String = "", $password_hash: String = "", $username: String = "") {
+  insert_users_one(object: {email: $email, password_hash: $password_hash, username: $username}) {
+    id
+    email
+    created_at
+    updated_at
+    username
+  }
 }`
