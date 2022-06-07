@@ -2,10 +2,10 @@ import "../styles/build.css";
 import type { AppContext, AppInitialProps, AppProps } from "next/app";
 import Head from "next/head";
 import App from "next/app";
-import { getUsers } from "./api/apollo_functions/users";
 import Router from "next/router";
 import { ApolloError } from "@apollo/client";
-
+import { getToken, setToken } from "./api/token";
+import cookie from 'cookie'
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
@@ -29,51 +29,88 @@ function MyApp({ Component, pageProps }: AppProps) {
 
 const redirect = (res: AppContext['ctx']['res'], location: string) => {
   if (res) { // server
-    res.writeHead(302, {
+    !res.headersSent && res.writeHead(302, {
       Location: location
     }).end();
-
   } else { // client
     Router.push(location)
   }
 }
 
+const refresh = async (token: string) => {
+  const response = await fetch(process.env.BASE_URL + "/api/session/refresh", { headers: { cookie: cookie.serialize('refresh_token', token) } });
+  const data = await response.json();
+  if (response.status !== 200) return undefined
+  return data;
+};
+
+const auth = async () => {
+  const response = await fetch(process.env.BASE_URL + "/api/session/auth", { headers: { "Authorization": `Bearer ${getToken()}` } });
+  const data = await response.json();
+  if (response.status === 200) return true;
+  return false;
+};
+
 export const sessionConditionRedirect = async (context: AppContext): Promise<AppInitialProps> => {
   // these will be available on the server
   const { req, res } = context.ctx;
+  const cookies = cookie.parse(req?.headers.cookie || "");
+  const refreshToken = cookies.refresh_token
 
   const path = req?.url || context.ctx.pathname;
   const isProtected = (path !== '/login');
 
-  let isLoggedIn = true;
+  let isLoggedIn = false;
 
   try {
-    await getUsers();
-    isLoggedIn = true;
+    isLoggedIn = await auth();
   } catch (e) {
     const er: ApolloError = e as ApolloError  
-    if (er.graphQLErrors[0]?.extensions?.code === "access-denied") {
+    if (er.graphQLErrors?.[0]?.extensions?.code === "access-denied") {
       isLoggedIn = false;
     }
   }
+  let response;
+  if (!isLoggedIn) {
+    // see if we can get a new access token with our refresh token cookie
+    try {
+      response = await refresh(refreshToken);
+      if (response) isLoggedIn = true;
+      setToken(response.data.access_token);
+    } catch (e) {
+      console.log("REFRESH ERROR: ", {e})
+    }
+  } 
 
   const appProps = await App.getInitialProps(context)
   // logged out and requests '/'
   if (!isLoggedIn && isProtected) {
     redirect(res, '/login')
-    return appProps
+    // res?.end();
+    return {
+      pageProps: {
+        appProps
+      },
+    }
   }
   // logged in and requests '/login'
   else if (isLoggedIn && !isProtected) {
     redirect(res, '/')
-    return appProps
+    // res?.end();
+    return {
+      pageProps: {
+        appProps
+      },
+    }
   }
   // they are in the right place
-  else return {
-    pageProps: {
-      appProps
-    },
-  }
+  else {
+    // res?.end();
+    return {
+      pageProps: {
+        appProps
+      },
+    }}
 
 }
 

@@ -31,7 +31,9 @@ export const GET_USER_BY_EMAIL = gql`
           created_at
           email
           updated_at
+          id
           username
+          password_hash
         }
       }
     }

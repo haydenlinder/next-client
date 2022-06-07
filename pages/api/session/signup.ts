@@ -3,10 +3,10 @@ import { createUser, getUserByEmail } from "../apollo_functions/users";
 import bcrypt from 'bcrypt';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  // These better be available
   const b = JSON.parse(req.body)
+  // These better be available
   const {email, password} = b
-  //  Check if there is already a user with that email
+  // Check if there is already a user with that email
   const { data } = await getUserByEmail(email, true)
   // If so, throw an error depending on the verified property
   const user = data?.users_connection?.edges[0]?.node

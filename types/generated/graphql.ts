@@ -404,7 +404,7 @@ export type Users = Node & {
   email: Scalars['String'];
   id: Scalars['ID'];
   is_verified: Scalars['Boolean'];
-  password_hash?: Maybe<Scalars['String']>;
+  password_hash: Scalars['String'];
   updated_at: Scalars['timestamptz'];
   username: Scalars['String'];
 };
@@ -551,7 +551,7 @@ export type GetUserByEmailQueryVariables = Exact<{
 }>;
 
 
-export type GetUserByEmailQuery = { __typename?: 'query_root', users_connection: { __typename?: 'usersConnection', edges: Array<{ __typename?: 'usersEdge', node: { __typename?: 'users', created_at: any, email: string, updated_at: any, username: string } }> } };
+export type GetUserByEmailQuery = { __typename?: 'query_root', users_connection: { __typename?: 'usersConnection', edges: Array<{ __typename?: 'usersEdge', node: { __typename?: 'users', created_at: any, email: string, updated_at: any, id: string, username: string, password_hash: string } }> } };
 
 export type GetUserByIdQueryVariables = Exact<{
   _eq?: InputMaybe<Scalars['Int']>;
@@ -601,7 +601,9 @@ export const GetUserByEmailDocument = gql`
         created_at
         email
         updated_at
+        id
         username
+        password_hash
       }
     }
   }
