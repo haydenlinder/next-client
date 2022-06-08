@@ -571,12 +571,26 @@ Ensure the default browser behavior of the `hidden` attribute.
   padding: 1rem;
 }
 
+.px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.py-2 {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
 .pt-28 {
   padding-top: 7rem;
 }
 
 .pb-96 {
   padding-bottom: 24rem;
+}
+
+.pb-10 {
+  padding-bottom: 2.5rem;
 }
 
 .text-white {

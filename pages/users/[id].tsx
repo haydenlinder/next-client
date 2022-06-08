@@ -1,9 +1,6 @@
 import type { GetServerSideProps, NextPage } from "next";
-import { GET_USER_BY_ID } from "../../graphql/users";
-import client from "../api/apollo-client";
 import {
     GetUserByIdQuery,
-    GetUserByIdQueryVariables,
 } from "../../types/generated/graphql";
 import { ApolloQueryResult } from "@apollo/client";
 import { getUserById } from "../api/apollo_functions/users";
