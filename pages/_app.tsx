@@ -1,7 +1,7 @@
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import Router from "next/router";
-import { ApolloProvider, from, gql, useReactiveVar } from "@apollo/client";
+import { ApolloProvider, from, useReactiveVar } from "@apollo/client";
 import { useEffect, useState } from "react";
 
 import { accessTokenState } from "../token";
@@ -10,7 +10,7 @@ import { Header } from "../components/Header";
 
 import "../styles/build.css";
 
-const baseUrl = typeof window === 'undefined' ? process.env.BASE_URL : ""
+const baseUrl = typeof window === 'undefined' ? "" : window.location.origin
 
 function MyApp({ Component, pageProps }: AppProps) {
   
@@ -31,8 +31,10 @@ const Main = ({ Component, pageProps }: Pick<AppProps, 'Component' | 'pageProps'
     const [loading, setLoading] = useState(true);
     const accessToken = useReactiveVar(accessTokenState);
     console.log({ accessToken })
+    console.log({pageProps})
     useEffect(() => {
       console.log('running');
+      if (accessToken) return;
       // see if we can get a new access token with our refresh token cookie
       (async () => {
         let access_token: string | undefined;
@@ -48,7 +50,7 @@ const Main = ({ Component, pageProps }: Pick<AppProps, 'Component' | 'pageProps'
       client.setLink(from([errorLink, authLink, httpLink]))
       if (!access_token) Router.replace('/login')
     })();
-  }, []);
+  }, [accessToken]);
 
   if (loading) return <div>loading</div>
 
@@ -61,28 +63,11 @@ const Main = ({ Component, pageProps }: Pick<AppProps, 'Component' | 'pageProps'
   )
 }
 
-// const redirect = (res: AppContext['ctx']['res'], location: string) => {
-//   if (res) { // server
-//     !res.headersSent && res.writeHead(302, {
-//       Location: location
-//     }).end();
-//   } else { // client
-//     Router.push(location)
-//   }
-// }
-
 const refresh = async () => {
   const response = await fetch(baseUrl + "/api/session/refresh");
   const data = await response.json();
   if (response.status !== 200) return undefined
   return data;
 };
-
-// const auth = async () => {
-//   const response = await fetch(baseUrl + "/api/session/auth", { headers: { "Authorization": `Bearer ${getToken()}` } });
-//   const data = await response.json();
-//   if (response.status === 200) return true;
-//   return false;
-// };
 
 export default MyApp;

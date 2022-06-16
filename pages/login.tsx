@@ -12,6 +12,9 @@ const Home: NextPage = () => {
   const accessToken = useReactiveVar(accessTokenState)
   console.log('login: ', {accessToken})
   const [isNewUser, setIsNewUser] = useState(true);
+  
+  if (accessToken) Router.replace('/') 
+  
   const signup: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     try {
@@ -22,11 +25,9 @@ const Home: NextPage = () => {
     }
   };
   
-  if (accessToken) Router.replace('/') 
 
   const login: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
-
     try {
       const response = await fetch("/api/session/login", { method: "POST", body: JSON.stringify({ email, password }) });
       const data = await response.json();
@@ -34,7 +35,6 @@ const Home: NextPage = () => {
     } catch (e) {
       console.log("LOGIN ERROR: ", e)
     }
-    
     Router.replace('/')
   };
   
