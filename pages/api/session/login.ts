@@ -8,7 +8,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const { email, password } = b
     // Look for user with the email above
     const { data, error } = await getUserByEmail(email, true)
-
+    console.log("Error finding user: ", {error})
     const user = data?.users_connection?.edges[0]?.node
     // Throw if no user or if they are not verified
     if (!user) return res.status(404).json({ errors: 'No user with that email.' })

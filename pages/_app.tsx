@@ -31,7 +31,7 @@ const Main = ({ Component, pageProps }: Pick<AppProps, 'Component' | 'pageProps'
     const [loading, setLoading] = useState(true);
     const accessToken = useReactiveVar(accessTokenState);
     console.log({ accessToken })
-    console.log({pageProps})
+
     useEffect(() => {
       console.log('running');
       if (accessToken) return;
