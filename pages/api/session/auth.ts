@@ -1,5 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import cookie from 'cookie';
 import jwt from 'jsonwebtoken'
 // This is a hasura auth webhook. See https://hasura.io/docs/latest/graphql/core/auth/authentication/webhook/
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {

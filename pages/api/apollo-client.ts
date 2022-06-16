@@ -1,12 +1,12 @@
 import { ApolloClient, InMemoryCache, from, HttpLink, ApolloLink } from "@apollo/client";
 import { onError } from "@apollo/client/link/error";
-import {getToken} from './token'
+import { accessTokenState } from "../../token";
 
-const httpLink = new HttpLink({
-  uri: process.env.HASURA_URL
+export const httpLink = new HttpLink({
+  uri: process.env.NEXT_PUBLIC_HASURA_URL
 })
 
-const errorLink = onError((e) => {
+export const errorLink = onError((e) => {
   const { graphQLErrors, networkError } = e;
   if (graphQLErrors)
     graphQLErrors.forEach(({ message, locations, path }) =>
@@ -17,15 +17,15 @@ const errorLink = onError((e) => {
   if (networkError) console.log(`[Network error]: ${networkError}`);
 });
 
-const authLink = new ApolloLink((operation, forward) => {
-  operation.setContext({ headers: { authorization: `Bearer ${getToken()}` } });
+export const authLink = new ApolloLink((operation, forward) => {
+  console.log("authLink: ", accessTokenState());
+  accessTokenState() && operation.setContext({ headers: { authorization: `Bearer ${accessTokenState()}` } });
   return forward(operation);
 });
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
   link: from([errorLink, authLink, httpLink])
-  // headers: { "x-hasura-admin-secret": secret },
 });
 
 export default client;

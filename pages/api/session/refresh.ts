@@ -45,6 +45,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
         )
     )
+    res.setHeader(
+        "Set-Cookie",
+        cookie.serialize(
+            'access_token',
+            access_token ,
+            {
+                path: '/',
+                // signed: true,
+                httpOnly: true,
+                // // https only v
+                secure: true,
+                sameSite: 'none'
+            }
+        )
+    )
     // Return access_token to be stored in memory
     // and the user_id for identification
     return res.json({

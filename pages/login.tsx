@@ -1,24 +1,41 @@
+import { useReactiveVar } from "@apollo/client";
 import type { NextPage } from "next";
+import Router from "next/router";
 import React, { FormEventHandler, useState } from "react";
-import { setToken } from "./api/token";
+import { accessTokenState } from "../token";
+
 
 const Home: NextPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const accessToken = useReactiveVar(accessTokenState)
+  console.log('login: ', {accessToken})
   const [isNewUser, setIsNewUser] = useState(true);
-
   const signup: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
-    const response = await fetch("/api/session/signup", { method: "POST", body: JSON.stringify({ email, password }) });
-    const data = await response.json();
+    try {
+      const response = await fetch("/api/session/signup", { method: "POST", body: JSON.stringify({ email, password }) });
+      const data = await response.json();
+    } catch (e) {
+      console.log("SIGNUP ERROR: ", e)
+    }
   };
+  
+  if (accessToken) Router.replace('/') 
 
   const login: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
-    const response = await fetch("/api/session/login", { method: "POST", body: JSON.stringify({ email, password }) });
-    const data = await response.json();
-    setToken(data.access_token)
+
+    try {
+      const response = await fetch("/api/session/login", { method: "POST", body: JSON.stringify({ email, password }) });
+      const data = await response.json();
+      accessTokenState(data.access_token)
+    } catch (e) {
+      console.log("LOGIN ERROR: ", e)
+    }
+    
+    Router.replace('/')
   };
   
   return (

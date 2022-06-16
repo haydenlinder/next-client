@@ -16,8 +16,8 @@ export const getUsers = async () => {
         >({ query: GET_USERS });
 }
 
-export const getUserByEmail = async (email: string | undefined, admin?: boolean) => {
-    return await client.query<
+export const getUserByEmail = (email: string | undefined, admin?: boolean) => {
+    return client.query<
     GetUserByEmailQuery,
     GetUserByEmailQueryVariables
         >({ query: GET_USER_BY_EMAIL, variables: { _eq: email }, context: { headers: !admin ? undefined : { "x-hasura-admin-secret": process.env.HASURA_ADMIN_SECRET } } });
