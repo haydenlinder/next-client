@@ -4,7 +4,7 @@ import Router from "next/router";
 import { accessTokenState } from "../token"
 
 const logout = async () => {
-    const response = await fetch('/api/session/logout');
+    const response = await fetch('/api/session/logout', { method: 'POST' });
     await response.json();
     accessTokenState(undefined)
     Router.replace('/login')
