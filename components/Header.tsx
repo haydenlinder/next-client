@@ -6,6 +6,7 @@ import { accessTokenState } from "../token"
 const logout = async () => {
     const response = await fetch('/api/session/logout');
     await response.json();
+    accessTokenState(undefined)
     Router.replace('/login')
 }
 
@@ -18,7 +19,7 @@ export const Header = () => {
                 <Link href="/">
                     Home
                 </Link>
-                {Boolean(accessToken) && <button onClick={e => logout().finally(() => accessTokenState(undefined))}>Logout</button>}
+                {Boolean(accessToken) && <button onClick={e => logout()}>Logout</button>}
             </nav>
         </header>
     )
