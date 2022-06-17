@@ -7,7 +7,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   // These better be available
   const {email, password} = b
   // Check if there is already a user with that email
-  const { data } = await getUserByEmail(email, true)
+  const { data } = await getUserByEmail(email)
   // If so, throw an error depending on the verified property
   const user = data?.users_connection?.edges[0]?.node
   if (user) {
@@ -25,7 +25,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       message: `Verification link sent to ${email}. Please verify your email.`
     }
   })
-
 };
 
 

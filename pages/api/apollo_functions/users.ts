@@ -1,6 +1,6 @@
 import { CREATE_USER, GET_USERS, GET_USER_BY_EMAIL, GET_USER_BY_ID } from "../../../graphql/users"
 import { CreateUserMutation, CreateUserMutationVariables, GetUserByEmailQuery, GetUserByEmailQueryVariables, GetUserByIdQuery, GetUserByIdQueryVariables, GetUsersPaginatedQuery, GetUsersPaginatedQueryResult } from "../../../types/generated/graphql"
-import client from "../apollo-client"
+import client, { serverClient } from "../apollo-client"
 
 export const getUserById = async (id: string | undefined) => {
     return await client.query<
@@ -16,15 +16,15 @@ export const getUsers = async () => {
         >({ query: GET_USERS });
 }
 
-export const getUserByEmail = (email: string | undefined, admin?: boolean) => {
-    return client.query<
+export const getUserByEmail = (email: string | undefined ) => {
+    return serverClient.query<
     GetUserByEmailQuery,
     GetUserByEmailQueryVariables
-        >({ query: GET_USER_BY_EMAIL, variables: { _eq: email }, context: { headers: !admin ? undefined : { "x-hasura-admin-secret": process.env.HASURA_ADMIN_SECRET } } });
+        >({ query: GET_USER_BY_EMAIL, variables: { _eq: email }, context: { headers: { "x-hasura-admin-secret": process.env.HASURA_ADMIN_SECRET } } });
 }
 
 export const createUser = async ({ email, password_hash }: CreateUserMutationVariables) => {
-    return await client.mutate<
+    return await serverClient.mutate<
     CreateUserMutation,
     CreateUserMutationVariables
 >({ mutation: CREATE_USER, variables: { email, password_hash }, context: { headers: { "x-hasura-admin-secret": process.env.HASURA_ADMIN_SECRET} } });

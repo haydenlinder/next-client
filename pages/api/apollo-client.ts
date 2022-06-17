@@ -23,6 +23,11 @@ export const authLink = new ApolloLink((operation, forward) => {
   return forward(operation);
 });
 
+export const serverClient = new ApolloClient({
+  cache: new InMemoryCache(),
+  link: from([errorLink, httpLink])
+});
+
 const client = new ApolloClient({
   cache: new InMemoryCache(),
   link: from([errorLink, authLink, httpLink])

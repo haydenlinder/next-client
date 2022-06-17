@@ -9,7 +9,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // Otherwise, verify the token
     let payload;
     try {
-        payload = jwt.verify(refreshToken, process.env.ACCESS_SECRET!)
+        payload = jwt.verify(refreshToken, process.env.REFRESH_SECRET!)
     } catch(e) {
         console.log("refresh server error: ", {e})
     }

@@ -11,10 +11,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             {
                 path: '/',
                 // signed: true,
-                // httpOnly: true,
+                httpOnly: true,
                 // https only v
-                // secure: true,
-                // sameSite: 'none'
+                secure: true,
+                sameSite: 'none'
             }
         )
     )

@@ -1,6 +1,6 @@
 import type { AppProps } from "next/app";
 import Head from "next/head";
-import Router from "next/router";
+import Router, { useRouter } from "next/router";
 import { ApolloProvider, from, useReactiveVar } from "@apollo/client";
 import { useEffect, useState } from "react";
 
@@ -31,26 +31,28 @@ const Main = ({ Component, pageProps }: Pick<AppProps, 'Component' | 'pageProps'
     const [loading, setLoading] = useState(true);
     const accessToken = useReactiveVar(accessTokenState);
     console.log({ accessToken })
+    const {asPath} = useRouter();
 
     useEffect(() => {
       console.log('running');
       if (accessToken) return;
+      setLoading(true);
       // see if we can get a new access token with our refresh token cookie
       (async () => {
         let access_token: string | undefined;
         try {
           const response = await refresh();
-        access_token = response?.data?.access_token;
-        accessTokenState(access_token)
-      } catch (e) {
-        console.log("REFRESH ERROR: ", { e })
-      } finally {
-        setLoading(false);
-      }
-      client.setLink(from([errorLink, authLink, httpLink]))
-      if (!access_token) Router.replace('/login')
-    })();
-  }, [accessToken]);
+          access_token = response?.data?.access_token;
+          accessTokenState(access_token)
+        } catch (e) {
+          console.log("REFRESH ERROR: ", { e })
+        } finally {
+          setLoading(false);
+        }
+        client.setLink(from([errorLink, authLink, httpLink]))
+        if (!access_token) Router.replace('/login')
+      })();
+  }, [accessToken, asPath]);
 
   if (loading) return <div>loading</div>
 
