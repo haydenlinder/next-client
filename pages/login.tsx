@@ -2,7 +2,8 @@ import { useReactiveVar } from "@apollo/client";
 import type { NextPage } from "next";
 import Router from "next/router";
 import React, { FormEventHandler, useState } from "react";
-import { accessTokenState } from "../token";
+import { accessTokenState, currentUserIdState } from "../token";
+import { RefreshResponse } from "./api/session/refresh";
 
 
 const Home: NextPage = () => {
@@ -10,11 +11,10 @@ const Home: NextPage = () => {
   const [password, setPassword] = useState("");
 
   const accessToken = useReactiveVar(accessTokenState)
-  console.log('login: ', {accessToken})
   const [isNewUser, setIsNewUser] = useState(true);
   
   if (accessToken) Router.replace('/') 
-  
+
   const signup: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     try {
@@ -30,8 +30,9 @@ const Home: NextPage = () => {
     e.preventDefault();
     try {
       const response = await fetch("/api/session/login", { method: "POST", body: JSON.stringify({ email, password }) });
-      const data = await response.json();
-      accessTokenState(data.access_token)
+      const data: RefreshResponse = await response.json();
+      accessTokenState(data.data?.access_token)
+      currentUserIdState(data.data?.user_id)
     } catch (e) {
       console.log("LOGIN ERROR: ", e)
     }

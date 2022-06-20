@@ -1,8 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next"
 import { getUserByEmail } from "../apollo_functions/users"
 import cookie from 'cookie'
+import { RefreshResponse } from "./refresh"
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse<RefreshResponse>) {
     const b = JSON.parse(req.body)
     // These better be available
     const { email, password } = b
@@ -21,13 +22,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // Generate a refresh token
     const jwt = await import('jsonwebtoken')
     const refresh_token = jwt.sign(
-        { user_id: user.id }, 
+        { user_id: user.user_id }, 
         process.env.REFRESH_SECRET!,
         { expiresIn: '7d' }
     )
     // Generate access token
     const access_token = jwt.sign(
-        { user_id: user.id },
+        { user_id: user.user_id },
         process.env.ACCESS_SECRET!,
         { expiresIn: '15m' }
     )
@@ -50,7 +51,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // Return access_token to be stored in memory
     return res.json({
         data: {
-            user_id: user.id,
+            user_id: user.user_id,
             access_token
         }
     })

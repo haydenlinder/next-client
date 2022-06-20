@@ -18,11 +18,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
     if (!payload) return res.status(401).json({ errors: 'Invalid token.' });
     // Get the user id
-    let user_id: string = "";
+    let user_id: number | undefined;
     if (typeof payload !== "string") user_id = payload.user_id;
     // return the user credentials to hasura
     return res.status(200).json({
-        "x-hasura-user-id": user_id,
+        "x-hasura-user-id": String(user_id),
         "x-hasura-role": "user",
     });
 };

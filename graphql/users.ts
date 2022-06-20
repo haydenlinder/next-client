@@ -10,6 +10,7 @@ export const GET_USERS = gql`
           email
           updated_at
           username
+          user_id
           id
         }
       }
@@ -32,6 +33,7 @@ export const GET_USER_BY_EMAIL = gql`
           email
           updated_at
           id
+          user_id
           username
           password_hash
         }
@@ -42,11 +44,12 @@ export const GET_USER_BY_EMAIL = gql`
 
 export const GET_USER_BY_ID = gql`
 query getUserById($_eq: Int = 0) {
-  users_connection(where: {id: {_eq: $_eq}}) {
+  users_connection(where: {user_id: {_eq: $_eq}}) {
     edges {
       node {
         email
         id
+        user_id
         created_at
         updated_at
         username
@@ -59,6 +62,7 @@ export const CREATE_USER = gql`
 mutation createUser($email: String = "", $password_hash: String = "", $username: String = "") {
   insert_users_one(object: {email: $email, password_hash: $password_hash, username: $username}) {
     id
+    user_id
     email
     created_at
     updated_at

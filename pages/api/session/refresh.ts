@@ -2,7 +2,15 @@ import { NextApiRequest, NextApiResponse } from "next"
 import cookie from 'cookie'
 import jwt from 'jsonwebtoken';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export type RefreshResponse = {
+    data?: {
+        user_id: number | undefined;
+        access_token: string;
+    },
+    errors?: string
+}
+
+export default async function handler(req: NextApiRequest, res: NextApiResponse<RefreshResponse>) {
     const refreshToken = req.cookies.refresh_token;
     // If no token, throw 401
     if (!refreshToken) return res.status(401).json({ errors: 'No token.' });
@@ -15,7 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
     if (!payload) return res.status(401).json({ errors: 'Invalid token.' });
     // Get the user id
-    let user_id: string = "";
+    let user_id: number | undefined;
     if (typeof payload !== "string") user_id = payload.user_id;
     // Generate a refresh token
     const refresh_token = jwt.sign(

@@ -18,7 +18,6 @@ export const errorLink = onError((e) => {
 });
 
 export const authLink = new ApolloLink((operation, forward) => {
-  console.log("authLink: ", accessTokenState());
   accessTokenState() && operation.setContext({ headers: { authorization: `Bearer ${accessTokenState()}` } });
   return forward(operation);
 });

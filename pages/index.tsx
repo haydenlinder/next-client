@@ -4,8 +4,10 @@ import {
 } from "../types/generated/graphql";
 import { useQuery } from "@apollo/client";
 import { GET_USERS } from "../graphql/users";
+import { useState } from "react";
 
 const Home: NextPage = ({ }) => {
+  const [body, setBody] = useState("");
 
   const { data, loading, error } = useQuery<
     GetUsersPaginatedQuery,
@@ -23,9 +25,11 @@ const Home: NextPage = ({ }) => {
 
   return (
     <section>
-      <h1>username: {user?.username}</h1>
-      <div>email: {user?.email}</div>
-      <div>joined: {user?.created_at}</div>
+      <form >
+        <h1>Make an entry</h1>
+        <label htmlFor="body">Body</label>
+        <textarea className="border border-black rounded" onChange={e => setBody(e.target.value)} value={body} name="body" id="body" cols={30} rows={10}/>
+      </form>
     </section>
   );
 };
