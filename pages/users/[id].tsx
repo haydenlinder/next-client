@@ -1,25 +1,35 @@
-import type { GetServerSideProps, NextPage } from "next";
+import type { NextPage } from "next";
 import {
-    GetUserByIdQuery,
+    GetUserByIdQuery, GetUserByIdQueryVariables,
 } from "../../types/generated/graphql";
-import { ApolloQueryResult } from "@apollo/client";
-import { getUserById } from "../api/apollo_functions/users";
+import { ApolloQueryResult, useQuery, useReactiveVar } from "@apollo/client";
+import { currentUserIdState } from "../../token";
+import { GET_USER_BY_ID } from "../../graphql/users";
+import { useRouter } from "next/router";
 
-type Props = ApolloQueryResult < GetUserByIdQuery >
 type Params = { id: string }
 
-export const getServerSideProps: GetServerSideProps<Props, Params> = async ({ req, res, params }) => {
-    const props  = await getUserById(params?.id);
 
-    return {
-        props,
-    };
+const Home: NextPage<ApolloQueryResult<GetUserByIdQuery>> = () => {
+    const { query } = useRouter()
 
-};
+    const { data, error, loading } = useQuery<GetUserByIdQuery, GetUserByIdQueryVariables>(GET_USER_BY_ID, {
+        variables: {
+            _eq: Number(query.id)
+        }
+    });
 
-const Home: NextPage<ApolloQueryResult<GetUserByIdQuery>> = ({ data, error }) => {
-    const user = data.users_connection.edges[0]?.node;
+    if (error) {
+        console.log({ error })
+        return <div>{error.message}</div>
+    }
+
+    if (loading) return <div>Loading</div>
+
+    const user = data?.users_connection.edges[0]?.node
+
     if (!user) return <div>User Not Found</div>
+
     return (
         <section>
             <h1>username: {user.username}</h1>
