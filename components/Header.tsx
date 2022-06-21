@@ -41,7 +41,7 @@ export const Header = () => {
                 {Boolean(accessToken) && <button onClick={e => logout()}>Logout</button>}
                 {Boolean(accessToken) && 
                     <Link href={`/users/${user?.user_id}`}>
-                        {user?.email}
+                        {user?.username}
                     </Link>
                 }
             </nav>

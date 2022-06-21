@@ -126,7 +126,7 @@ export type Mutation_RootDelete_PostsArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Posts_By_PkArgs = {
-  id: Scalars['Int'];
+  post_id: Scalars['Int'];
 };
 
 
@@ -220,8 +220,14 @@ export enum Order_By {
 /** columns and relationships of "posts" */
 export type Posts = Node & {
   __typename?: 'posts';
+  body: Scalars['String'];
   created_at: Scalars['timestamptz'];
   id: Scalars['ID'];
+  post_id: Scalars['Int'];
+  updated_at?: Maybe<Scalars['timestamptz']>;
+  /** An object relationship */
+  user: Users;
+  user_id: Scalars['Int'];
 };
 
 /** A Relay connection object on "posts" */
@@ -242,8 +248,12 @@ export type Posts_Bool_Exp = {
   _and?: InputMaybe<Array<Posts_Bool_Exp>>;
   _not?: InputMaybe<Posts_Bool_Exp>;
   _or?: InputMaybe<Array<Posts_Bool_Exp>>;
+  body?: InputMaybe<String_Comparison_Exp>;
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
-  id?: InputMaybe<Int_Comparison_Exp>;
+  post_id?: InputMaybe<Int_Comparison_Exp>;
+  updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  user?: InputMaybe<Users_Bool_Exp>;
+  user_id?: InputMaybe<Int_Comparison_Exp>;
 };
 
 /** unique or primary key constraints on table "posts" */
@@ -254,13 +264,18 @@ export enum Posts_Constraint {
 
 /** input type for incrementing numeric columns in table "posts" */
 export type Posts_Inc_Input = {
-  id?: InputMaybe<Scalars['Int']>;
+  post_id?: InputMaybe<Scalars['Int']>;
+  user_id?: InputMaybe<Scalars['Int']>;
 };
 
 /** input type for inserting data into table "posts" */
 export type Posts_Insert_Input = {
+  body?: InputMaybe<Scalars['String']>;
   created_at?: InputMaybe<Scalars['timestamptz']>;
-  id?: InputMaybe<Scalars['Int']>;
+  post_id?: InputMaybe<Scalars['Int']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+  user?: InputMaybe<Users_Obj_Rel_Insert_Input>;
+  user_id?: InputMaybe<Scalars['Int']>;
 };
 
 /** response of any mutation on the table "posts" */
@@ -281,35 +296,54 @@ export type Posts_On_Conflict = {
 
 /** Ordering options when selecting data from "posts". */
 export type Posts_Order_By = {
+  body?: InputMaybe<Order_By>;
   created_at?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
+  post_id?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+  user?: InputMaybe<Users_Order_By>;
+  user_id?: InputMaybe<Order_By>;
 };
 
 /** primary key columns input for table: posts */
 export type Posts_Pk_Columns_Input = {
-  id: Scalars['Int'];
+  post_id: Scalars['Int'];
 };
 
 /** select columns of table "posts" */
 export enum Posts_Select_Column {
   /** column name */
+  Body = 'body',
+  /** column name */
   CreatedAt = 'created_at',
   /** column name */
-  Id = 'id'
+  PostId = 'post_id',
+  /** column name */
+  UpdatedAt = 'updated_at',
+  /** column name */
+  UserId = 'user_id'
 }
 
 /** input type for updating data in table "posts" */
 export type Posts_Set_Input = {
+  body?: InputMaybe<Scalars['String']>;
   created_at?: InputMaybe<Scalars['timestamptz']>;
-  id?: InputMaybe<Scalars['Int']>;
+  post_id?: InputMaybe<Scalars['Int']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']>;
+  user_id?: InputMaybe<Scalars['Int']>;
 };
 
 /** update columns of table "posts" */
 export enum Posts_Update_Column {
   /** column name */
+  Body = 'body',
+  /** column name */
   CreatedAt = 'created_at',
   /** column name */
-  Id = 'id'
+  PostId = 'post_id',
+  /** column name */
+  UpdatedAt = 'updated_at',
+  /** column name */
+  UserId = 'user_id'
 }
 
 export type Query_Root = {
@@ -470,6 +504,13 @@ export type Users_Mutation_Response = {
   returning: Array<Users>;
 };
 
+/** input type for inserting object relation for remote table "users" */
+export type Users_Obj_Rel_Insert_Input = {
+  data: Users_Insert_Input;
+  /** on conflict condition */
+  on_conflict?: InputMaybe<Users_On_Conflict>;
+};
+
 /** on conflict condition type for table "users" */
 export type Users_On_Conflict = {
   constraint: Users_Constraint;
@@ -540,6 +581,21 @@ export enum Users_Update_Column {
   Username = 'username'
 }
 
+export type CreatePostMutationVariables = Exact<{
+  body?: InputMaybe<Scalars['String']>;
+  user_id?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type CreatePostMutation = { __typename?: 'mutation_root', insert_posts_one?: { __typename?: 'posts', body: string, created_at: any, id: string, post_id: number, updated_at?: any | null, user_id: number, user: { __typename?: 'users', id: string, user_id: number, username: string } } | null };
+
+export type GetPostsQueryVariables = Exact<{
+  _gte?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type GetPostsQuery = { __typename?: 'query_root', posts_connection: { __typename?: 'postsConnection', edges: Array<{ __typename?: 'postsEdge', cursor: string, node: { __typename?: 'posts', body: string, created_at: any, id: string, post_id: number, updated_at?: any | null, user_id: number, user: { __typename?: 'users', id: string, user_id: number, username: string } } }> } };
+
 export type GetUsersPaginatedQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']>;
 }>;
@@ -571,6 +627,53 @@ export type CreateUserMutationVariables = Exact<{
 export type CreateUserMutation = { __typename?: 'mutation_root', insert_users_one?: { __typename?: 'users', id: string, user_id: number, email: string, created_at: any, updated_at: any, username: string } | null };
 
 
+export const CreatePostDocument = gql`
+    mutation createPost($body: String = "", $user_id: Int = 10) {
+  insert_posts_one(object: {body: $body, user_id: $user_id}) {
+    body
+    created_at
+    id
+    post_id
+    updated_at
+    user_id
+    user {
+      id
+      user_id
+      username
+    }
+  }
+}
+    `;
+export type CreatePostMutationFn = Apollo.MutationFunction<CreatePostMutation, CreatePostMutationVariables>;
+export type CreatePostMutationResult = Apollo.MutationResult<CreatePostMutation>;
+export type CreatePostMutationOptions = Apollo.BaseMutationOptions<CreatePostMutation, CreatePostMutationVariables>;
+export const GetPostsDocument = gql`
+    query getPosts($_gte: Int = 0) {
+  posts_connection(
+    first: 10
+    order_by: {post_id: desc}
+    where: {post_id: {_gte: $_gte}}
+  ) {
+    edges {
+      node {
+        body
+        created_at
+        id
+        post_id
+        updated_at
+        user_id
+        user {
+          id
+          user_id
+          username
+        }
+      }
+      cursor
+    }
+  }
+}
+    `;
+export type GetPostsQueryResult = Apollo.QueryResult<GetPostsQuery, GetPostsQueryVariables>;
 export const GetUsersPaginatedDocument = gql`
     query getUsersPaginated($first: Int = 10) {
   users_connection(first: $first) {
