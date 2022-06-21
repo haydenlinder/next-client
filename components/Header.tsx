@@ -25,12 +25,11 @@ export const Header = () => {
 
     if (error) {
         console.log({error})
-        return <div>{error.message}</div>
     }
 
     if (loading) return <div>Loading</div>
 
-    const user = data?.users_connection.edges[0].node
+    const user = data?.users_connection.edges[0]?.node
 
     return (
         <header className="p-4 bg-black text-white mb-3 absolute w-full top-0">
