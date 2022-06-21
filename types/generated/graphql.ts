@@ -587,7 +587,7 @@ export type CreatePostMutationVariables = Exact<{
 }>;
 
 
-export type CreatePostMutation = { __typename?: 'mutation_root', insert_posts_one?: { __typename?: 'posts', body: string, created_at: any, id: string, post_id: number, updated_at?: any | null, user_id: number, user: { __typename?: 'users', id: string, user_id: number, username: string } } | null };
+export type CreatePostMutation = { __typename?: 'mutation_root', insert_posts_one?: { __typename?: 'posts', id: string, post_id: number } | null };
 
 export type GetPostsQueryVariables = Exact<{
   _gte?: InputMaybe<Scalars['Int']>;
@@ -595,6 +595,13 @@ export type GetPostsQueryVariables = Exact<{
 
 
 export type GetPostsQuery = { __typename?: 'query_root', posts_connection: { __typename?: 'postsConnection', edges: Array<{ __typename?: 'postsEdge', cursor: string, node: { __typename?: 'posts', body: string, created_at: any, id: string, post_id: number, updated_at?: any | null, user_id: number, user: { __typename?: 'users', id: string, user_id: number, username: string } } }> } };
+
+export type DeletePostMutationVariables = Exact<{
+  post_id?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type DeletePostMutation = { __typename?: 'mutation_root', delete_posts_by_pk?: { __typename?: 'posts', id: string } | null };
 
 export type GetUsersPaginatedQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']>;
@@ -630,17 +637,8 @@ export type CreateUserMutation = { __typename?: 'mutation_root', insert_users_on
 export const CreatePostDocument = gql`
     mutation createPost($body: String = "", $user_id: Int = 10) {
   insert_posts_one(object: {body: $body, user_id: $user_id}) {
-    body
-    created_at
     id
     post_id
-    updated_at
-    user_id
-    user {
-      id
-      user_id
-      username
-    }
   }
 }
     `;
@@ -674,6 +672,16 @@ export const GetPostsDocument = gql`
 }
     `;
 export type GetPostsQueryResult = Apollo.QueryResult<GetPostsQuery, GetPostsQueryVariables>;
+export const DeletePostDocument = gql`
+    mutation deletePost($post_id: Int = 1) {
+  delete_posts_by_pk(post_id: $post_id) {
+    id
+  }
+}
+    `;
+export type DeletePostMutationFn = Apollo.MutationFunction<DeletePostMutation, DeletePostMutationVariables>;
+export type DeletePostMutationResult = Apollo.MutationResult<DeletePostMutation>;
+export type DeletePostMutationOptions = Apollo.BaseMutationOptions<DeletePostMutation, DeletePostMutationVariables>;
 export const GetUsersPaginatedDocument = gql`
     query getUsersPaginated($first: Int = 10) {
   users_connection(first: $first) {

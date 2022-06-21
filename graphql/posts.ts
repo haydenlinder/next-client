@@ -30,4 +30,12 @@ export const GET_POSTS = gql`
             }
         }
     }
-`
+`;
+
+export const DELETE_POST = gql`
+    mutation deletePost($post_id: Int = 1) {
+        delete_posts_by_pk(post_id: $post_id) {
+            id
+        }
+    }
+`;
