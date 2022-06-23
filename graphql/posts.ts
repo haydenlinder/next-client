@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client";
 
 export const CREATE_POST = gql`
-    mutation createPost($body: String = "", $user_id: Int = 10) {
-        insert_posts_one(object: {body: $body, user_id: $user_id}) {
+    mutation createPost($body: String = "", $user_id: Int = 10, $photo_url: String = "") {
+        insert_posts_one(object: {body: $body, user_id: $user_id, photo_url: $photo_url}) {
             id
             post_id
         }
@@ -14,6 +14,7 @@ export const GET_POSTS = gql`
         posts_connection(first: 10, order_by: {post_id: desc}, where: {post_id: {_gte: $_gte}}) {
             edges {
                 node {
+                    photo_url
                     body
                     created_at
                     id
