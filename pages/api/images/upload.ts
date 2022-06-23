@@ -59,7 +59,8 @@ async function checkBucketExists(s3: AWS.S3, bucketName: string) {
         await s3.headBucket(options).promise();
         return true;
     } catch (error) {
-        if (error.statusCode === 404) return false;
+        const e = error as AWS.AWSError
+        if (e.statusCode === 404) return false;
         throw error;
     }
 }

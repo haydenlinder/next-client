@@ -30,9 +30,13 @@ async function uploadImage(file: File) {
   return imageUrl;
 }
 
+interface FilePreview extends File {
+  preview: string;
+}
+
 const Home: NextPage = ({ }) => {
   const [body, setBody] = useState("");
-  const [files, setFiles] = useState([]);
+  const [files, setFiles] = useState<FilePreview[]>([]);
   console.log(files)
 
   const currentUserId = useReactiveVar(currentUserIdState);
@@ -112,7 +116,12 @@ const Home: NextPage = ({ }) => {
 };
 
 
-function DropzoneWithPreview({setFiles, files}) {
+type DropzoneProps = {
+  setFiles: React.Dispatch<React.SetStateAction<FilePreview[]>>;
+  files: FilePreview[];
+}
+
+function DropzoneWithPreview({setFiles, files}: DropzoneProps) {
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: (acceptedFiles) => {
       setFiles(
@@ -179,7 +188,7 @@ function DropzoneWithPreview({setFiles, files}) {
   useEffect(
     () => () => {
       // Make sure to revoke the data uris to avoid memory leaks
-      files.forEach((file: File) => URL.revokeObjectURL(file.preview));
+      files.forEach((file) => URL.revokeObjectURL(file.preview));
     },
     [files]
   );
