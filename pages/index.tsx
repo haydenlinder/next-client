@@ -197,7 +197,7 @@ function DropzoneWithPreview({setFiles, files}: DropzoneProps) {
     <section className="container">
       <div {...getRootProps({ className: "dropzone" })} style={dropzoneStyles}>
         <input {...getInputProps()} name="image" accept="image/*" />
-        <p>Drag 'n' drop some files here, or click to select files</p>
+        <p>Drag and drop some files here, or click to select files</p>
       </div>
       <aside style={thumbsContainer}>{thumbs}</aside>
     </section>
