@@ -1,5 +1,3 @@
-import crypto from "crypto";
-
 import nc from "next-connect";
 import type { NextApiRequest, NextApiResponse } from "next";
 
@@ -42,12 +40,12 @@ const storage = multerSharpS3({
         { suffix: "thumb.webp", width: 150, height: 150 },
         { suffix: "original.webp" },
     ],
-    Key: (req, file, cb) => {
-        crypto.pseudoRandomBytes(16, (err, raw) => {
-            const filename = err ? undefined : raw.toString("hex");
-            cb(err, filename);
-        });
-    },
+    // Key: (req, file, cb) => {
+    //     crypto.pseudoRandomBytes(16, (err, raw) => {
+    //         const filename = err ? undefined : raw.toString("hex");
+    //         cb(err, filename);
+    //     });
+    // },
 });
 
 const upload = multer({ storage });
