@@ -25,7 +25,7 @@ async function uploadImage(file: File) {
   const res = await req.json();
 
   console.log("Got image upload result:", res);
-  const imageUrl = `http://localhost:9000/${res.file["original.webp"].Bucket}/${res.file["original.webp"].Key}`;
+  const imageUrl = `${process.env.S3_SERVER_URL}/${res.file["original.webp"].Bucket}/${res.file["original.webp"].Key}`;
   console.log("View image at:", imageUrl);
   return imageUrl;
 }
