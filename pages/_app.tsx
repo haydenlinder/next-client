@@ -31,10 +31,10 @@ function MyApp({ Component, pageProps }: AppProps) {
 const Main = ({ Component, pageProps }: Pick<AppProps, 'Component' | 'pageProps'>) => {
     const [loading, setLoading] = useState(true);
     const accessToken = useReactiveVar(accessTokenState);
-    const {asPath} = useRouter();
+    const {asPath, route} = useRouter();
 
     useEffect(() => {
-      if (accessToken) return;
+      if (accessToken || route === '/verify') return setLoading(false);
       setLoading(true);
       // see if we can get a new access token with our refresh token cookie
       (async () => {

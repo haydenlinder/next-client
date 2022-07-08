@@ -32,3 +32,20 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+#
+# Environment
+
+Put these in `.env.local` before starting the server:
+
+- NEXT_PUBLIC_HASURA_URL=http://localhost:8080/v1beta1/relay
+- HASURA_ADMIN_SECRET=1234
+- ACCESS_SECRET=1234
+- REFRESH_SECRET=5678
+- BASE_URL=http://localhost:3000
+- S3_BUCKET_NAME="my-bucketname"
+- S3_ACCESS_KEY="minio"
+- S3_SECRET_ACCESS_KEY="minio123"
+- S3_SERVER_URL="http://localhost:9000"
+- SENDGRID_API_KEY=SG.XXXXXXXX
+- DOMAIN=XXXX.com
