@@ -1,6 +1,9 @@
+import { useReactiveVar } from "@apollo/client";
 import { NextPage } from "next";
 import Link from "next/link";
+import Router from "next/router";
 import { useEffect, useState } from "react";
+import { accessTokenState } from "../token";
 
 const verify = async () => {
     const res = await fetch(`${window.location.origin}/api/session/verify${window.location.search}`)
@@ -10,21 +13,25 @@ const verify = async () => {
 
 const Verify: NextPage = () => {
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(undefined);
-    console.log("render");
+    const [error, setError] = useState<string | undefined>(undefined);
+    const accessToken = useReactiveVar(accessTokenState);
 
     useEffect(() => {
+        if (accessToken) {
+            Router.replace('/')
+        }
         (async () => {
             try {
                 verify();
-            } catch (er) {
+            } catch (e) {
+                const er = e as string;
                 console.log(er)
-                // setError(er)
+                setError(er)
             } finally {
                 setLoading(false);
             }
         })();
-    }, []);
+    }, [accessToken]);
 
     if (loading) return <div>Loading...</div>
     if (error) return <p>{error}</p>

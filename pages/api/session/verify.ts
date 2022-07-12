@@ -8,11 +8,9 @@ export type VerifyResponse = {
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<VerifyResponse>) {
-    if (typeof req.query.token !== 'string') return res.json({ errors: "Received multiple tokens, expected one." })
+    if (!req.query.token) return res.status(401).json({ errors: "No token." })
+    if (typeof req.query.token !== 'string') return res.status(401).json({ errors: "Received multiple tokens, expected one." })
     const token = req.query.token;
-    console.log("verify: ", token)
-    // If no token, throw 401
-    if (!token) return res.status(401).json({ errors: 'No token.' });
     // Otherwise, verify the token
     let payload;
     try {
