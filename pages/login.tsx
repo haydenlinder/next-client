@@ -9,6 +9,7 @@ import { RefreshResponse } from "./api/session/refresh";
 const Home: NextPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState<undefined | string>(undefined);
 
   const accessToken = useReactiveVar(accessTokenState)
   const [isNewUser, setIsNewUser] = useState(true);
@@ -31,6 +32,7 @@ const Home: NextPage = () => {
     try {
       const response = await fetch("/api/session/login", { method: "POST", body: JSON.stringify({ email, password }) });
       const data: RefreshResponse = await response.json();
+      if (response.status !== 200) return setError(data.errors);
       accessTokenState(data.data?.access_token)
       currentUserIdState(data.data?.user_id)
     } catch (e) {

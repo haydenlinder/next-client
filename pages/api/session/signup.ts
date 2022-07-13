@@ -2,24 +2,9 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { createUser, getUserByEmail } from "../apollo_functions/users";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import sgMail, { ResponseError } from '@sendgrid/mail';
 
-
-import sgMail, { ResponseError, MailDataRequired } from '@sendgrid/mail';
-console.log(process.env.SENDGRID_API_KEY);
 sgMail.setApiKey(process.env.SENDGRID_API_KEY || "");
-
-const sendEmail = async (msg: MailDataRequired) => {
-  try {
-    await sgMail.send(msg);
-  } catch (e) {
-    const error = e as ResponseError;
-    console.error(error);
-
-    if (error.response) {
-      console.error(error.response.body)
-    }
-  }
-}
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const b = JSON.parse(req.body)
@@ -30,19 +15,19 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   // If so, throw an error depending on the verified property
   const user = data?.users_connection?.edges[0]?.node
   if (user) {
-    return res.status(400).json({ error: `User with email address ${email} already exists.` })
+    return res.status(400).json({ errors: `User with email address ${email} already exists.` })
   }
   // TODO: check if email is verified
   // Otherwise, create a password hash
   const password_hash = await bcrypt.hash(password, 10)
-  // And save the user
+  // Save the user
   const { data: newUserData } = await createUser({ email: email, password_hash })
   const token = jwt.sign(
     { user_id: newUserData?.insert_users_one?.id },
     process.env.REFRESH_SECRET!,
     { expiresIn: '7d' }
   )
-  console.log("signup: ", token)
+  // And send them an email
   const params = new URLSearchParams({token})
   const msg = {
     to: email,
@@ -52,7 +37,18 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     html: `<p>Please <a href="${process.env.BASE_URL}/verify?token=${token}">click here to verify your email.</p>`,
   };
 
-  await sendEmail(msg)
+  try {
+    await sgMail.send(msg);
+  } catch (e) {
+    const error = e as ResponseError;
+    console.error(error);
+
+    if (error.response) {
+      console.error(error.response.body)
+    }
+
+    res.status(500).json({ errors: "Something went wrong. Please try again." })
+  }
 
   return res.json({
     data: {

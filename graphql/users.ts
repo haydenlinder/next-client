@@ -33,6 +33,7 @@ export const GET_USER_BY_EMAIL = gql`
           email
           updated_at
           id
+          is_verified
           user_id
           username
           password_hash
@@ -69,3 +70,14 @@ mutation createUser($email: String = "", $password_hash: String = "", $username:
     username
   }
 }`
+
+export const VERIFY_USER = gql`
+  mutation verifyUser($user_id: Int = 10) {
+    update_users_by_pk(pk_columns: {user_id: $user_id}, _set: {is_verified: true}) {
+      is_verified
+      email
+      id
+      user_id
+    }
+  }
+`

@@ -1,5 +1,5 @@
 import { CREATE_USER, GET_USERS, GET_USER_BY_EMAIL, GET_USER_BY_ID } from "../../../graphql/users"
-import { CreateUserMutation, CreateUserMutationVariables, GetUserByEmailQuery, GetUserByEmailQueryVariables, GetUserByIdQuery, GetUserByIdQueryVariables, GetUsersPaginatedQuery, GetUsersPaginatedQueryResult } from "../../../types/generated/graphql"
+import { CreateUserMutation, CreateUserMutationVariables, GetUserByEmailQuery, GetUserByEmailQueryVariables, GetUserByIdQuery, GetUserByIdQueryVariables, GetUsersPaginatedQuery, GetUsersPaginatedQueryResult, VerifyUserMutation, VerifyUserMutationVariables } from "../../../types/generated/graphql"
 import client, { serverClient } from "../apollo-client"
 
 export const getUserById = async (id: string | undefined) => {
@@ -28,4 +28,11 @@ export const createUser = async ({ email, password_hash }: CreateUserMutationVar
     CreateUserMutation,
     CreateUserMutationVariables
 >({ mutation: CREATE_USER, variables: { email, password_hash }, context: { headers: { "x-hasura-admin-secret": process.env.HASURA_ADMIN_SECRET} } });
+}
+
+export const verifyUser = async ({ user_id }: VerifyUserMutationVariables) => {
+    return await serverClient.mutate<
+    VerifyUserMutation,
+    VerifyUserMutationVariables
+>({ mutation: CREATE_USER, variables: { user_id }, context: { headers: { "x-hasura-admin-secret": process.env.HASURA_ADMIN_SECRET} } });
 }

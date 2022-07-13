@@ -13,6 +13,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     const user = data?.users_connection?.edges[0]?.node
     // Throw if no user or if they are not verified
     if (!user) return res.status(404).json({ errors: 'No user with that email.' })
+    // If the user hasn't verified their email, send an error
+    if (!user.is_verified) return res.status(401).json({ errors: "Please verify your email." })
     // TODO: handle case where user has not verified email
     // Check if password is correct
     const bcrypt = await import('bcrypt')

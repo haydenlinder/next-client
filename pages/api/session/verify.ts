@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next"
-import cookie from 'cookie'
 import jwt from 'jsonwebtoken';
+import { verifyUser } from "../apollo_functions/users";
 
 export type VerifyResponse = {
     data?: string;
@@ -18,9 +18,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     } catch (e) {
         console.log("refresh server error: ", { e })
     }
+
+    console.log({payload})
     
     if (!payload) return res.status(401).json({ errors: 'Invalid token.' });
-
+    // And update the user
+    await verifyUser({ user_id: payload.user_id || ""})
     return res.json({
         data: "Success"
     })

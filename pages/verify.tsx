@@ -22,7 +22,9 @@ const Verify: NextPage = () => {
         }
         (async () => {
             try {
-                verify();
+                const data = await verify();
+                if (data.errors) setError(data.errors)
+                console.log(data)
             } catch (e) {
                 const er = e as string;
                 console.log(er)

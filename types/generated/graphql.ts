@@ -625,7 +625,7 @@ export type GetUserByEmailQueryVariables = Exact<{
 }>;
 
 
-export type GetUserByEmailQuery = { __typename?: 'query_root', users_connection: { __typename?: 'usersConnection', edges: Array<{ __typename?: 'usersEdge', node: { __typename?: 'users', created_at: any, email: string, updated_at: any, id: string, user_id: number, username: string, password_hash: string } }> } };
+export type GetUserByEmailQuery = { __typename?: 'query_root', users_connection: { __typename?: 'usersConnection', edges: Array<{ __typename?: 'usersEdge', node: { __typename?: 'users', created_at: any, email: string, updated_at: any, id: string, is_verified: boolean, user_id: number, username: string, password_hash: string } }> } };
 
 export type GetUserByIdQueryVariables = Exact<{
   _eq?: InputMaybe<Scalars['Int']>;
@@ -642,6 +642,13 @@ export type CreateUserMutationVariables = Exact<{
 
 
 export type CreateUserMutation = { __typename?: 'mutation_root', insert_users_one?: { __typename?: 'users', id: string, user_id: number, email: string, created_at: any, updated_at: any, username: string } | null };
+
+export type VerifyUserMutationVariables = Exact<{
+  user_id?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type VerifyUserMutation = { __typename?: 'mutation_root', update_users_by_pk?: { __typename?: 'users', is_verified: boolean, email: string, id: string, user_id: number } | null };
 
 
 export const CreatePostDocument = gql`
@@ -728,6 +735,7 @@ export const GetUserByEmailDocument = gql`
         email
         updated_at
         id
+        is_verified
         user_id
         username
         password_hash
@@ -771,3 +779,16 @@ export const CreateUserDocument = gql`
 export type CreateUserMutationFn = Apollo.MutationFunction<CreateUserMutation, CreateUserMutationVariables>;
 export type CreateUserMutationResult = Apollo.MutationResult<CreateUserMutation>;
 export type CreateUserMutationOptions = Apollo.BaseMutationOptions<CreateUserMutation, CreateUserMutationVariables>;
+export const VerifyUserDocument = gql`
+    mutation verifyUser($user_id: Int = 10) {
+  update_users_by_pk(pk_columns: {user_id: $user_id}, _set: {is_verified: true}) {
+    is_verified
+    email
+    id
+    user_id
+  }
+}
+    `;
+export type VerifyUserMutationFn = Apollo.MutationFunction<VerifyUserMutation, VerifyUserMutationVariables>;
+export type VerifyUserMutationResult = Apollo.MutationResult<VerifyUserMutation>;
+export type VerifyUserMutationOptions = Apollo.BaseMutationOptions<VerifyUserMutation, VerifyUserMutationVariables>;
