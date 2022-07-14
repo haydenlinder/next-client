@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next"
 import jwt from 'jsonwebtoken';
 import { verifyUser } from "../apollo_functions/users";
+import { TokenPayload } from "./types";
 
 export type VerifyResponse = {
     data?: string;
@@ -14,14 +15,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     // Otherwise, verify the token
     let payload;
     try {
-        payload = jwt.verify(token, process.env.REFRESH_SECRET!)
+        payload = jwt.verify(token, process.env.REFRESH_SECRET!) as TokenPayload;
     } catch (e) {
         console.log("refresh server error: ", { e })
     }
     
     if (!payload) return res.status(401).json({ errors: 'Invalid token.' });
     // And update the user
-    await verifyUser({ user_id: payload.user_id || ""})
+    await verifyUser({ user_id: payload.user_id})
 
     return res.json({
         data: "Success"
