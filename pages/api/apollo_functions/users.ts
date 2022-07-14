@@ -1,4 +1,4 @@
-import { CREATE_USER, GET_USERS, GET_USER_BY_EMAIL, GET_USER_BY_ID } from "../../../graphql/users"
+import { CREATE_USER, GET_USERS, GET_USER_BY_EMAIL, GET_USER_BY_ID, VERIFY_USER } from "../../../graphql/users"
 import { CreateUserMutation, CreateUserMutationVariables, GetUserByEmailQuery, GetUserByEmailQueryVariables, GetUserByIdQuery, GetUserByIdQueryVariables, GetUsersPaginatedQuery, GetUsersPaginatedQueryResult, VerifyUserMutation, VerifyUserMutationVariables } from "../../../types/generated/graphql"
 import client, { serverClient } from "../apollo-client"
 
@@ -34,5 +34,5 @@ export const verifyUser = async ({ user_id }: VerifyUserMutationVariables) => {
     return await serverClient.mutate<
     VerifyUserMutation,
     VerifyUserMutationVariables
->({ mutation: CREATE_USER, variables: { user_id }, context: { headers: { "x-hasura-admin-secret": process.env.HASURA_ADMIN_SECRET} } });
+>({ mutation: VERIFY_USER, variables: { user_id }, context: { headers: { "x-hasura-admin-secret": process.env.HASURA_ADMIN_SECRET} } });
 }

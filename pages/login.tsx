@@ -21,6 +21,7 @@ const Home: NextPage = () => {
     try {
       const response = await fetch("/api/session/signup", { method: "POST", body: JSON.stringify({ email, password }) });
       const data = await response.json();
+      if (response.status !== 200) return setError(data.errors)
     } catch (e) {
       console.log("SIGNUP ERROR: ", e)
     }
@@ -32,7 +33,9 @@ const Home: NextPage = () => {
     try {
       const response = await fetch("/api/session/login", { method: "POST", body: JSON.stringify({ email, password }) });
       const data: RefreshResponse = await response.json();
+
       if (response.status !== 200) return setError(data.errors);
+      
       accessTokenState(data.data?.access_token)
       currentUserIdState(data.data?.user_id)
     } catch (e) {
@@ -44,6 +47,7 @@ const Home: NextPage = () => {
   return (
     <>
     <form onSubmit={isNewUser ? signup : login} className="flex flex-col items-center pb-10">
+      <p className="h-4 m-4 font-bold text-red-600">{error}</p>
       <h1>{isNewUser ? `Sign Up`: `Login`}</h1>
       <input
         className="border border-solid rounded"

@@ -23,7 +23,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   // Save the user
   const { data: newUserData } = await createUser({ email: email, password_hash })
   const token = jwt.sign(
-    { user_id: newUserData?.insert_users_one?.id },
+    { user_id: newUserData?.insert_users_one?.user_id },
     process.env.REFRESH_SECRET!,
     { expiresIn: '7d' }
   )

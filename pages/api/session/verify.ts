@@ -18,12 +18,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     } catch (e) {
         console.log("refresh server error: ", { e })
     }
-
-    console.log({payload})
     
     if (!payload) return res.status(401).json({ errors: 'Invalid token.' });
     // And update the user
     await verifyUser({ user_id: payload.user_id || ""})
+
     return res.json({
         data: "Success"
     })

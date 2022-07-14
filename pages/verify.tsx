@@ -4,10 +4,11 @@ import Link from "next/link";
 import Router from "next/router";
 import { useEffect, useState } from "react";
 import { accessTokenState } from "../token";
+import { VerifyResponse } from "./api/session/verify";
 
 const verify = async () => {
     const res = await fetch(`${window.location.origin}/api/session/verify${window.location.search}`)
-    const data = await res.json();
+    const data: VerifyResponse = await res.json();
     return data;
 }
 
@@ -24,9 +25,8 @@ const Verify: NextPage = () => {
             try {
                 const data = await verify();
                 if (data.errors) setError(data.errors)
-                console.log(data)
             } catch (e) {
-                const er = e as string;
+                const er = e as string;  
                 console.log(er)
                 setError(er)
             } finally {
@@ -36,10 +36,11 @@ const Verify: NextPage = () => {
     }, [accessToken]);
 
     if (loading) return <div>Loading...</div>
-    if (error) return <p>{error}</p>
+    if (error) return <p>error</p>
         
     return (
         <section>
+            <h1>Success!</h1>
             <Link href="/login" passHref><button>Log In</button></Link>
         </section>
     )

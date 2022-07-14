@@ -37,7 +37,6 @@ interface FilePreview extends File {
 const Home: NextPage = ({ }) => {
   const [body, setBody] = useState("");
   const [files, setFiles] = useState<FilePreview[]>([]);
-  console.log(files)
 
   const currentUserId = useReactiveVar(currentUserIdState);
 
