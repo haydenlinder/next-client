@@ -93,7 +93,7 @@ const Home: NextPage = ({ }) => {
         <h1>Make an entry</h1>
         <label htmlFor="body">Body</label>
         <DropzoneWithPreview files={files} setFiles={setFiles} />
-        <textarea placeholder="body" className="border border-black rounded" onChange={e => setBody(e.target.value)} value={body} name="body" id="body" cols={30} rows={10}/>
+        <textarea placeholder="body" className="border border-black rounded w-full" onChange={e => setBody(e.target.value)} value={body} name="body" id="body" cols={30} rows={10}/>
         <button>{saving ? "Saving" : "Post"}</button>
       </form>
       <div>
@@ -104,8 +104,8 @@ const Home: NextPage = ({ }) => {
               <h2>Author: <Link className="text-blue underline" href={`/users/${p.user_id}`}>{p.user.username}</Link></h2>
               <h3>Created: {p.created_at}</h3>
               <p>Body: {p.body}</p>
-              <img src={p.photo_url || ""} alt="" height={500} width={500}/>
-              <button onClick={() => deletePost({ variables: { post_id: p.post_id } })}>{deleting ? "Deleting" : "Delete"}</button>
+              {p.photo_url && <img src={p.photo_url || ""} alt="" height={500} width={500}/>}
+              <button className="border p-2 rounded mt-4" onClick={() => deletePost({ variables: { post_id: p.post_id } })}>{deleting ? "Deleting" : "Delete"}</button>
             </div>
           )
         })}
