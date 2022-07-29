@@ -34,13 +34,17 @@ export const Header = () => {
     return (
         <header className="p-4 bg-black text-white mb-3 absolute w-full top-0">
             <nav className="container">
-                <Link href="/">
-                    Home
+                <Link passHref href="/">
+                    <a className="mr-2">
+                        Home
+                    </a>
                 </Link>
-                {Boolean(accessToken) && <button onClick={e => logout()}>Logout</button>}
+                {Boolean(accessToken) && <button className="mr-2" onClick={e => logout()}>Logout</button>}
                 {Boolean(accessToken) && 
-                    <Link href={`/users/${user?.user_id}`}>
-                        {user?.username}
+                    <Link passHref href={`/users/${user?.user_id}`}>
+                    <a className="mr-2">
+                        {user?.username || "Profile"}
+                    </a>
                     </Link>
                 }
             </nav>
