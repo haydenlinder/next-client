@@ -8,7 +8,7 @@ import multerSharpS3 from "multer-sharp-s3";
 import AWS from "aws-sdk";
 
 export const s3 = new AWS.S3({
-    accessKeyId: process.env.S3_ACCESS_KEY,
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
     endpoint: process.env.S3_SERVER_URL,
     s3ForcePathStyle: true,
@@ -69,7 +69,7 @@ async function createBucketIfNotExists(s3: AWS.S3, bucketName: string) {
 
     const bucket = await s3
         .createBucket({
-            Bucket: "my-bucketname",
+            Bucket: process.env.S3_BUCKET_NAME || "",
             ACL: "public-read",
         })
         .promise();
