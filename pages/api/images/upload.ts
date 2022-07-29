@@ -10,7 +10,7 @@ import AWS from "aws-sdk";
 export const s3 = new AWS.S3({
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
-    endpoint: process.env.S3_SERVER_URL,
+    // endpoint: process.env.S3_SERVER_URL,
     s3ForcePathStyle: true,
     signatureVersion: "v4",
 });
@@ -22,7 +22,7 @@ export const s3 = new AWS.S3({
 const storage = multerSharpS3({
     toFormat: 'webp',
     s3,
-    ACL: "public-read",
+    ACL: undefined,
     Bucket: process.env.S3_BUCKET_NAME,
     multiple: true,
     resize: [
@@ -32,57 +32,10 @@ const storage = multerSharpS3({
         { suffix: "thumb.webp", width: 150, height: 150 },
         { suffix: "original.webp" },
     ],
-    // Key: (req, file, cb) => {
-    //     crypto.pseudoRandomBytes(16, (err, raw) => {
-    //         const filename = err ? undefined : raw.toString("hex");
-    //         cb(err, filename);
-    //     });
-    // },
 });
 
 const upload = multer({ storage });
 
-// Code outside of the exported request handler will be invoked once
-// So let's try to bootstrap the bucket we want to upload to, in case it doesn't exist
-
-async function checkBucketExists(s3: AWS.S3, bucketName: string) {
-    const options = { Bucket: bucketName };
-    try {
-        await s3.headBucket(options).promise();
-        return true;
-    } catch (error) {
-        const e = error as AWS.AWSError
-        if (e.statusCode === 404) return false;
-        throw error;
-    }
-}
-
-async function createBucketIfNotExists(s3: AWS.S3, bucketName: string) {
-    const exists = await checkBucketExists(s3, bucketName);
-    if (exists) return;
-
-    console.log(
-        "Checked for S3 bucket",
-        process.env.S3_BUCKET_NAME,
-        "but it didn't exist. Attempting to create it now"
-    );
-
-    const bucket = await s3
-        .createBucket({
-            Bucket: process.env.S3_BUCKET_NAME || "",
-            ACL: "public-read",
-        })
-        .promise();
-
-    console.log("Created bucket:", bucket);
-
-    return bucket;
-}
-
-createBucketIfNotExists(s3, process.env.S3_BUCKET_NAME || "").catch((err) => {
-    console.log("Got error while creating bucket", process.env.S3_BUCKET_NAME);
-    console.log(err);
-});
 
 /**
  * ===========================
