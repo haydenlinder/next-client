@@ -6,7 +6,7 @@ import { accessTokenState, currentUserIdState } from "../token";
 import { RefreshResponse } from "./api/session/refresh";
 
 
-const Home: NextPage = () => {
+const Login: NextPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<undefined | string>(undefined);
@@ -75,4 +75,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default Login;

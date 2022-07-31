@@ -10,7 +10,7 @@ import { useRouter } from "next/router";
 type Params = { id: string }
 
 
-const Home: NextPage<ApolloQueryResult<GetUserByIdQuery>> = () => {
+const User: NextPage<ApolloQueryResult<GetUserByIdQuery>> = () => {
     const { query } = useRouter()
 
     const { data, error, loading } = useQuery<GetUserByIdQuery, GetUserByIdQueryVariables>(GET_USER_BY_ID, {
@@ -39,4 +39,4 @@ const Home: NextPage<ApolloQueryResult<GetUserByIdQuery>> = () => {
     );
 };
 
-export default Home;
+export default User;

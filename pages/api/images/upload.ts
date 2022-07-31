@@ -3,17 +3,10 @@ import type { NextApiRequest, NextApiResponse } from "next";
 
 import multer from "multer";
 import multerSharpS3 from "multer-sharp-s3";
+import { s3 } from '../s3-client'
 
 
-import AWS from "aws-sdk";
 
-export const s3 = new AWS.S3({
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
-    // endpoint: process.env.S3_SERVER_URL,
-    s3ForcePathStyle: true,
-    signatureVersion: "v4",
-});
 /**
  * ===========================
  * FILE UPLOAD CONFIG
@@ -36,13 +29,41 @@ const storage = multerSharpS3({
 
 const upload = multer({ storage });
 
+export enum ImageSizes {
+    "lg.webp" = "lg.webp",
+    "md.webp" = "md.webp",
+    "sm.webp" = "sm.webp",
+    "thumb.webp" = "thumb.webp",
+    "original.webp" = "original.webp",
+}
+
+type ImageAttributes = {
+    Bucket: string
+    ContentType: string
+    ETag: string
+    Key: string
+    Location: string
+    height: number
+    key: string
+    premultiplied: boolean;
+    size: number;
+    width: number
+}
+
+type Versions = Record<ImageSizes, ImageAttributes>
+
 
 /**
  * ===========================
  * HANDLER
  * ===========================
  */
-const handler = nc<NextApiRequest, NextApiResponse>({
+
+export type FileResponse = {
+    file?: Express.Multer.File & Versions;
+    message?: string;
+}
+const handler = nc<NextApiRequest, NextApiResponse<FileResponse>>({
     onError: (err, req, res, next) => {
         console.log(err);
     },

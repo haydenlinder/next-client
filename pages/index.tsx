@@ -2,8 +2,6 @@ import type { NextPage } from "next";
 import {
   CreatePostMutation,
   CreatePostMutationVariables,
-  DeletePostMutation,
-  DeletePostMutationVariables,
   GetPostsQuery,
   GetPostsQueryVariables,
 } from "../types/generated/graphql";
@@ -11,8 +9,10 @@ import { useMutation, useQuery, useReactiveVar } from "@apollo/client";
 import { FormEventHandler, useEffect, useState } from "react";
 import { CREATE_POST, DELETE_POST, GET_POSTS } from "../graphql/posts";
 import { currentUserIdState } from "../token";
-import Link from "next/link";
 import { useDropzone } from "react-dropzone";
+import { Post } from "../components/Post";
+import { FileResponse } from "./api/images/upload";
+
 
 async function uploadImage(file: File) {
   const fakeImageForm = new FormData();
@@ -22,12 +22,11 @@ async function uploadImage(file: File) {
     method: "POST",
     body: fakeImageForm,
   });
-  const res = await req.json();
+  const res: FileResponse = await req.json();
 
-  console.log("Got image upload result:", res);
-  const imageUrl = `${process.env.S3_SERVER_URL}/${res.file["original.webp"].Bucket}/${res.file["original.webp"].Key}`;
-  console.log("View image at:", imageUrl);
-  return imageUrl;
+  const key = res.file?.["original.webp"].key
+
+  return key;
 }
 
 interface FilePreview extends File {
@@ -54,11 +53,7 @@ const Home: NextPage = ({ }) => {
       GET_POSTS
     ]
   });
-  const [deletePost, { loading: deleting }] = useMutation<DeletePostMutation, DeletePostMutationVariables>(DELETE_POST, {
-    refetchQueries: [
-      GET_POSTS
-    ]
-  });
+
 
 
   if (loading) return <div>loading...</div>;
@@ -71,13 +66,13 @@ const Home: NextPage = ({ }) => {
   const handleSubmit: FormEventHandler = async (e) => {
     e.preventDefault();
     try {
-      const imageUrls = await Promise.all(files.map(uploadImage));
-      console.log({imageUrls});
+      const imageKeys = await Promise.all(files.map(uploadImage));
+      console.log({imageKeys});
       savePost({
         variables: {
           body,
           user_id: currentUserId,
-          photo_url: imageUrls[0],
+          photo_url: imageKeys[0],
         }
       });
     } catch (e) {
@@ -98,17 +93,7 @@ const Home: NextPage = ({ }) => {
       </form>
       <div>
         <h1>Past posts</h1>
-        {posts?.map(p => {
-          return (
-            <div key={p.id} className="border border-black rounded p-4 mb-4">
-              <h2>Author: <Link className="text-blue underline" href={`/users/${p.user_id}`}>{p.user.username}</Link></h2>
-              <h3>Created: {p.created_at}</h3>
-              <p>Body: {p.body}</p>
-              {p.photo_url && <img src={p.photo_url || ""} alt="" height={500} width={500}/>}
-              <button className="border p-2 rounded mt-4" onClick={() => deletePost({ variables: { post_id: p.post_id } })}>{deleting ? "Deleting" : "Delete"}</button>
-            </div>
-          )
-        })}
+        {posts?.map(post => <Post key={post.id} post={post}/>)}
       </div>
     </section>
   );
