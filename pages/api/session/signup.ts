@@ -31,10 +31,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const params = new URLSearchParams({token})
   const msg = {
     to: email,
-    from: `noreply@${process.env.DOMAIN}`, // Use the email address or domain you verified above
+    from: `noreply@${process.env.EMAIL_DOMAIN}`, 
     subject: 'Please verify your email',
     text: `Please use this link to verify your email: ${process.env.BASE_URL}/verify?${params.toString()}`,
-    html: `<p>Please <a href="${process.env.BASE_URL}/verify?token=${token}">click here to verify your email.</p>`,
+    html: `<p>Please <a href="${process.env.BASE_URL}/verify?token=${token}">verify your email.</a></p>`,
   };
 
   try {

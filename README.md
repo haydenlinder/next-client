@@ -44,8 +44,7 @@ Put these in `.env.local` before starting the server:
 - REFRESH_SECRET=5678
 - BASE_URL=http://localhost:3000
 - S3_BUCKET_NAME="my-bucketname"
-- AWS_ACCESS_KEY_ID="minio"
-- S3_SECRET_ACCESS_KEY="minio123"
-- S3_SERVER_URL="http://localhost:9000"
+- S3_ACCESS_KEY="1234abc"
+- S3_SECRET_ACCESS_KEY="!@#zyx..."
 - SENDGRID_API_KEY=SG.XXXXXXXX
-- DOMAIN=XXXX.com
+- EMAIL_DOMAIN=http:/localhost:3000
