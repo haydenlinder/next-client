@@ -7,7 +7,7 @@ import {
 } from "../types/generated/graphql";
 import { useMutation, useQuery, useReactiveVar } from "@apollo/client";
 import { FormEventHandler, useEffect, useState } from "react";
-import { CREATE_POST, DELETE_POST, GET_POSTS } from "../graphql/posts";
+import { CREATE_POST, GET_POSTS } from "../graphql/posts";
 import { currentUserIdState } from "../token";
 import { useDropzone } from "react-dropzone";
 import { Post } from "../components/Post";
