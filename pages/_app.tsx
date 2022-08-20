@@ -61,8 +61,9 @@ export const sessionConditionRedirect = async (context: AppContext): Promise<App
   // these will be available on the server
   const { req, res } = context.ctx;
 
-  const path = req?.url || context.ctx.pathname;
-  const isProtected = (path === '/');
+  const path = (req?.url || context.ctx.pathname).split('?')[0] || '';
+  console.log({path})
+  const isProtected = (path === '/admin');
   const isLogin = (path === '/login');
 
   const response = await refresh(req?.headers.cookie);

@@ -45,7 +45,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({ req }) => 
   console.log({token})
   const { data } = await serverClient.query<GetPostsQuery>({
     query: GET_POSTS,
-    context: { headers: { authorization: `Bearer ${token}` } }
+    context: { headers: { 'x-hasura-admin-secret': process.env.HASURA_ADMIN_SECRET } }
   })
   return (
     {
@@ -88,13 +88,6 @@ const Home: NextPage<Props> = ({ posts }) => {
 
   return (
     <section>
-      <form className="mb-8" onSubmit={handleSubmit}>
-        <h1>Make an entry</h1>
-        <label htmlFor="body">Body</label>
-        <DropzoneWithPreview files={files} setFiles={setFiles} />
-        <textarea placeholder="body" className="border border-black rounded w-full" onChange={e => setBody(e.target.value)} value={body} name="body" id="body" cols={30} rows={10}/>
-        <button>{saving ? "Saving" : "Post"}</button>
-      </form>
       <div>
         <h1>Past posts</h1>
         {posts?.map(post => <Post key={post.id} post={post}/>)}
@@ -104,93 +97,7 @@ const Home: NextPage<Props> = ({ posts }) => {
 };
 
 
-type DropzoneProps = {
-  setFiles: React.Dispatch<React.SetStateAction<FilePreview[]>>;
-  files: FilePreview[];
-}
 
-function DropzoneWithPreview({setFiles, files}: DropzoneProps) {
-  const { getRootProps, getInputProps } = useDropzone({
-    onDrop: (acceptedFiles) => {
-      setFiles(
-        acceptedFiles.map((file) =>
-          Object.assign(file, {
-            preview: URL.createObjectURL(file),
-          })
-        )
-      );
-    },
-  });
-
-  const thumbsContainer = {
-    display: "flex",
-    marginTop: 16,
-  };
-
-  const thumb = {
-    display: "inline-flex",
-    borderRadius: 2,
-    border: "1px solid #eaeaea",
-    marginBottom: 8,
-    marginRight: 8,
-    width: 100,
-    height: 100,
-    padding: 4,
-  };
-
-  const thumbInner = {
-    display: "flex",
-    minWidth: 0,
-    overflow: "hidden",
-  };
-
-  const img = {
-    display: "block",
-    width: "auto",
-    height: "100%",
-  };
-
-  const dropzoneStyles = {
-    flex: 1,
-    display: "flex",
-    alignItems: "center",
-    padding: "20px",
-    borderWidth: "2px",
-    borderRadius: "2px",
-    borderColor: " #eeeeee",
-    borderStyle: "dashed",
-    backgroundColor: "#fafafa",
-    color: "#bdbdbd",
-    outline: "none",
-    transition: "border .24s ease-in-out",
-  };
-
-  const thumbs = files.map((file) => (
-    <div style={{ ...thumb }} key={file.name}>
-      <div style={thumbInner}>
-        <img src={file.preview} style={img} />
-      </div>
-    </div>
-  ));
-
-  useEffect(
-    () => () => {
-      // Make sure to revoke the data uris to avoid memory leaks
-      files.forEach((file) => URL.revokeObjectURL(file.preview));
-    },
-    [files]
-  );
-
-  return (
-    <section className="container">
-      <div {...getRootProps({ className: "dropzone" })} style={dropzoneStyles}>
-        <input {...getInputProps()} name="image" accept="image/*" />
-        <p>Drag and drop some files here, or click to select files</p>
-      </div>
-      <aside style={thumbsContainer}>{thumbs}</aside>
-    </section>
-  );
-}
 
 
 
