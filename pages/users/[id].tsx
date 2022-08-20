@@ -1,4 +1,4 @@
-import type { NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 import {
     GetUserByIdQuery, GetUserByIdQueryVariables,
 } from "../../types/generated/graphql";
@@ -6,27 +6,38 @@ import { ApolloQueryResult, useQuery, useReactiveVar } from "@apollo/client";
 import { currentUserIdState } from "../../token";
 import { GET_USER_BY_ID } from "../../graphql/users";
 import { useRouter } from "next/router";
+import { serverClient } from "../api/apollo-client";
+import { refresh } from "../api/next-client";
 
-type Params = { id: string }
+type Props = { user: GetUserByIdQuery['users_connection']['edges'][0]['node'] }
 
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+    const response = await refresh(req?.headers.cookie);
+    const accessToken = response?.data?.access_token;
+    const user_id = response?.data?.user_id;
 
-const User: NextPage<ApolloQueryResult<GetUserByIdQuery>> = () => {
-    const { query } = useRouter()
+    let user: GetUserByIdQuery['users_connection']['edges'][0]['node'] | undefined
 
-    const { data, error, loading } = useQuery<GetUserByIdQuery, GetUserByIdQueryVariables>(GET_USER_BY_ID, {
-        variables: {
-            _eq: Number(query.id)
-        }
-    });
-
-    if (error) {
-        console.log({ error })
-        return <div>{error.message}</div>
+    if (accessToken) {
+        const { data } = await serverClient.query<GetUserByIdQuery, GetUserByIdQueryVariables>({
+            query: GET_USER_BY_ID,
+            variables: {
+                _eq: user_id
+            },
+            context: { headers: { authorization: `Bearer ${accessToken}` } }
+        });
+        user = data.users_connection.edges[0].node
     }
+    return ({
+        props: {
+            user
+        }
+    })
+}
 
-    if (loading) return <div>Loading</div>
 
-    const user = data?.users_connection.edges[0]?.node
+const User: NextPage<Props> = ({ user }) => {
+    const { query } = useRouter()
 
     if (!user) return <div>User Not Found</div>
 

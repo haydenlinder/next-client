@@ -27,7 +27,7 @@ const Verify: NextPage = () => {
                 if (data.errors) setError(data.errors)
             } catch (e) {
                 const er = e as string;  
-                console.log(er)
+                console.error(er)
                 setError(er)
             } finally {
                 setLoading(false);

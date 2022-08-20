@@ -1,4 +1,4 @@
-import type { NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 import {
   CreatePostMutation,
   CreatePostMutationVariables,
@@ -12,6 +12,8 @@ import { currentUserIdState } from "../token";
 import { useDropzone } from "react-dropzone";
 import { Post } from "../components/Post";
 import { FileResponse } from "./api/images/upload";
+import { serverClient } from "./api/apollo-client";
+import { getCookieParser } from "next/dist/server/api-utils";
 
 
 async function uploadImage(file: File) {
@@ -33,20 +35,34 @@ interface FilePreview extends File {
   preview: string;
 }
 
-const Home: NextPage = ({ }) => {
+type Props = {
+  posts: GetPostsQuery['posts_connection']['edges'][0]['node'][]
+}
+
+export const getServerSideProps: GetServerSideProps<Props> = async ({ req }) => {
+  const cookies = getCookieParser(req.headers)()
+  const token = cookies.access_token
+  console.log({token})
+  const { data } = await serverClient.query<GetPostsQuery>({
+    query: GET_POSTS,
+    context: { headers: { authorization: `Bearer ${token}` } }
+  })
+  return (
+    {
+      props: {
+        posts: data.posts_connection.edges.map(e => e.node)
+      }
+    }
+  )
+}
+
+const Home: NextPage<Props> = ({ posts }) => {
   const [body, setBody] = useState("");
   const [files, setFiles] = useState<FilePreview[]>([]);
 
   const currentUserId = useReactiveVar(currentUserIdState);
 
-  const { data, loading, error } = useQuery<
-    GetPostsQuery,
-    GetPostsQueryVariables
-  >(GET_POSTS, {
-    variables: {
-      _gte: 0
-    }
-  });
+  
 
   const [savePost, { loading: saving }] = useMutation<CreatePostMutation, CreatePostMutationVariables>(CREATE_POST, {
     refetchQueries: [
@@ -54,20 +70,10 @@ const Home: NextPage = ({ }) => {
     ]
   });
 
-
-
-  if (loading) return <div>loading...</div>;
-
-  if (error) {
-    console.log({error})
-    return <div>no data</div>
-  };
-
   const handleSubmit: FormEventHandler = async (e) => {
     e.preventDefault();
     try {
       const imageKeys = await Promise.all(files.map(uploadImage));
-      console.log({imageKeys});
       savePost({
         variables: {
           body,
@@ -76,11 +82,9 @@ const Home: NextPage = ({ }) => {
         }
       });
     } catch (e) {
-      console.log({e})
+      console.error({e})
     }
   }
-
-  const posts = data?.posts_connection.edges.map(e => e.node);
 
   return (
     <section>

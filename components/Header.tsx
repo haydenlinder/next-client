@@ -5,6 +5,11 @@ import { GET_USER_BY_ID } from "../graphql/users";
 import { accessTokenState, currentUserIdState } from "../token"
 import { GetUserByIdQuery, GetUserByIdQueryVariables } from "../types/generated/graphql";
 
+type HeaderProps = {
+    accessToken: string | undefined
+    user: GetUserByIdQuery['users_connection']['edges'][0]['node']
+}
+
 const logout = async () => {
     const response = await fetch('/api/session/logout', { method: 'POST' });
     await response.json();
@@ -13,23 +18,7 @@ const logout = async () => {
     Router.replace('/login')
 }
 
-export const Header = () => {
-    const accessToken = useReactiveVar(accessTokenState);
-    const currentUserId = useReactiveVar(currentUserIdState);
-
-    const { data, error, loading } = useQuery<GetUserByIdQuery, GetUserByIdQueryVariables>(GET_USER_BY_ID, { 
-        variables: {
-          _eq: currentUserId
-        }
-    });
-
-    if (error) {
-        console.log({error})
-    }
-
-    if (loading) return <div>Loading</div>
-
-    const user = data?.users_connection.edges[0]?.node
+export const Header = ({ accessToken, user }: HeaderProps) => {
 
     return (
         <header className="p-4 bg-black text-white mb-3 absolute w-full top-0">

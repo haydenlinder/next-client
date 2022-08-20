@@ -17,7 +17,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     try {
         payload = jwt.verify(token, process.env.REFRESH_SECRET!) as TokenPayload;
     } catch (e) {
-        console.log("refresh server error: ", { e })
+        console.error("refresh server error: ", { e })
     }
     
     if (!payload) return res.status(401).json({ errors: 'Invalid token.' });

@@ -10,15 +10,15 @@ export const errorLink = onError((e) => {
   const { graphQLErrors, networkError } = e;
   if (graphQLErrors)
     graphQLErrors.forEach(({ message, locations, path }) =>
-      console.log(
+      console.error(
         `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
       ),
     );
-  if (networkError) console.log(`[Network error]: ${networkError}`);
+  if (networkError) console.error(`[Network error]: ${networkError}`);
 });
 
-export const authLink = new ApolloLink((operation, forward) => {
-  accessTokenState() && operation.setContext({ headers: { authorization: `Bearer ${accessTokenState()}` } });
+export const authLink = (token: string) => new ApolloLink((operation, forward) => {
+  operation.setContext({ headers: { authorization: `Bearer ${token}` } });
   return forward(operation);
 });
 
@@ -29,7 +29,7 @@ export const serverClient = new ApolloClient({
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
-  link: from([errorLink, authLink, httpLink])
+  link: from([errorLink, authLink(''), httpLink])
 });
 
 export default client;

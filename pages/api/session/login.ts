@@ -10,7 +10,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     // Look for user with the email above
     const { data, error } = await getUserByEmail(email);
     if (error) {
-        console.log("Error finding user: ", error);
+        console.error("Error finding user: ", error);
         return res.status(500).json({errors: `Error finding user: ${error}`});
     }
     const user = data?.users_connection?.edges[0]?.node;
@@ -40,18 +40,32 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     // Add refresh token to cookies
     res.setHeader(
         "Set-Cookie",
-        cookie.serialize(
-            'refresh_token',
-            refresh_token,
-            {
-                path: '/',
-                // signed: true,
-                httpOnly: true,
-                // https only v
-                secure: true,
-                sameSite: 'none'
-            }
-        )
+        [
+            cookie.serialize(
+                'refresh_token',
+                refresh_token,
+                {
+                    path: '/',
+                    // signed: true,
+                    httpOnly: true,
+                    // https only v
+                    secure: true,
+                    sameSite: 'none'
+                }
+            ),
+            cookie.serialize(
+                'access_token',
+                access_token,
+                {
+                    path: '/',
+                    // signed: true,
+                    httpOnly: true,
+                    // https only v
+                    secure: true,
+                    sameSite: 'none'
+                }
+            ),
+    ]
     );
     // Return access_token to be stored in memory
     return res.json({

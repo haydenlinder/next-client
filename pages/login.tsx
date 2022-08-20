@@ -13,8 +13,6 @@ const Login: NextPage = () => {
 
   const accessToken = useReactiveVar(accessTokenState)
   const [isNewUser, setIsNewUser] = useState(true);
-  
-  if (accessToken) Router.replace('/') 
 
   const signup: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
@@ -23,10 +21,9 @@ const Login: NextPage = () => {
       const data = await response.json();
       if (response.status !== 200) return setError(data.errors)
     } catch (e) {
-      console.log("SIGNUP ERROR: ", e)
+      console.error("SIGNUP ERROR: ", e)
     }
   };
-  
 
   const login: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
@@ -39,7 +36,7 @@ const Login: NextPage = () => {
       accessTokenState(data.data?.access_token)
       currentUserIdState(data.data?.user_id)
     } catch (e) {
-      console.log("LOGIN ERROR: ", e)
+      console.error("LOGIN ERROR: ", e)
     }
     Router.replace('/')
   };

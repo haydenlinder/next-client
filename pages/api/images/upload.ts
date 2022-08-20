@@ -65,7 +65,7 @@ export type FileResponse = {
 }
 const handler = nc<NextApiRequest, NextApiResponse<FileResponse>>({
     onError: (err, req, res, next) => {
-        console.log(err);
+        console.error(err);
     },
 });
 
