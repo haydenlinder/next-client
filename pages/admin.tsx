@@ -3,9 +3,8 @@ import {
     CreatePostMutation,
     CreatePostMutationVariables,
     GetPostsQuery,
-    GetPostsQueryVariables,
 } from "../types/generated/graphql";
-import { useMutation, useQuery, useReactiveVar } from "@apollo/client";
+import { useMutation, useReactiveVar } from "@apollo/client";
 import { FormEventHandler, useEffect, useState } from "react";
 import { CREATE_POST, GET_POSTS } from "../graphql/posts";
 import { currentUserIdState } from "../token";
@@ -14,6 +13,7 @@ import { Post } from "../components/Post";
 import { FileResponse } from "./api/images/upload";
 import { serverClient } from "./api/apollo-client";
 import { getCookieParser } from "next/dist/server/api-utils";
+import ReactMarkdown from "react-markdown";
 
 
 async function uploadImage(file: File) {
@@ -62,8 +62,6 @@ const Home: NextPage<Props> = ({ posts }) => {
 
     const currentUserId = useReactiveVar(currentUserIdState);
 
-
-
     const [savePost, { loading: saving }] = useMutation<CreatePostMutation, CreatePostMutationVariables>(CREATE_POST, {
         refetchQueries: [
             GET_POSTS
@@ -92,7 +90,11 @@ const Home: NextPage<Props> = ({ posts }) => {
                 <h1>Make an entry</h1>
                 <label htmlFor="body">Body</label>
                 <DropzoneWithPreview files={files} setFiles={setFiles} />
-                <textarea placeholder="body" className="border border-black rounded w-full" onChange={e => setBody(e.target.value)} value={body} name="body" id="body" cols={30} rows={10} />
+                <textarea placeholder="body" className="p-2 border border-black rounded w-full" onChange={e => setBody(e.target.value)} value={body} name="body" id="body" cols={30} rows={10} />
+                <ReactMarkdown components={{
+                    h1: ({ node, ...props }) => <h1 className='font-bold text-lg' {...props} />,
+                    a: ({ node, ...props }) => <a className='text-blue-400 text-lg' {...props} />
+                }}>{body}</ReactMarkdown>
                 <button>{saving ? "Saving" : "Post"}</button>
             </form>
             <div>
