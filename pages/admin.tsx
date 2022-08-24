@@ -3,6 +3,8 @@ import {
     CreatePostMutation,
     CreatePostMutationVariables,
     GetPostsQuery,
+    GetUserByIdQuery,
+    GetUserByIdQueryResult,
 } from "../types/generated/graphql";
 import { useMutation, useReactiveVar } from "@apollo/client";
 import { FormEventHandler, useEffect, useState } from "react";
@@ -14,6 +16,7 @@ import { FileResponse } from "./api/images/upload";
 import { serverClient } from "./api/apollo-client";
 import { getCookieParser } from "next/dist/server/api-utils";
 import ReactMarkdown from "react-markdown";
+import { getCurrentUser } from "./api/apollo_functions/users";
 
 
 async function uploadImage(file: File) {
@@ -36,7 +39,8 @@ interface FilePreview extends File {
 }
 
 type Props = {
-    posts: GetPostsQuery['posts_connection']['edges'][0]['node'][]
+    posts: GetPostsQuery['posts_connection']['edges'][0]['node'][];
+    user: GetUserByIdQuery['users_connection']['edges'][0]['node'] | undefined
 }
 
 export const getServerSideProps: GetServerSideProps<Props> = async ({ req }) => {
@@ -47,20 +51,22 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({ req }) => 
         query: GET_POSTS,
         context: { headers: { authorization: `Bearer ${token}` } }
     })
+
+    const user = await getCurrentUser(req);
+
     return (
         {
             props: {
-                posts: data.posts_connection.edges.map(e => e.node)
+                posts: data.posts_connection.edges.map(e => e.node),
+                user
             }
         }
     )
 }
 
-const Home: NextPage<Props> = ({ posts }) => {
+const Home: NextPage<Props> = ({ posts, user }) => {
     const [body, setBody] = useState("");
     const [files, setFiles] = useState<FilePreview[]>([]);
-
-    const currentUserId = useReactiveVar(currentUserIdState);
 
     const [savePost, { loading: saving }] = useMutation<CreatePostMutation, CreatePostMutationVariables>(CREATE_POST, {
         refetchQueries: [
@@ -75,7 +81,7 @@ const Home: NextPage<Props> = ({ posts }) => {
             savePost({
                 variables: {
                     body,
-                    user_id: currentUserId,
+                    user_id: user?.user_id,
                     photo_url: imageKeys[0],
                 }
             });

@@ -1,6 +1,8 @@
+import { GetServerSidePropsContext, NextApiRequest } from "next"
 import { CREATE_USER, GET_USERS, GET_USER_BY_EMAIL, GET_USER_BY_ID, VERIFY_USER } from "../../../graphql/users"
 import { CreateUserMutation, CreateUserMutationVariables, GetUserByEmailQuery, GetUserByEmailQueryVariables, GetUserByIdQuery, GetUserByIdQueryVariables, GetUsersPaginatedQuery, GetUsersPaginatedQueryResult, VerifyUserMutation, VerifyUserMutationVariables } from "../../../types/generated/graphql"
 import client, { serverClient } from "../apollo-client"
+import { refresh } from "../next-client"
 
 export const getUserById = async (id: string | undefined) => {
     return await client.query<
@@ -35,4 +37,25 @@ export const verifyUser = async ({ user_id }: VerifyUserMutationVariables) => {
     VerifyUserMutation,
     VerifyUserMutationVariables
 >({ mutation: VERIFY_USER, variables: { user_id }, context: { headers: { "x-hasura-admin-secret": process.env.HASURA_ADMIN_SECRET} } });
+}
+
+export const getCurrentUser = async (req: GetServerSidePropsContext['req']) => {
+    const response = await refresh(req?.headers.cookie);
+    const accessToken = response?.data?.access_token;
+    const user_id = response?.data?.user_id;
+
+    let user: GetUserByIdQuery['users_connection']['edges'][0]['node'] | undefined
+
+    if (accessToken) {
+        const { data } = await serverClient.query<GetUserByIdQuery, GetUserByIdQueryVariables>({
+            query: GET_USER_BY_ID,
+            variables: {
+                _eq: user_id
+            },
+            context: { headers: { authorization: `Bearer ${accessToken}` } }
+        });
+        user = data.users_connection.edges[0].node
+    }
+
+    return user;
 }
