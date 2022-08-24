@@ -17,6 +17,7 @@ import { serverClient } from "./api/apollo-client";
 import { getCookieParser } from "next/dist/server/api-utils";
 import ReactMarkdown from "react-markdown";
 import { getCurrentUser } from "./api/apollo_functions/users";
+import { Button } from "../components/Button";
 
 
 async function uploadImage(file: File) {
@@ -102,7 +103,7 @@ const Home: NextPage<Props> = ({ posts, user }) => {
                     h1: ({ node, ...props }) => <h1 className='font-bold text-lg' {...props} />,
                     a: ({ node, ...props }) => <a className='text-blue-600 hover:underline text-lg' {...props} />
                 }}>{body}</ReactMarkdown>
-                <button className="p-2 border border-black rounded">{saving ? "Saving" : "Post"}</button>
+                <Button className="">{saving ? "Saving" : "Post"}</Button>
             </form>
             <div>
                 <h1>Past posts</h1>

@@ -4,6 +4,7 @@ import Router from "next/router";
 import { GET_USER_BY_ID } from "../graphql/users";
 import { accessTokenState, currentUserIdState } from "../token"
 import { GetUserByIdQuery, GetUserByIdQueryVariables } from "../types/generated/graphql";
+import { Button } from "./Button";
 
 type HeaderProps = {
     accessToken: string | undefined
@@ -22,19 +23,21 @@ export const Header = ({ accessToken, user }: HeaderProps) => {
 
     return (
         <header className="p-4 flex justify-center bg-black text-white mb-3 absolute w-full top-0">
-            <nav className="container">
+            <nav className="container flex items-center justify-between">
                 <Link passHref href="/">
                     <a className="mr-2">
                         Home
                     </a>
                 </Link>
-                {Boolean(accessToken) && <button className="mr-2" onClick={e => logout()}>Logout</button>}
                 {Boolean(accessToken) && 
-                    <Link passHref href={`/users/${user?.user_id}`}>
-                    <a className="mr-2">
-                        {user?.username || "Profile"}
-                    </a>
-                    </Link>
+                    <div>
+                        <Link passHref href={`/users/${user?.user_id}`}>
+                            <a className="mr-2">
+                                {user?.username || "Profile"}
+                            </a>
+                        </Link>
+                        <Button className="mr-2 border-white" onClick={e => logout()}>Logout</Button>
+                    </div>
                 }
             </nav>
         </header>

@@ -4,6 +4,7 @@ import ReactMarkdown from "react-markdown";
 import { DELETE_POST, GET_POSTS } from "../graphql/posts";
 import { currentUserIdState } from "../token";
 import { DeletePostMutation, DeletePostMutationVariables, GetPostsQuery } from "../types/generated/graphql";
+import { Button } from "./Button";
 type Post = GetPostsQuery['posts_connection']['edges'][0]['node']
 
 type PostProps = {
@@ -28,7 +29,7 @@ export const Post = ({post}: PostProps) => {
                 a: ({ node, ...props }) => <a className='text-blue-600 hover:underline text-lg' {...props} />
             }}>{post.body}</ReactMarkdown>
             {post.photo_url && <img src={`/api/images/${post.photo_url}`} alt="" height={500} width={500} />}
-            {post.user_id === currentUserId &&  <button className="border p-2 rounded mt-4" onClick={() => deletePost({ variables: { post_id: post.post_id } })}>{deleting ? "Deleting" : "Delete"}</button>}
+            {post.user_id === currentUserId &&  <Button className="mt-4" onClick={() => deletePost({ variables: { post_id: post.post_id } })}>{deleting ? "Deleting" : "Delete"}</Button>}
         </div>
     )
 }

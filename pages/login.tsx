@@ -2,6 +2,7 @@ import { useReactiveVar } from "@apollo/client";
 import type { NextPage } from "next";
 import Router from "next/router";
 import React, { FormEventHandler, useState } from "react";
+import { Button } from "../components/Button";
 import { accessTokenState, currentUserIdState } from "../token";
 import { RefreshResponse } from "./api/session/refresh";
 
@@ -58,16 +59,16 @@ const Login: NextPage = () => {
         type="password"
         onChange={e => setPassword(e.target.value)}
       />
-      <button className="border border-solid rounded px-4 py-2">
+      <Button className="my-2">
         🚀
-      </button>
+      </Button>
     </form>
-      <button
-        className="border border-solid rounded px-4 py-2" 
+      <Button
+        className="my-2" 
         onClick={() => setIsNewUser(bool => !bool) }
       >
         Switch to {isNewUser ? `Login` : `Signup`}
-      </button>
+      </Button>
     </>
   );
 };

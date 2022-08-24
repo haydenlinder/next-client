@@ -3,6 +3,7 @@ import { NextPage } from "next";
 import Link from "next/link";
 import Router from "next/router";
 import { useEffect, useState } from "react";
+import { Button } from "../components/Button";
 import { accessTokenState } from "../token";
 import { VerifyResponse } from "./api/session/verify";
 
@@ -41,7 +42,7 @@ const Verify: NextPage = () => {
     return (
         <section>
             <h1>Success!</h1>
-            <Link href="/login" passHref><button>Log In</button></Link>
+            <Link href="/login" passHref><Button>Log In</Button></Link>
         </section>
     )
 };
