@@ -446,6 +446,7 @@ export type Users = Node & {
   created_at: Scalars['timestamptz'];
   email: Scalars['String'];
   id: Scalars['ID'];
+  is_admin?: Maybe<Scalars['Boolean']>;
   is_verified: Scalars['Boolean'];
   password_hash: Scalars['String'];
   updated_at: Scalars['timestamptz'];
@@ -473,6 +474,7 @@ export type Users_Bool_Exp = {
   _or?: InputMaybe<Array<Users_Bool_Exp>>;
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   email?: InputMaybe<String_Comparison_Exp>;
+  is_admin?: InputMaybe<Boolean_Comparison_Exp>;
   is_verified?: InputMaybe<Boolean_Comparison_Exp>;
   password_hash?: InputMaybe<String_Comparison_Exp>;
   updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
@@ -497,6 +499,7 @@ export type Users_Inc_Input = {
 export type Users_Insert_Input = {
   created_at?: InputMaybe<Scalars['timestamptz']>;
   email?: InputMaybe<Scalars['String']>;
+  is_admin?: InputMaybe<Scalars['Boolean']>;
   is_verified?: InputMaybe<Scalars['Boolean']>;
   password_hash?: InputMaybe<Scalars['String']>;
   updated_at?: InputMaybe<Scalars['timestamptz']>;
@@ -531,6 +534,7 @@ export type Users_On_Conflict = {
 export type Users_Order_By = {
   created_at?: InputMaybe<Order_By>;
   email?: InputMaybe<Order_By>;
+  is_admin?: InputMaybe<Order_By>;
   is_verified?: InputMaybe<Order_By>;
   password_hash?: InputMaybe<Order_By>;
   updated_at?: InputMaybe<Order_By>;
@@ -550,6 +554,8 @@ export enum Users_Select_Column {
   /** column name */
   Email = 'email',
   /** column name */
+  IsAdmin = 'is_admin',
+  /** column name */
   IsVerified = 'is_verified',
   /** column name */
   PasswordHash = 'password_hash',
@@ -565,6 +571,7 @@ export enum Users_Select_Column {
 export type Users_Set_Input = {
   created_at?: InputMaybe<Scalars['timestamptz']>;
   email?: InputMaybe<Scalars['String']>;
+  is_admin?: InputMaybe<Scalars['Boolean']>;
   is_verified?: InputMaybe<Scalars['Boolean']>;
   password_hash?: InputMaybe<Scalars['String']>;
   updated_at?: InputMaybe<Scalars['timestamptz']>;
@@ -578,6 +585,8 @@ export enum Users_Update_Column {
   CreatedAt = 'created_at',
   /** column name */
   Email = 'email',
+  /** column name */
+  IsAdmin = 'is_admin',
   /** column name */
   IsVerified = 'is_verified',
   /** column name */
@@ -618,21 +627,21 @@ export type GetUsersPaginatedQueryVariables = Exact<{
 }>;
 
 
-export type GetUsersPaginatedQuery = { __typename?: 'query_root', users_connection: { __typename?: 'usersConnection', edges: Array<{ __typename?: 'usersEdge', cursor: string, node: { __typename?: 'users', created_at: any, email: string, updated_at: any, username: string, user_id: number, id: string } }>, pageInfo: { __typename?: 'PageInfo', endCursor: string, hasNextPage: boolean, hasPreviousPage: boolean, startCursor: string } } };
+export type GetUsersPaginatedQuery = { __typename?: 'query_root', users_connection: { __typename?: 'usersConnection', edges: Array<{ __typename?: 'usersEdge', cursor: string, node: { __typename?: 'users', created_at: any, email: string, updated_at: any, username: string, user_id: number, is_admin?: boolean | null, id: string } }>, pageInfo: { __typename?: 'PageInfo', endCursor: string, hasNextPage: boolean, hasPreviousPage: boolean, startCursor: string } } };
 
 export type GetUserByEmailQueryVariables = Exact<{
   _eq?: InputMaybe<Scalars['String']>;
 }>;
 
 
-export type GetUserByEmailQuery = { __typename?: 'query_root', users_connection: { __typename?: 'usersConnection', edges: Array<{ __typename?: 'usersEdge', node: { __typename?: 'users', created_at: any, email: string, updated_at: any, id: string, is_verified: boolean, user_id: number, username: string, password_hash: string } }> } };
+export type GetUserByEmailQuery = { __typename?: 'query_root', users_connection: { __typename?: 'usersConnection', edges: Array<{ __typename?: 'usersEdge', node: { __typename?: 'users', created_at: any, email: string, updated_at: any, id: string, is_verified: boolean, user_id: number, username: string, password_hash: string, is_admin?: boolean | null } }> } };
 
 export type GetUserByIdQueryVariables = Exact<{
   _eq?: InputMaybe<Scalars['Int']>;
 }>;
 
 
-export type GetUserByIdQuery = { __typename?: 'query_root', users_connection: { __typename?: 'usersConnection', edges: Array<{ __typename?: 'usersEdge', node: { __typename?: 'users', email: string, id: string, user_id: number, created_at: any, updated_at: any, username: string } }> } };
+export type GetUserByIdQuery = { __typename?: 'query_root', users_connection: { __typename?: 'usersConnection', edges: Array<{ __typename?: 'usersEdge', node: { __typename?: 'users', email: string, id: string, user_id: number, created_at: any, updated_at: any, username: string, is_admin?: boolean | null } }> } };
 
 export type CreateUserMutationVariables = Exact<{
   email?: InputMaybe<Scalars['String']>;
@@ -713,6 +722,7 @@ export const GetUsersPaginatedDocument = gql`
         updated_at
         username
         user_id
+        is_admin
         id
       }
     }
@@ -739,6 +749,7 @@ export const GetUserByEmailDocument = gql`
         user_id
         username
         password_hash
+        is_admin
       }
     }
   }
@@ -756,6 +767,7 @@ export const GetUserByIdDocument = gql`
         created_at
         updated_at
         username
+        is_admin
       }
     }
   }

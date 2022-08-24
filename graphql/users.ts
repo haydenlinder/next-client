@@ -11,6 +11,7 @@ export const GET_USERS = gql`
           updated_at
           username
           user_id
+          is_admin
           id
         }
       }
@@ -37,6 +38,7 @@ export const GET_USER_BY_EMAIL = gql`
           user_id
           username
           password_hash
+          is_admin
         }
       }
     }
@@ -54,6 +56,7 @@ query getUserById($_eq: Int = 0) {
         created_at
         updated_at
         username
+        is_admin
       }
     }
   }

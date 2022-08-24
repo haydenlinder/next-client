@@ -63,8 +63,8 @@ export const sessionConditionRedirect = async (context: AppContext): Promise<App
 
   const path = (req?.url || context.ctx.pathname).split('?')[0] || '';
 
-  const isProtected = (path === '/admin');
-  const isLogin = (path === '/login');
+  const isAdminRoute = (path === '/admin');
+  const isLoginRoute = (path === '/login');
 
   const response = await refresh(req?.headers.cookie);
   const accessToken = response?.data?.access_token;
@@ -83,14 +83,13 @@ export const sessionConditionRedirect = async (context: AppContext): Promise<App
   }
 
   const appProps = await App.getInitialProps(context)
-  // logged out and requests '/app' or '/app/...'
-  if (!accessToken && isProtected) {
+  // logged out and requests '/admin'
+  if (!accessToken && isAdminRoute) {
     redirect(res, '/login')
     return appProps
   }
-
-  // logged in and requests '/signup' or '/'
-  else if (accessToken && isLogin) {
+  // logged in and requests '/login' or requests '/admin' without being an admin user
+  else if (accessToken && (isLoginRoute || (isAdminRoute && !user?.is_admin))) {
     redirect(res, '/')
     return appProps
   }

@@ -36,6 +36,11 @@ export const Header = ({ accessToken, user }: HeaderProps) => {
                                 {user?.username || "Profile"}
                             </a>
                         </Link>
+                        {user.is_admin && <Link passHref href='/admin'>
+                            <a className="mr-2 hover:underline">
+                                Admin
+                            </a>
+                        </Link>}
                         <Button className="mr-2 border-white" onClick={e => logout()}>Logout</Button>
                     </div>
                 }
