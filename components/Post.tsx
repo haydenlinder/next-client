@@ -1,5 +1,6 @@
 import { useMutation, useReactiveVar } from "@apollo/client";
 import Link from "next/link";
+import ReactMarkdown from "react-markdown";
 import { DELETE_POST, GET_POSTS } from "../graphql/posts";
 import { currentUserIdState } from "../token";
 import { DeletePostMutation, DeletePostMutationVariables, GetPostsQuery } from "../types/generated/graphql";
@@ -22,7 +23,10 @@ export const Post = ({post}: PostProps) => {
         <div key={post.id} className="border border-black rounded p-4 mb-4">
             <h2>Author: <Link className="text-blue underline" href={`/users/${post.user_id}`}>{post.user.username}</Link></h2>
             <h3>Created: {post.created_at}</h3>
-            <p>Body: {post.body}</p>
+            <ReactMarkdown components={{
+                h1: ({ node, ...props }) => <h1 className='font-bold text-lg' {...props} />,
+                a: ({ node, ...props }) => <a className='text-blue-600 hover:underline text-lg' {...props} />
+            }}>{post.body}</ReactMarkdown>
             {post.photo_url && <img src={`/api/images/${post.photo_url}`} alt="" height={500} width={500} />}
             {post.user_id === currentUserId &&  <button className="border p-2 rounded mt-4" onClick={() => deletePost({ variables: { post_id: post.post_id } })}>{deleting ? "Deleting" : "Delete"}</button>}
         </div>

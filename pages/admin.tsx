@@ -91,11 +91,12 @@ const Home: NextPage<Props> = ({ posts }) => {
                 <label htmlFor="body">Body</label>
                 <DropzoneWithPreview files={files} setFiles={setFiles} />
                 <textarea placeholder="body" className="p-2 border border-black rounded w-full" onChange={e => setBody(e.target.value)} value={body} name="body" id="body" cols={30} rows={10} />
-                <ReactMarkdown components={{
+                <h1 className="my-2 font-bold text-lg">Preview:</h1>
+                <ReactMarkdown className="p-2 my-2 rounded border border-black" components={{
                     h1: ({ node, ...props }) => <h1 className='font-bold text-lg' {...props} />,
-                    a: ({ node, ...props }) => <a className='text-blue-400 text-lg' {...props} />
+                    a: ({ node, ...props }) => <a className='text-blue-600 hover:underline text-lg' {...props} />
                 }}>{body}</ReactMarkdown>
-                <button>{saving ? "Saving" : "Post"}</button>
+                <button className="p-2 border border-black rounded">{saving ? "Saving" : "Post"}</button>
             </form>
             <div>
                 <h1>Past posts</h1>
