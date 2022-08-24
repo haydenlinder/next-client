@@ -32,7 +32,7 @@ export const Header = ({ accessToken, user }: HeaderProps) => {
                 {Boolean(accessToken) && 
                     <div>
                         <Link passHref href={`/users/${user?.user_id}`}>
-                            <a className="mr-2">
+                            <a className="mr-2 hover:underline">
                                 {user?.username || "Profile"}
                             </a>
                         </Link>
