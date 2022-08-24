@@ -46,7 +46,7 @@ type Props = {
 export const getServerSideProps: GetServerSideProps<Props> = async ({ req }) => {
     const cookies = getCookieParser(req.headers)()
     const token = cookies.access_token
-    console.log({ token })
+
     const { data } = await serverClient.query<GetPostsQuery>({
         query: GET_POSTS,
         context: { headers: { authorization: `Bearer ${token}` } }

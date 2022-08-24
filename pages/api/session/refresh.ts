@@ -12,7 +12,7 @@ export type RefreshResponse = {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<RefreshResponse>) {
     const refreshToken = req.cookies.refresh_token;
-    console.log({refreshToken})
+
     // If no token, throw 401
     if (!refreshToken) return res.status(401).json({ errors: 'No token.' });
     // Otherwise, verify the token
@@ -22,7 +22,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     } catch(e) {
         console.error("refresh server error: ", {e})
     }
-    console.log({payload})
+
     if (!payload) return res.status(401).json({ errors: 'Invalid token.' });
     // Get the user id
     let user_id: number | undefined;

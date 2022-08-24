@@ -5,7 +5,7 @@ import { TokenPayload } from './types';
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     // access token from Authorization header
     const auth = req.headers.authorization; // "Bearer {token}" see https://datatracker.ietf.org/doc/html/rfc6750#section-2.1
-    console.log({auth})
+
     // check for an access_token
     if (!auth || typeof auth !== 'string') return res.status(401).json({ errors: "No Authorization header present." })
     const access_token = auth.split(" ")[1];
