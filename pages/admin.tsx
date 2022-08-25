@@ -9,7 +9,6 @@ import {
 import { useMutation, useReactiveVar } from "@apollo/client";
 import { FormEventHandler, useEffect, useState } from "react";
 import { CREATE_POST, GET_POSTS } from "../graphql/posts";
-import { currentUserIdState } from "../token";
 import { useDropzone } from "react-dropzone";
 import { Post } from "../components/Post";
 import { FileResponse } from "./api/images/upload";
@@ -18,6 +17,7 @@ import { getCookieParser } from "next/dist/server/api-utils";
 import ReactMarkdown from "react-markdown";
 import { getCurrentUser } from "./api/apollo_functions/users";
 import { Button } from "../components/Button";
+import { H1 } from "../components/H1";
 
 
 async function uploadImage(file: File) {
@@ -106,8 +106,8 @@ const Home: NextPage<Props> = ({ posts, user }) => {
                 <Button className="">{saving ? "Saving" : "Post"}</Button>
             </form>
             <div>
-                <h1>Past posts</h1>
-                {posts?.map(post => <Post key={post.id} post={post} />)}
+                <H1>Courses</H1>
+                {posts?.map(post => <Post user={user} key={post.id} post={post} />)}
             </div>
         </section>
     );

@@ -1,9 +1,6 @@
-import { useQuery, useReactiveVar } from "@apollo/client"
 import Link from "next/link"
 import Router from "next/router";
-import { GET_USER_BY_ID } from "../graphql/users";
-import { accessTokenState, currentUserIdState } from "../token"
-import { GetUserByIdQuery, GetUserByIdQueryVariables } from "../types/generated/graphql";
+import { GetUserByIdQuery } from "../types/generated/graphql";
 import { Button } from "./Button";
 
 type HeaderProps = {
@@ -14,8 +11,6 @@ type HeaderProps = {
 const logout = async () => {
     const response = await fetch('/api/session/logout', { method: 'POST' });
     await response.json();
-    accessTokenState(undefined)
-    currentUserIdState(undefined)
     Router.replace('/login')
 }
 
@@ -29,7 +24,7 @@ export const Header = ({ accessToken, user }: HeaderProps) => {
                         Home
                     </a>
                 </Link>
-                {Boolean(accessToken) && 
+                {Boolean(accessToken) ?
                     <div>
                         <Link passHref href={`/users/${user?.user_id}`}>
                             <a className="mr-2 hover:underline">
@@ -43,6 +38,12 @@ export const Header = ({ accessToken, user }: HeaderProps) => {
                         </Link>}
                         <Button className="mr-2 border-white" onClick={e => logout()}>Logout</Button>
                     </div>
+                    : 
+                    <Link passHref href='/login'>
+                        <a className="mr-2 hover:underline">
+                            Log In
+                        </a>
+                    </Link>
                 }
             </nav>
         </header>
