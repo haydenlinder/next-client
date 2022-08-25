@@ -26,11 +26,9 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({ req }) => 
 
 const Home: NextPage<Props> = ({ posts }) => {
   return (
-    <section>
-      <div>
+    <section className="w-full max-w-2xl">
         <h1>Past posts</h1>
         {posts?.map(post => <Post key={post.id} post={post}/>)}
-      </div>
     </section>
   );
 };

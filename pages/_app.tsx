@@ -1,17 +1,13 @@
 import type { AppContext, AppInitialProps, AppProps } from "next/app";
 import Head from "next/head";
-import Router, { useRouter } from "next/router";
+import Router from "next/router";
 import { ApolloProvider, from, useReactiveVar } from "@apollo/client";
-import { useEffect, useState } from "react";
 
-import { accessTokenState, currentUserIdState } from "../token";
 import client, { authLink, errorLink, httpLink, serverClient } from "./api/apollo-client";
 import { Header } from "../components/Header";
 
 import "../styles/build.css";
-import { RefreshResponse } from "./api/session/refresh";
 import App from "next/app";
-import { getCookieParser } from "next/dist/server/api-utils";
 import { GetUserByIdQuery, GetUserByIdQueryVariables } from "../types/generated/graphql";
 import { GET_USER_BY_ID } from "../graphql/users";
 import { refresh } from "./api/next-client";
@@ -38,7 +34,7 @@ const Main = ({ Component, pageProps }: Pick<AppProps, 'Component' | 'pageProps'
     <>
     <Header user={pageProps.user} accessToken={pageProps.accessToken}/>
     <main className="max-h-screen min-h-screen flex justify-center overflow-y-scroll pt-28 pb-96">
-      <div className="container h-screen flex flex-col items-center">
+      <div className="h-screen container flex flex-col items-center">
         <Component {...pageProps} />
       </div>
     </main>
