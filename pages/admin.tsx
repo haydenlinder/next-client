@@ -92,7 +92,7 @@ const Home: NextPage<Props> = ({ posts, user }) => {
     }
 
     return (
-        <section>
+        <section className="container">
             <form className="mb-8" onSubmit={handleSubmit}>
                 <h1>Make an entry</h1>
                 <label htmlFor="body">Body</label>
