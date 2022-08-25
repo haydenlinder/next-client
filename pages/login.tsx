@@ -3,7 +3,6 @@ import type { NextPage } from "next";
 import Router from "next/router";
 import React, { FormEventHandler, useState } from "react";
 import { Button } from "../components/Button";
-import { accessTokenState, currentUserIdState } from "../token";
 import { RefreshResponse } from "./api/session/refresh";
 
 
@@ -12,7 +11,7 @@ const Login: NextPage = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<undefined | string>(undefined);
 
-  const accessToken = useReactiveVar(accessTokenState)
+
   const [isNewUser, setIsNewUser] = useState(true);
 
   const signup: FormEventHandler<HTMLFormElement> = async (e) => {
@@ -34,8 +33,6 @@ const Login: NextPage = () => {
 
       if (response.status !== 200) return setError(data.errors);
       
-      accessTokenState(data.data?.access_token)
-      currentUserIdState(data.data?.user_id)
     } catch (e) {
       console.error("LOGIN ERROR: ", e)
     }

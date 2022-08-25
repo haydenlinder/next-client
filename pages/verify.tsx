@@ -4,7 +4,6 @@ import Link from "next/link";
 import Router from "next/router";
 import { useEffect, useState } from "react";
 import { Button } from "../components/Button";
-import { accessTokenState } from "../token";
 import { VerifyResponse } from "./api/session/verify";
 
 const verify = async () => {
@@ -16,12 +15,8 @@ const verify = async () => {
 const Verify: NextPage = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | undefined>(undefined);
-    const accessToken = useReactiveVar(accessTokenState);
 
     useEffect(() => {
-        if (accessToken) {
-            Router.replace('/')
-        }
         (async () => {
             try {
                 const data = await verify();
@@ -34,7 +29,7 @@ const Verify: NextPage = () => {
                 setLoading(false);
             }
         })();
-    }, [accessToken]);
+    }, []);
 
     if (loading) return <div>Loading...</div>
     if (error) return <p>error</p>

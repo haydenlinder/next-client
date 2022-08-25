@@ -1,6 +1,5 @@
 import { ApolloClient, InMemoryCache, from, HttpLink, ApolloLink } from "@apollo/client";
 import { onError } from "@apollo/client/link/error";
-import { accessTokenState } from "../../token";
 
 export const httpLink = new HttpLink({
   uri: process.env.NEXT_PUBLIC_HASURA_URL
