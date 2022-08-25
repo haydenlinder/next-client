@@ -94,16 +94,19 @@ const Home: NextPage<Props> = ({ posts, user }) => {
     return (
         <section className="container">
             <form className="mb-8" onSubmit={handleSubmit}>
-                <h1>Make an entry</h1>
+                <H1>Make an entry</H1>
                 <label htmlFor="body">Body</label>
-                <DropzoneWithPreview files={files} setFiles={setFiles} />
                 <textarea placeholder="body" className="p-2 border border-black rounded w-full" onChange={e => setBody(e.target.value)} value={body} name="body" id="body" cols={30} rows={10} />
-                <h1 className="my-2 font-bold text-lg">Preview:</h1>
-                <ReactMarkdown className="p-2 my-2 rounded border border-black" components={{
-                    h1: ({ node, ...props }) => <h1 className='font-bold text-lg' {...props} />,
-                    a: ({ node, ...props }) => <a className='text-blue-600 hover:underline text-lg' {...props} />
-                }}>{body}</ReactMarkdown>
-                <Button className="">{saving ? "Saving" : "Post"}</Button>
+                <DropzoneWithPreview files={files} setFiles={setFiles} />
+                {body && 
+                <>
+                    <H1 className="my-2 font-bold text-lg">Preview:</H1>
+                    <ReactMarkdown className="p-2 my-2 rounded border border-black" components={{
+                        h1: ({ node, ...props }) => <h1 className='font-bold text-lg' {...props} />,
+                        a: ({ node, ...props }) => <a className='text-blue-600 hover:underline text-lg' {...props} />
+                    }}>{body}</ReactMarkdown>
+                    <Button className="">{saving ? "Saving" : "Post"}</Button>
+                </>}
             </form>
             <div>
                 <H1>Courses</H1>
