@@ -16,6 +16,7 @@ export const GET_POSTS = gql`
                 node {
                     photo_url
                     body
+                    price
                     created_at
                     id
                     post_id

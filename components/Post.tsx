@@ -21,15 +21,16 @@ export const Post = ({post}: PostProps) => {
     });
 
     return (
-        <div key={post.id} className="border border-black rounded p-4 mb-4">
-            <h2>Author: <Link className="text-blue underline" href={`/users/${post.user_id}`}>{post.user.username}</Link></h2>
-            <h3>Created: {post.created_at}</h3>
-            <ReactMarkdown components={{
-                h1: ({ node, ...props }) => <h1 className='font-bold text-lg' {...props} />,
-                a: ({ node, ...props }) => <a className='text-blue-600 hover:underline text-lg' {...props} />
-            }}>{post.body}</ReactMarkdown>
-            {post.photo_url && <img src={`/api/images/${post.photo_url}`} alt="" height={500} width={500} />}
-            {post.user_id === currentUserId &&  <Button className="mt-4" onClick={() => deletePost({ variables: { post_id: post.post_id } })}>{deleting ? "Deleting" : "Delete"}</Button>}
-        </div>
+        <Link passHref href={`/posts/${post.id}`} key={post.id} >
+            <div className="border border-black rounded p-4 mb-4">
+                <ReactMarkdown components={{
+                    h1: ({ node, ...props }) => <h1 className='font-bold text-lg' {...props} />,
+                    a: ({ node, ...props }) => <a className='text-blue-600 hover:underline text-lg' {...props} />
+                }}>{post.body}</ReactMarkdown>
+                <Button>{post.price}</Button>
+                {post.photo_url && <img src={`/api/images/${post.photo_url}`} alt="" height={500} width={500} />}
+                {post.user_id === currentUserId &&  <Button className="mt-4" onClick={() => deletePost({ variables: { post_id: post.post_id } })}>{deleting ? "Deleting" : "Delete"}</Button>}
+            </div>
+        </Link>
     )
 }
