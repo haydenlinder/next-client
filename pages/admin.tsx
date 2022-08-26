@@ -67,6 +67,8 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({ req }) => 
 
 const Home: NextPage<Props> = ({ posts, user }) => {
     const [body, setBody] = useState("");
+    const [description, setDescription] = useState("");
+    const [title, setTitle] = useState("");
     const [files, setFiles] = useState<FilePreview[]>([]);
 
     const [savePost, { loading: saving }] = useMutation<CreatePostMutation, CreatePostMutationVariables>(CREATE_POST, {
@@ -82,6 +84,8 @@ const Home: NextPage<Props> = ({ posts, user }) => {
             savePost({
                 variables: {
                     body,
+                    description,
+                    title,
                     user_id: user?.user_id,
                     photo_url: imageKeys[0],
                 }
@@ -95,12 +99,23 @@ const Home: NextPage<Props> = ({ posts, user }) => {
         <section className="container">
             <form className="mb-8" onSubmit={handleSubmit}>
                 <H1>Make an entry</H1>
+                {/* title */}
+                <label htmlFor="title">Title</label>
+                <input placeholder="title" className="p-2 border border-black rounded w-full" onChange={e => setTitle(e.target.value)} value={body} name="title" id="title" />
+                {/* description */}
+                <label htmlFor="description">Description</label>
+                <textarea placeholder="description" className="p-2 border border-black rounded w-full" onChange={e => setDescription(e.target.value)} value={description} name="description" id="description" cols={30} rows={5} />
+                {/* body */}
                 <label htmlFor="body">Body</label>
                 <textarea placeholder="body" className="p-2 border border-black rounded w-full" onChange={e => setBody(e.target.value)} value={body} name="body" id="body" cols={30} rows={10} />
+                {/* photos */}
                 <DropzoneWithPreview files={files} setFiles={setFiles} />
+                {/* preview */}
                 {body && 
                 <>
-                    <H1 className="my-2 font-bold text-lg">Preview:</H1>
+                    <H1 className="my-2">Preview:</H1>
+                    <H1 className="my-2">{title}</H1>
+                    <p>{description}</p>
                     <ReactMarkdown className="p-2 my-2 rounded border border-black" components={{
                         h1: ({ node, ...props }) => <h1 className='font-bold text-lg' {...props} />,
                         a: ({ node, ...props }) => <a className='text-blue-600 hover:underline text-lg' {...props} />

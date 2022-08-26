@@ -1,10 +1,12 @@
 import { gql } from "@apollo/client";
 
 export const CREATE_POST = gql`
-    mutation createPost($body: String = "", $user_id: Int = 10, $photo_url: String = "") {
+    mutation createPost($body: String = "", $description: String = "", $title: String = "", $user_id: Int = 10, $photo_url: String = "") {
         insert_posts_one(object: {body: $body, user_id: $user_id, photo_url: $photo_url}) {
             id
             post_id
+            description
+            title
         }
     }
 `;
@@ -15,6 +17,8 @@ export const GET_POSTS = gql`
             edges {
                 node {
                     photo_url
+                    title
+                    description
                     body
                     price
                     created_at

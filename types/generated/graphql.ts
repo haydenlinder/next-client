@@ -236,10 +236,12 @@ export type Posts = Node & {
   __typename?: 'posts';
   body: Scalars['String'];
   created_at: Scalars['timestamptz'];
+  description: Scalars['String'];
   id: Scalars['ID'];
   photo_url?: Maybe<Scalars['String']>;
   post_id: Scalars['Int'];
   price: Scalars['numeric'];
+  title: Scalars['String'];
   updated_at?: Maybe<Scalars['timestamptz']>;
   /** An object relationship */
   user: Users;
@@ -266,9 +268,11 @@ export type Posts_Bool_Exp = {
   _or?: InputMaybe<Array<Posts_Bool_Exp>>;
   body?: InputMaybe<String_Comparison_Exp>;
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  description?: InputMaybe<String_Comparison_Exp>;
   photo_url?: InputMaybe<String_Comparison_Exp>;
   post_id?: InputMaybe<Int_Comparison_Exp>;
   price?: InputMaybe<Numeric_Comparison_Exp>;
+  title?: InputMaybe<String_Comparison_Exp>;
   updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   user?: InputMaybe<Users_Bool_Exp>;
   user_id?: InputMaybe<Int_Comparison_Exp>;
@@ -291,9 +295,11 @@ export type Posts_Inc_Input = {
 export type Posts_Insert_Input = {
   body?: InputMaybe<Scalars['String']>;
   created_at?: InputMaybe<Scalars['timestamptz']>;
+  description?: InputMaybe<Scalars['String']>;
   photo_url?: InputMaybe<Scalars['String']>;
   post_id?: InputMaybe<Scalars['Int']>;
   price?: InputMaybe<Scalars['numeric']>;
+  title?: InputMaybe<Scalars['String']>;
   updated_at?: InputMaybe<Scalars['timestamptz']>;
   user?: InputMaybe<Users_Obj_Rel_Insert_Input>;
   user_id?: InputMaybe<Scalars['Int']>;
@@ -319,9 +325,11 @@ export type Posts_On_Conflict = {
 export type Posts_Order_By = {
   body?: InputMaybe<Order_By>;
   created_at?: InputMaybe<Order_By>;
+  description?: InputMaybe<Order_By>;
   photo_url?: InputMaybe<Order_By>;
   post_id?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
+  title?: InputMaybe<Order_By>;
   updated_at?: InputMaybe<Order_By>;
   user?: InputMaybe<Users_Order_By>;
   user_id?: InputMaybe<Order_By>;
@@ -339,11 +347,15 @@ export enum Posts_Select_Column {
   /** column name */
   CreatedAt = 'created_at',
   /** column name */
+  Description = 'description',
+  /** column name */
   PhotoUrl = 'photo_url',
   /** column name */
   PostId = 'post_id',
   /** column name */
   Price = 'price',
+  /** column name */
+  Title = 'title',
   /** column name */
   UpdatedAt = 'updated_at',
   /** column name */
@@ -354,9 +366,11 @@ export enum Posts_Select_Column {
 export type Posts_Set_Input = {
   body?: InputMaybe<Scalars['String']>;
   created_at?: InputMaybe<Scalars['timestamptz']>;
+  description?: InputMaybe<Scalars['String']>;
   photo_url?: InputMaybe<Scalars['String']>;
   post_id?: InputMaybe<Scalars['Int']>;
   price?: InputMaybe<Scalars['numeric']>;
+  title?: InputMaybe<Scalars['String']>;
   updated_at?: InputMaybe<Scalars['timestamptz']>;
   user_id?: InputMaybe<Scalars['Int']>;
 };
@@ -368,11 +382,15 @@ export enum Posts_Update_Column {
   /** column name */
   CreatedAt = 'created_at',
   /** column name */
+  Description = 'description',
+  /** column name */
   PhotoUrl = 'photo_url',
   /** column name */
   PostId = 'post_id',
   /** column name */
   Price = 'price',
+  /** column name */
+  Title = 'title',
   /** column name */
   UpdatedAt = 'updated_at',
   /** column name */
@@ -625,19 +643,21 @@ export enum Users_Update_Column {
 
 export type CreatePostMutationVariables = Exact<{
   body?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
+  title?: InputMaybe<Scalars['String']>;
   user_id?: InputMaybe<Scalars['Int']>;
   photo_url?: InputMaybe<Scalars['String']>;
 }>;
 
 
-export type CreatePostMutation = { __typename?: 'mutation_root', insert_posts_one?: { __typename?: 'posts', id: string, post_id: number } | null };
+export type CreatePostMutation = { __typename?: 'mutation_root', insert_posts_one?: { __typename?: 'posts', id: string, post_id: number, description: string, title: string } | null };
 
 export type GetPostsQueryVariables = Exact<{
   _gte?: InputMaybe<Scalars['Int']>;
 }>;
 
 
-export type GetPostsQuery = { __typename?: 'query_root', posts_connection: { __typename?: 'postsConnection', edges: Array<{ __typename?: 'postsEdge', cursor: string, node: { __typename?: 'posts', photo_url?: string | null, body: string, price: any, created_at: any, id: string, post_id: number, updated_at?: any | null, user_id: number, user: { __typename?: 'users', id: string, user_id: number, username: string } } }> } };
+export type GetPostsQuery = { __typename?: 'query_root', posts_connection: { __typename?: 'postsConnection', edges: Array<{ __typename?: 'postsEdge', cursor: string, node: { __typename?: 'posts', photo_url?: string | null, title: string, description: string, body: string, price: any, created_at: any, id: string, post_id: number, updated_at?: any | null, user_id: number, user: { __typename?: 'users', id: string, user_id: number, username: string } } }> } };
 
 export type DeletePostMutationVariables = Exact<{
   post_id?: InputMaybe<Scalars['Int']>;
@@ -685,12 +705,14 @@ export type VerifyUserMutation = { __typename?: 'mutation_root', update_users_by
 
 
 export const CreatePostDocument = gql`
-    mutation createPost($body: String = "", $user_id: Int = 10, $photo_url: String = "") {
+    mutation createPost($body: String = "", $description: String = "", $title: String = "", $user_id: Int = 10, $photo_url: String = "") {
   insert_posts_one(
     object: {body: $body, user_id: $user_id, photo_url: $photo_url}
   ) {
     id
     post_id
+    description
+    title
   }
 }
     `;
@@ -707,6 +729,8 @@ export const GetPostsDocument = gql`
     edges {
       node {
         photo_url
+        title
+        description
         body
         price
         created_at

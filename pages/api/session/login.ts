@@ -27,13 +27,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     // Generate a refresh token
     const jwt = await import('jsonwebtoken');
     const refresh_token = jwt.sign(
-        { user_id: user.user_id }, 
+        { user_id: user.user_id, is_admin: user.is_admin }, 
         process.env.REFRESH_SECRET!,
         { expiresIn: '7d' }
     );
     // Generate access token
     const access_token = jwt.sign(
-        { user_id: user.user_id },
+        { user_id: user.user_id, is_admin: user.is_admin },
         process.env.ACCESS_SECRET!,
         { expiresIn: '15m' }
     );

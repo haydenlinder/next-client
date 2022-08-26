@@ -21,7 +21,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (payload === undefined) return res.status(401).json({ errors: 'Invalid token.' });
     // Get the user id
     let user_id: number = -1;
-    if (typeof payload !== "string") user_id = payload.user_id;
+    let is_admin: boolean = false;
+    if (typeof payload !== "string") {
+        user_id = payload.user_id;
+        is_admin = payload.is_admin;
+    }
+
+    if (is_admin) return res.status(200).json({
+        "x-hasura-admin-secret": process.env.HASURA_ADMIN_SECRET,
+        "x-hasura-role": "admin"
+    })
+
     // return the user credentials to hasura
     return res.status(200).json({
         "x-hasura-user-id": String(user_id),

@@ -23,19 +23,55 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         console.error("refresh server error: ", {e})
     }
 
-    if (!payload) return res.status(401).json({ errors: 'Invalid token.' });
+    if (!payload) {
+        // logout
+        res.setHeader(
+            "Set-Cookie",
+            [
+                cookie.serialize(
+                    'refresh_token',
+                    "",
+                    {
+                        path: '/',
+                        // signed: true,
+                        httpOnly: true,
+                        // https only v
+                        secure: true,
+                        sameSite: 'none'
+                    }
+                ),
+                cookie.serialize(
+                    'access_token',
+                    "",
+                    {
+                        path: '/',
+                        // signed: true,
+                        httpOnly: true,
+                        // https only v
+                        secure: true,
+                        sameSite: 'none'
+                    }
+                ),
+            ]
+        )
+        return res.status(401).json({ errors: 'Invalid token.' });
+    }
     // Get the user id
     let user_id: number | undefined;
-    if (typeof payload !== "string") user_id = payload.user_id;
+    let is_admin: boolean | undefined;
+    if (typeof payload !== "string") {
+        user_id = payload.user_id;
+        is_admin = payload.is_admin
+    }
     // Generate a refresh token
     const refresh_token = jwt.sign(
-        { user_id: user_id },
+        { user_id: user_id, is_admin: is_admin },
         process.env.REFRESH_SECRET!,
         { expiresIn: '7d' }
     )
     // Generate access token
     const access_token = jwt.sign(
-        { user_id: user_id },
+        { user_id: user_id, is_admin: is_admin },
         process.env.ACCESS_SECRET!,
         { expiresIn: '15m' }
     )
