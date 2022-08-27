@@ -81,6 +81,7 @@ const Home: NextPage<Props> = ({ posts, user }) => {
         e.preventDefault();
         try {
             const imageKeys = await Promise.all(files.map(uploadImage));
+            console.log({title, description, body})
             savePost({
                 variables: {
                     body,
@@ -101,7 +102,7 @@ const Home: NextPage<Props> = ({ posts, user }) => {
                 <H1>Make an entry</H1>
                 {/* title */}
                 <label htmlFor="title">Title</label>
-                <input placeholder="title" className="p-2 border border-black rounded w-full" onChange={e => setTitle(e.target.value)} value={body} name="title" id="title" />
+                <input placeholder="title" className="p-2 border border-black rounded w-full" onChange={e => setTitle(e.target.value)} value={title} name="title" id="title" />
                 {/* description */}
                 <label htmlFor="description">Description</label>
                 <textarea placeholder="description" className="p-2 border border-black rounded w-full" onChange={e => setDescription(e.target.value)} value={description} name="description" id="description" cols={30} rows={5} />

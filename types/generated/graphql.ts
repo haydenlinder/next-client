@@ -707,7 +707,7 @@ export type VerifyUserMutation = { __typename?: 'mutation_root', update_users_by
 export const CreatePostDocument = gql`
     mutation createPost($body: String = "", $description: String = "", $title: String = "", $user_id: Int = 10, $photo_url: String = "") {
   insert_posts_one(
-    object: {body: $body, user_id: $user_id, photo_url: $photo_url}
+    object: {body: $body, user_id: $user_id, photo_url: $photo_url, title: $title, description: $description}
   ) {
     id
     post_id
