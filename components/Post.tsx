@@ -4,7 +4,8 @@ import { DELETE_POST, GET_POSTS } from "../graphql/posts";
 
 import { DeletePostMutation, DeletePostMutationVariables, GetPostsQuery, GetUserByIdQuery } from "../types/generated/graphql";
 import { Button } from "./Button";
-import { H2 } from "./h2";
+import { H2 } from "./H2";
+
 type Post = GetPostsQuery['posts_connection']['edges'][0]['node']
 type User = GetUserByIdQuery['users_connection']['edges'][0]['node']
 
