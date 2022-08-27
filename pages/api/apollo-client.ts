@@ -22,7 +22,9 @@ export const authLink = (token: string) => new ApolloLink((operation, forward) =
 });
 
 export const serverClient = new ApolloClient({
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+    resultCaching: false
+  }),
   link: from([errorLink, httpLink])
 });
 
