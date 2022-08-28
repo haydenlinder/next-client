@@ -12,7 +12,7 @@ const Login: NextPage = () => {
   const [error, setError] = useState<undefined | string>(undefined);
 
 
-  const [isNewUser, setIsNewUser] = useState(true);
+  const [isNewUser, setIsNewUser] = useState(false);
 
   const signup: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
