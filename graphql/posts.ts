@@ -19,7 +19,6 @@ export const GET_POSTS = gql`
                     photo_url
                     title
                     description
-                    body
                     price
                     created_at
                     id
@@ -29,7 +28,6 @@ export const GET_POSTS = gql`
                     user {
                         id
                         user_id
-                        username
                     }
                 }
             cursor
