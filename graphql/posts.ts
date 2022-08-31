@@ -43,3 +43,11 @@ export const DELETE_POST = gql`
         }
     }
 `;
+
+export const UPDATE_POST = gql`
+    mutation updatePost($post_id: Int = 10, $body: String = "", $description: String = "", $photo_url: String = "", $price: numeric = 0, $title: String = "") {
+        update_posts_by_pk(pk_columns: {post_id: $post_id}, _set: {body: $body, description: $description, photo_url: $photo_url, price: $price, title: $title}) {
+            post_id
+        }
+    }
+`;

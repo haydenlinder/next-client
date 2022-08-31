@@ -666,6 +666,18 @@ export type DeletePostMutationVariables = Exact<{
 
 export type DeletePostMutation = { __typename?: 'mutation_root', delete_posts_by_pk?: { __typename?: 'posts', id: string } | null };
 
+export type UpdatePostMutationVariables = Exact<{
+  post_id?: InputMaybe<Scalars['Int']>;
+  body?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
+  photo_url?: InputMaybe<Scalars['String']>;
+  price?: InputMaybe<Scalars['numeric']>;
+  title?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type UpdatePostMutation = { __typename?: 'mutation_root', update_posts_by_pk?: { __typename?: 'posts', post_id: number } | null };
+
 export type GetUsersPaginatedQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']>;
 }>;
@@ -758,6 +770,19 @@ export const DeletePostDocument = gql`
 export type DeletePostMutationFn = Apollo.MutationFunction<DeletePostMutation, DeletePostMutationVariables>;
 export type DeletePostMutationResult = Apollo.MutationResult<DeletePostMutation>;
 export type DeletePostMutationOptions = Apollo.BaseMutationOptions<DeletePostMutation, DeletePostMutationVariables>;
+export const UpdatePostDocument = gql`
+    mutation updatePost($post_id: Int = 10, $body: String = "", $description: String = "", $photo_url: String = "", $price: numeric = 0, $title: String = "") {
+  update_posts_by_pk(
+    pk_columns: {post_id: $post_id}
+    _set: {body: $body, description: $description, photo_url: $photo_url, price: $price, title: $title}
+  ) {
+    post_id
+  }
+}
+    `;
+export type UpdatePostMutationFn = Apollo.MutationFunction<UpdatePostMutation, UpdatePostMutationVariables>;
+export type UpdatePostMutationResult = Apollo.MutationResult<UpdatePostMutation>;
+export type UpdatePostMutationOptions = Apollo.BaseMutationOptions<UpdatePostMutation, UpdatePostMutationVariables>;
 export const GetUsersPaginatedDocument = gql`
     query getUsersPaginated($first: Int = 10) {
   users_connection(first: $first) {
