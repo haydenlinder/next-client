@@ -13,7 +13,7 @@ import { Post as TPost, User } from "../types/entities";
 import { useQuery } from "@apollo/client";
 
 type Props = {
-    posts: TPost
+    posts: TPost[]
     user: User
 }
 
