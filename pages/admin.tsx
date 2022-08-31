@@ -10,6 +10,7 @@ import { getCurrentUser } from "./api/apollo_functions/users";
 import { H1 } from "../components/H1";
 import PostForm from "../components/PostForm";
 import { Post as TPost, User } from "../types/entities";
+import { useQuery } from "@apollo/client";
 
 type Props = {
     posts: TPost
@@ -37,17 +38,18 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({ req }) => 
     )
 }
 
-const Home: NextPage<Props> = ({ posts, user }) => {
-    
+const Admin: NextPage<Props> = ({ posts, user }) => {
+    const { data, loading } = useQuery<GetPostsQuery>(GET_POSTS)
+    const clientPosts = data?.posts_connection.edges.map(e => e.node);
     return (
         <section className="container">
             <PostForm user={user}/>
             <div>
                 <H1>Courses</H1>
-                {posts?.map(post => <Post user={user} key={post.id} post={post} />)}
+                {(clientPosts || posts)?.map(post => <Post user={user} key={post.id} post={post} />)}
             </div>
         </section>
     );
 };
 
-export default Home;
+export default Admin;

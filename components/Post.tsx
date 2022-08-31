@@ -32,11 +32,13 @@ export const Post = ({post, user}: PostProps) => {
         deletePost({ variables: { post_id: post.post_id } })
     }
 
-    const { description, title, price, photo_url, post_id} = post;
+    const { description, title, price, photo_url, post_id, body} = post;
 
     if (isEdit) return (
         <PostForm 
+            originalBody={body}
             user={user} 
+            originalPrice={price}
             onAfterSave={() => setIsEdit(false)} 
             originalDescription={description}
             originalPhoto={photo_url}
@@ -49,7 +51,7 @@ export const Post = ({post, user}: PostProps) => {
         <div className="flex flex-col items-center border border-black rounded mb-4">
             {/* CONTENT */}
             <div className="relative z-0 h-36 w-full">
-                {post.photo_url && <Image src={`/api/images/${post.photo_url}`} alt="" height={200} layout="fill" objectFit='scale-down' />}
+                {post.photo_url && <Image src={`/api/images/${post.photo_url}`} alt="" layout="fill" objectFit='scale-down' />}
             </div>
             <div className="flex justify-between items-center bg-gray-200 p-4">
                 <div>
@@ -59,8 +61,8 @@ export const Post = ({post, user}: PostProps) => {
                 {/* BUTTONS */}
                 <div>
                     <Button className="bg-yellow-500">{post.price <= 0 ? "FREE!" : post.price}</Button>
-                    {post.user_id === user?.user_id &&  <Button className="ml-4" onClick={handleDelete}>{deleting ? "Deleting" : "Delete"}</Button>}
-                    {post.user_id === user?.user_id &&  <Button className="ml-4" onClick={e => setIsEdit(true)}>Edit</Button>}
+                    {user?.is_admin &&  <Button className="ml-4" onClick={handleDelete}>{deleting ? "Deleting" : "Delete"}</Button>}
+                    {user?.is_admin &&  <Button className="ml-4" onClick={e => setIsEdit(true)}>Edit</Button>}
                 </div>
             </div>
         </div>

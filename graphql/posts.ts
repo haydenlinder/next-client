@@ -22,6 +22,7 @@ export const GET_POSTS = gql`
                     price
                     created_at
                     id
+                    body
                     post_id
                     updated_at
                     user_id

@@ -657,7 +657,7 @@ export type GetPostsQueryVariables = Exact<{
 }>;
 
 
-export type GetPostsQuery = { __typename?: 'query_root', posts_connection: { __typename?: 'postsConnection', edges: Array<{ __typename?: 'postsEdge', cursor: string, node: { __typename?: 'posts', photo_url?: string | null, title: string, description: string, price: any, created_at: any, id: string, post_id: number, updated_at?: any | null, user_id: number, user: { __typename?: 'users', id: string, user_id: number } } }> } };
+export type GetPostsQuery = { __typename?: 'query_root', posts_connection: { __typename?: 'postsConnection', edges: Array<{ __typename?: 'postsEdge', cursor: string, node: { __typename?: 'posts', photo_url?: string | null, title: string, description: string, price: any, created_at: any, id: string, body: string, post_id: number, updated_at?: any | null, user_id: number, user: { __typename?: 'users', id: string, user_id: number } } }> } };
 
 export type DeletePostMutationVariables = Exact<{
   post_id?: InputMaybe<Scalars['Int']>;
@@ -746,6 +746,7 @@ export const GetPostsDocument = gql`
         price
         created_at
         id
+        body
         post_id
         updated_at
         user_id

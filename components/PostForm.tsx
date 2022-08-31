@@ -17,6 +17,7 @@ type Props = {
     originalTitle?: string;
     originalDescription?: string;
     originalPhoto?: string | null;
+    originalPrice?: number;
     postId?: number;
 }
 
@@ -41,6 +42,7 @@ const PostForm: NextPage<Props> = ({
     originalDescription,
     originalTitle,
     originalPhoto,
+    originalPrice,
     postId,
     onAfterSave = () => null 
 }) => {
