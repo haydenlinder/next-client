@@ -1,4 +1,5 @@
 import { useMutation } from "@apollo/client";
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { DELETE_POST, GET_POSTS } from "../graphql/posts";
@@ -47,7 +48,9 @@ export const Post = ({post, user}: PostProps) => {
     return (
         <div className="flex flex-col items-center border border-black rounded mb-4">
             {/* CONTENT */}
-            {post.photo_url && <img src={`/api/images/${post.photo_url}`} alt="" height={500} width={500} />}
+            <div className="relative z-0 h-36 w-full">
+                {post.photo_url && <Image src={`/api/images/${post.photo_url}`} alt="" height={200} layout="fill" objectFit='scale-down' />}
+            </div>
             <div className="flex justify-between items-center bg-gray-200 p-4">
                 <div>
                     <H2>{post.title}</H2>
