@@ -35,16 +35,19 @@ export const Post = ({post, user}: PostProps) => {
     const { description, title, price, photo_url, post_id, body} = post;
 
     if (isEdit) return (
-        <PostForm 
-            originalBody={body}
-            user={user} 
-            originalPrice={price}
-            onAfterSave={() => setIsEdit(false)} 
-            originalDescription={description}
-            originalPhoto={photo_url}
-            originalTitle={title}
-            postId={post_id}
-        />
+        <div>
+            <PostForm 
+                originalBody={body}
+                user={user} 
+                originalPrice={price}
+                onAfterSave={() => setIsEdit(false)} 
+                originalDescription={description}
+                originalPhoto={photo_url}
+                originalTitle={title}
+                postId={post_id}
+            />
+            <Button onClick={e => setIsEdit(false)}>Cancel</Button>
+        </div>
     )
 
     return (
@@ -59,7 +62,7 @@ export const Post = ({post, user}: PostProps) => {
                     <p>{post.description}</p>
                 </div>
                 {/* BUTTONS */}
-                <div>
+                <div className="ml-4">
                     <Button className="bg-yellow-500">{post.price <= 0 ? "FREE!" : post.price}</Button>
                     {user?.is_admin &&  <Button className="ml-4" onClick={handleDelete}>{deleting ? "Deleting" : "Delete"}</Button>}
                     {user?.is_admin &&  <Button className="ml-4" onClick={e => setIsEdit(true)}>Edit</Button>}
