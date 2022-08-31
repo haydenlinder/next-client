@@ -1,11 +1,11 @@
 import type { GetServerSideProps, NextPage } from "next";
 import {
     GetPostsQuery,
-} from "../types/generated/graphql";
-import { GET_POSTS } from "../graphql/posts";
-import { Post } from "../components/Post";
-import { serverClient } from "./api/apollo-client";
-import { H1 } from "../components/H1";
+} from "../../types/generated/graphql";
+import { GET_POSTS } from "../../graphql/posts";
+import { Post } from "../../components/Post";
+import { serverClient } from "../api/apollo-client";
+import { H1 } from "../../components/H1";
 import { useQuery } from "@apollo/client";
 
 type Props = {

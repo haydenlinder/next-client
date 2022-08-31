@@ -657,7 +657,7 @@ export type GetPostsQueryVariables = Exact<{
 }>;
 
 
-export type GetPostsQuery = { __typename?: 'query_root', posts_connection: { __typename?: 'postsConnection', edges: Array<{ __typename?: 'postsEdge', cursor: string, node: { __typename?: 'posts', photo_url?: string | null, title: string, description: string, price: any, created_at: any, id: string, body: string, post_id: number, updated_at?: any | null, user_id: number, user: { __typename?: 'users', id: string, user_id: number } } }> } };
+export type GetPostsQuery = { __typename?: 'query_root', posts_connection: { __typename?: 'postsConnection', edges: Array<{ __typename?: 'postsEdge', cursor: string, node: { __typename?: 'posts', photo_url?: string | null, title: string, description: string, price: any, created_at: any, id: string, body: string, post_id: number, updated_at?: any | null } }> } };
 
 export type DeletePostMutationVariables = Exact<{
   post_id?: InputMaybe<Scalars['Int']>;
@@ -677,6 +677,13 @@ export type UpdatePostMutationVariables = Exact<{
 
 
 export type UpdatePostMutation = { __typename?: 'mutation_root', update_posts_by_pk?: { __typename?: 'posts', post_id: number } | null };
+
+export type GetPostByIdQueryVariables = Exact<{
+  post_id?: InputMaybe<Int_Comparison_Exp>;
+}>;
+
+
+export type GetPostByIdQuery = { __typename?: 'query_root', posts_connection: { __typename?: 'postsConnection', edges: Array<{ __typename?: 'postsEdge', node: { __typename?: 'posts', body: string, created_at: any, description: string, id: string, photo_url?: string | null, post_id: number, price: any, title: string, updated_at?: any | null } }> } };
 
 export type GetUsersPaginatedQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']>;
@@ -749,11 +756,6 @@ export const GetPostsDocument = gql`
         body
         post_id
         updated_at
-        user_id
-        user {
-          id
-          user_id
-        }
       }
       cursor
     }
@@ -784,6 +786,26 @@ export const UpdatePostDocument = gql`
 export type UpdatePostMutationFn = Apollo.MutationFunction<UpdatePostMutation, UpdatePostMutationVariables>;
 export type UpdatePostMutationResult = Apollo.MutationResult<UpdatePostMutation>;
 export type UpdatePostMutationOptions = Apollo.BaseMutationOptions<UpdatePostMutation, UpdatePostMutationVariables>;
+export const GetPostByIdDocument = gql`
+    query getPostById($post_id: Int_comparison_exp = {_eq: 10}) {
+  posts_connection(where: {post_id: $post_id}) {
+    edges {
+      node {
+        body
+        created_at
+        description
+        id
+        photo_url
+        post_id
+        price
+        title
+        updated_at
+      }
+    }
+  }
+}
+    `;
+export type GetPostByIdQueryResult = Apollo.QueryResult<GetPostByIdQuery, GetPostByIdQueryVariables>;
 export const GetUsersPaginatedDocument = gql`
     query getUsersPaginated($first: Int = 10) {
   users_connection(first: $first) {

@@ -63,7 +63,7 @@ export const Post = ({post, user}: PostProps) => {
                 </div>
                 {/* BUTTONS */}
                 <div className="ml-4">
-                    <Button className="bg-yellow-500">{post.price <= 0 ? "FREE!" : post.price}</Button>
+                    <Link passHref href={`/courses/${post.post_id}`}><Button className="bg-yellow-500">{post.price <= 0 ? "FREE!" : post.price}</Button></Link>
                     {user?.is_admin &&  <Button className="ml-4" onClick={handleDelete}>{deleting ? "Deleting" : "Delete"}</Button>}
                     {user?.is_admin &&  <Button className="ml-4" onClick={e => setIsEdit(true)}>Edit</Button>}
                 </div>

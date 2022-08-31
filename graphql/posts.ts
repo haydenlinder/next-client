@@ -25,11 +25,6 @@ export const GET_POSTS = gql`
                     body
                     post_id
                     updated_at
-                    user_id
-                    user {
-                        id
-                        user_id
-                    }
                 }
             cursor
             }
@@ -49,6 +44,26 @@ export const UPDATE_POST = gql`
     mutation updatePost($post_id: Int = 10, $body: String = "", $description: String = "", $photo_url: String = "", $price: numeric = 0, $title: String = "") {
         update_posts_by_pk(pk_columns: {post_id: $post_id}, _set: {body: $body, description: $description, photo_url: $photo_url, price: $price, title: $title}) {
             post_id
+        }
+    }
+`;
+
+export const GET_POST_BY_ID = gql`
+    query getPostById($post_id: Int_comparison_exp = {_eq: 10}) {
+        posts_connection(where: {post_id: $post_id}) {
+            edges {
+                node {
+                    body
+                    created_at
+                    description
+                    id
+                    photo_url
+                    post_id
+                    price
+                    title
+                    updated_at
+                }
+            }
         }
     }
 `;
