@@ -11,7 +11,7 @@ type HeaderProps = {
 const logout = async () => {
     const response = await fetch('/api/session/logout', { method: 'POST' });
     await response.json();
-    Router.replace('/login')
+    Router.replace('/')
 }
 
 export const Header = ({ accessToken, user }: HeaderProps) => {
