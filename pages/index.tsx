@@ -12,7 +12,7 @@ import { H2 } from "../components/H2";
 const Home: NextPage= () => {
   return (
     <main className="w-full">
-      <section className="text-white drop-shadow-md h-screen pt-28 bg-gradient-to-r from-green-400 to-blue-500 w-full flex flex-col items-center">
+      <section className="text-white drop-shadow-md h-screen pt-28 bg-gradient-to-r from-green-500 to-blue-500 w-full flex flex-col items-center">
         <div className="container flex flex-col items-center">
           <H1 className="text-center my-4 mb-6">Don{"'"}t Just Learn to Code</H1>
           <H1 className="text-center my-4 mb-6">Learn to Ship it 🚢</H1>
