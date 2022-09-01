@@ -35,12 +35,11 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 
 
 const User: NextPage<Props> = ({ user }) => {
-    const { query } = useRouter()
 
     if (!user) return <div>User Not Found</div>
 
     return (
-        <section>
+        <section className="pt-36 container">
             <h1>username: {user.username}</h1>
             <div>email: {user.email}</div>
             <div>joined: {user.created_at}</div>

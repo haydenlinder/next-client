@@ -31,11 +31,11 @@ const Verify: NextPage = () => {
         })();
     }, []);
 
-    if (loading) return <div>Loading...</div>
-    if (error) return <p>error</p>
+    if (loading) return <div className="pt-36">Loading...</div>
+    if (error) return <p className="pt-36">error</p>
         
     return (
-        <section>
+        <section className="pt-36">
             <h1>Success!</h1>
             <Link href="/login" passHref><Button>Log In</Button></Link>
         </section>

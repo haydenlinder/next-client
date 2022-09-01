@@ -42,7 +42,7 @@ const Admin: NextPage<Props> = ({ posts, user }) => {
     const { data, loading } = useQuery<GetPostsQuery>(GET_POSTS)
     const clientPosts = data?.posts_connection.edges.map(e => e.node);
     return (
-        <section className="container">
+        <section className="container pt-36">
             <PostForm user={user}/>
             <div>
                 <H1>Courses</H1>

@@ -46,15 +46,15 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({ req, param
     }
 }
 
-
 const Course: NextPage<Props> = ({ post, error }) => {
-
-    if (error) return <div>{error}</div>
-
-    if (!post) return <div>Post Not Found</div>
-
     return (
-        <Post post={post}/>
+        <div className="pt-36 container">
+            {(!post || error) ? 
+                <div>{error || "Post not found"}</div> 
+                :
+                <Post post={post}/>
+            }
+        </div>
     );
 };
 

@@ -36,12 +36,12 @@ const Login: NextPage = () => {
     } catch (e) {
       console.error("LOGIN ERROR: ", e)
     }
-    Router.replace('/')
+    Router.replace('/courses')
   };
   
   return (
     <>
-    <form onSubmit={isNewUser ? signup : login} className="flex flex-col items-center pb-10">
+    <form onSubmit={isNewUser ? signup : login} className="flex flex-col items-center pt-36">
       <p className="h-4 m-4 font-bold text-red-600">{error}</p>
       <h1>{isNewUser ? `Sign Up`: `Login`}</h1>
       <input
@@ -56,12 +56,11 @@ const Login: NextPage = () => {
         type="password"
         onChange={e => setPassword(e.target.value)}
       />
-      <Button className="my-2">
-        🚀
+      <Button className="my-4">
+        {isNewUser ? "Sign up" : "Log In"}
       </Button>
     </form>
-      <Button
-        className="my-2" 
+      <Button 
         onClick={() => setIsNewUser(bool => !bool) }
       >
         Switch to {isNewUser ? `Login` : `Signup`}

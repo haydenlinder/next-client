@@ -56,7 +56,7 @@ export const Post = ({post, user}: PostProps) => {
             <div className="relative z-0 h-36 w-full">
                 {post.photo_url && <Image src={`/api/images/${post.photo_url}`} alt="" layout="fill" objectFit='scale-down' />}
             </div>
-            <div className="flex justify-between items-center bg-gray-200 p-4">
+            <div className="flex justify-between items-center bg-gradient-to-r  from-red-100 to-orange-100 p-4">
                 <div>
                     <H2>{post.title}</H2>
                     <p>{post.description}</p>

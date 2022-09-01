@@ -1,7 +1,7 @@
 import type { AppContext, AppInitialProps, AppProps } from "next/app";
 import Head from "next/head";
 import Router from "next/router";
-import { ApolloProvider, from, useReactiveVar } from "@apollo/client";
+import { ApolloProvider, from } from "@apollo/client";
 
 import client, { authLink, errorLink, httpLink, serverClient } from "./api/apollo-client";
 import { Header } from "../components/Header";
@@ -31,14 +31,10 @@ const Main = ({ Component, pageProps }: Pick<AppProps, 'Component' | 'pageProps'
   client.setLink(from([errorLink, authLink(pageProps.accessToken), httpLink]))
 
   return (
-    <>
-    <Header user={pageProps.user} accessToken={pageProps.accessToken}/>
-    <main className="max-h-screen min-h-screen flex justify-center overflow-y-scroll pt-28 pb-96">
-      <div className="h-screen container flex flex-col items-center">
-        <Component {...pageProps} />
-      </div>
-    </main>
-    </>
+    <div id='app-scroll-container' className="flex flex-col items-center h-screen max-h-screen overflow-y-scroll">
+      <Header user={pageProps.user} accessToken={pageProps.accessToken}/>
+      <Component {...pageProps} />
+    </div>
   )
 }
 

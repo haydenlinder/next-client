@@ -30,7 +30,7 @@ const Courses: NextPage<Props> = ({ posts }) => {
     const { data, loading } = useQuery<GetPostsQuery>(GET_POSTS)
     const clientPosts = data?.posts_connection.edges.map(e => e.node);
     return (
-        <section className="w-full">
+        <section className="w-full pt-36 container">
             <H1>Courses</H1>
             {loading && <div>loading...</div>}
             {(clientPosts || posts)?.map(post => <Post key={post.id} post={post} />)}
