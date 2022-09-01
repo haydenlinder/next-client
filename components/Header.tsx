@@ -17,7 +17,7 @@ const logout = async () => {
 export const Header = ({ accessToken, user }: HeaderProps) => {
 
     return (
-        <header className="p-4 flex justify-center bg-black text-white absolute w-full top-0 z-10">
+        <header className="p-4 flex justify-center bg-black text-white absolute w-screen top-0 right-0 z-10">
             <nav className="container flex items-center justify-between">
                 <Link passHref href="/">
                     <a className="mr-2">
