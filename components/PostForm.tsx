@@ -1,6 +1,6 @@
 import { useMutation } from "@apollo/client";
 import { NextPage } from "next";
-import { FormEventHandler, useEffect, useState } from "react";
+import { ComponentProps, CSSProperties, FormEventHandler, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import ReactMarkdown from "react-markdown";
 import { CREATE_POST, GET_POSTS, UPDATE_POST } from "../graphql/posts";
@@ -9,6 +9,9 @@ import { User } from "../types/entities";
 import { CreatePostMutation, CreatePostMutationVariables, UpdatePostMutation, UpdatePostMutationVariables } from "../types/generated/graphql";
 import { Button } from "./Button";
 import { H1 } from "./H1";
+import { H2 } from "./H2";
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import vscDarkPlus  from 'react-syntax-highlighter/dist/cjs/styles/prism/vsc-dark-plus';
 
 type Props = {
     user: User
@@ -126,10 +129,33 @@ const PostForm: NextPage<Props> = ({
                     <H1 className="my-2">Preview:</H1>
                     <H1 className="my-2">{title}</H1>
                     <p>{description}</p>
-                    <ReactMarkdown className="p-2 my-2 rounded border border-black" components={{
-                        h1: ({ node, ...props }) => <h1 className='font-bold text-lg' {...props} />,
-                        a: ({ node, ...props }) => <a className='text-blue-600 hover:underline text-lg' {...props} />
-                    }}>{body}</ReactMarkdown>
+                    <ReactMarkdown 
+                        className="p-2 my-2 rounded border border-black" 
+                        components={{
+                            // pre: ({ children, node, ...props }) => <pre className="bg-black text-white rounded p-4" {...props}>{children}</pre>,
+                            br: ({node, ...props}) => <br {...props}/>,
+                            h1: ({ node, ...props }) => <H1 {...props} />,
+                            h2: ({ node, ...props }) => <H2 {...props} />,
+                            a: ({ node, ...props }) => <a className='text-blue-600 hover:underline text-lg' {...props} />,
+                            code: ({node, inline, className, children, ...props}) =>{
+                                const match = /language-(\w+)/.exec(className || '')
+                                return !inline && match ? (
+                                <SyntaxHighlighter
+                                    children={String(children).replace(/\n$/, '')}
+                                    // @ts-ignore-error - no idea why TS doesn't allow this, even with type assertion
+                                    style={vscDarkPlus}
+                                    language={match[1]}
+                                    PreTag="div"
+                                    {...props}
+                                />
+                                ) : (
+                                <code className={className} {...props}>
+                                    {children}
+                                </code>
+                                )
+                            }
+                        }}
+                    >{body}</ReactMarkdown>
                     <Button className="">{saving ? "Saving" : "Post"}</Button>
                 </>}
         </form>

@@ -10,6 +10,7 @@ import { Post as TPost } from "../../types/entities";
 import { PostPreview } from "../../components/PostPreview";
 import LoginForm from "../../components/LoginForm";
 import { H2 } from "../../components/H2";
+import { Post } from "../../components/Post";
 
 type Props = { post?: TPost, error?: number }
 
@@ -52,12 +53,13 @@ const Course: NextPage<Props> = ({ post, error }) => {
             <LoginForm />
         </div>
     )
+
     return (
-        <div className="pt-36 container">
+        <div className="container">
             {(!post || error) ? 
-                <div>{error || "Post not found"}</div> 
+                <div className="pt-36">{error || "Post not found"}</div> 
                 :
-                <PostPreview post={post}/>
+                <Post post={post}/>
             }
         </div>
     );
