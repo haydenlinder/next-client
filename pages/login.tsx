@@ -48,12 +48,7 @@ const Login: NextPage = () => {
       <div className="w-96 pt-32">
           <H1 className="mb-6 text-center">{isNewUser ? 'Hop on Board 🚢' : `Get back to Coding`}</H1>
           <LoginForm isNewUser={isNewUser}/>
-        <Button 
-          secondary
-          onClick={() => setIsNewUser(bool => !bool) }
-        >
-          Switch to {isNewUser ? `Login` : `Signup`}
-        </Button>
+        
     </div>
     </div>
   );

@@ -1,9 +1,7 @@
 
-import type { NextPage } from "next";
 import Router from "next/router";
 import React, { FormEventHandler, useState } from "react";
 import { Button } from "../components/Button";
-import { H1 } from "../components/H1";
 import { Input } from "../components/Input";
 import { RefreshResponse } from "../pages/api/session/refresh";
 
@@ -11,7 +9,8 @@ type Props = {
     isNewUser?: boolean
 }
 
-const LoginForm = ({ isNewUser }: Props) => {
+const LoginForm = ({ isNewUser: isNew }: Props) => {
+    const [isNewUser, setIsNewUser] = useState(isNew || false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState<undefined | string>(undefined);
@@ -45,26 +44,34 @@ const LoginForm = ({ isNewUser }: Props) => {
     }
 
     return (
-        <form onSubmit={handleSubmit} className="flex flex-col items-center w-96">
-            <p className="h-4 m-4 font-bold text-red-600">{error}</p>
-            <Input
-                required
-                className="border border-solid rounded mb-4"
-                placeholder="email"
-                type="email"
-                onChange={e => setEmail(e.target.value)}
-            />
-            <Input
-                required
-                className="border border-solid rounded"
-                placeholder="password"
-                type="password"
-                onChange={e => setPassword(e.target.value)}
-            />
-            <Button className="my-4">
-                {isNewUser ? "Get Started" : "Log In"}
+        <div className="w-96">
+            <form onSubmit={handleSubmit} className="flex flex-col items-center w-96">
+                <p className="h-4 m-4 font-bold text-red-600">{error}</p>
+                <Input
+                    required
+                    className="border border-solid rounded mb-4"
+                    placeholder="email"
+                    type="email"
+                    onChange={e => setEmail(e.target.value)}
+                />
+                <Input
+                    required
+                    className="border border-solid rounded"
+                    placeholder="password"
+                    type="password"
+                    onChange={e => setPassword(e.target.value)}
+                />
+                <Button className="my-4">
+                    {isNewUser ? "Get Started" : "Log In"}
+                </Button>
+            </form>
+            <Button
+                secondary
+                onClick={() => setIsNewUser(bool => !bool)}
+            >
+                Switch to {isNewUser ? `Login` : `Signup`}
             </Button>
-        </form>
+        </div>
     );
 };
 
