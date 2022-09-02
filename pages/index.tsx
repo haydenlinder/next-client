@@ -16,7 +16,7 @@ const Home: NextPage= () => {
 
   return (
     <main className="w-full">
-      <section className="text-white drop-shadow-md h-screen pt-28 bg-gradient-to-r from-green-500 to-blue-500 w-full flex flex-col items-center">
+      <section className="drop-shadow-md h-screen pt-28 bg-gradient-to-r from-green-300 to-blue-300 w-full flex flex-col items-center">
         <div className="container flex flex-col items-center">
           <H1 className="text-center my-4 mb-6">Don{"'"}t Just Learn to Code</H1>
           <H1 className="text-center my-4 mb-6">Learn to Ship it 🚢</H1>
@@ -29,7 +29,7 @@ const Home: NextPage= () => {
           </form>
         </div>
       </section>
-      <section className="text-white text-center pt-16 h-screen w-full bg-gradient-to-r from-blue-500 to-purple-500 flex flex-col items-center">
+      <section className="text-center pt-16 h-screen w-full bg-gradient-to-r from-blue-300 to-purple-300 flex flex-col items-center">
         <div className="container flex flex-col items-center">
           <H1 className="my-4 mb-6">Learn to Code</H1>
           <H1 className=" my-4 mb-6">Without the BS</H1>
@@ -43,12 +43,11 @@ const Home: NextPage= () => {
             <H2 className="mb-4">
               No boilerplate code or in-browser editors. 
             </H2>
-            <p>
+            <p className="mb-4">
               You create all the projects from scratch on your own machine,{" "}
               <br className="hidden sm:block" />
               which helps you learn better than hand-holding.
             </p>
-          </div>
           <Button 
             className="text-lg lg:text-2xl" 
             secondary 
@@ -59,6 +58,7 @@ const Home: NextPage= () => {
           >
             Get Started
           </Button>
+          </div>
         </div>
       </section>
     </main>

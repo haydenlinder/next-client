@@ -11,7 +11,7 @@ type HeaderProps = {
 const logout = async () => {
     const response = await fetch('/api/session/logout', { method: 'POST' });
     await response.json();
-    Router.replace('/')
+    Router.replace('/login')
 }
 
 export const Header = ({ accessToken, user }: HeaderProps) => {
@@ -20,12 +20,12 @@ export const Header = ({ accessToken, user }: HeaderProps) => {
         <header className="p-4 flex justify-center bg-black text-white absolute w-screen top-0 right-0 z-10">
             <nav className="container flex items-center justify-between">
                 <Link passHref href="/">
-                    <a className="mr-2">
-                        Home
+                    <a className="mr-2 text-5xl">
+                        🚢
                     </a>
                 </Link>
                 {Boolean(accessToken) ?
-                    <div>
+                    <div className="flex items-center">
                         <Link passHref href={`/users/${user?.user_id}`}>
                             <a className="mr-2 hover:underline">
                                 {user?.username || "Profile"}

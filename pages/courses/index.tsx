@@ -31,7 +31,7 @@ const Courses: NextPage<Props> = ({ posts }) => {
     const clientPosts = data?.posts_connection.edges.map(e => e.node);
     return (
         <section className="w-full pt-36 container">
-            <H1>Courses</H1>
+            <H1 className="mb-10 text-center">Courses</H1>
             {loading && <div>loading...</div>}
             {(clientPosts || posts)?.map(post => <Post key={post.id} post={post} />)}
         </section>

@@ -31,7 +31,7 @@ const Main = ({ Component, pageProps }: Pick<AppProps, 'Component' | 'pageProps'
   client.setLink(from([errorLink, authLink(pageProps.accessToken), httpLink]))
 
   return (
-    <div id='app-scroll-container' className="flex flex-col items-center h-screen max-h-screen overflow-y-scroll">
+    <div id='app-scroll-container' className="flex flex-col items-center h-screen max-h-screen overflow-y-scroll bg-gradient-to-r from-blue-300 to-purple-300">
       <Header user={pageProps.user} accessToken={pageProps.accessToken}/>
       <Component {...pageProps} />
     </div>
@@ -57,6 +57,7 @@ export const sessionConditionRedirect = async (context: AppContext): Promise<App
 
   const isAdminRoute = (path === '/admin');
   const isLoginRoute = (path === '/login');
+  const isHomeRoute = (path === '/');
 
   const response = await refresh(req?.headers.cookie);
   const accessToken = response?.data?.access_token;
@@ -81,8 +82,8 @@ export const sessionConditionRedirect = async (context: AppContext): Promise<App
     return appProps
   }
   // logged in and requests '/login' or requests '/admin' without being an admin user
-  else if (accessToken && (isLoginRoute || (isAdminRoute && !user?.is_admin))) {
-    redirect(res, '/')
+  else if (accessToken && (isLoginRoute || isHomeRoute || (isAdminRoute && !user?.is_admin))) {
+    redirect(res, '/courses')
     return appProps
   }
   // they are in the right place
