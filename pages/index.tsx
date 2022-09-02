@@ -24,8 +24,9 @@ const Home: NextPage= () => {
             Deploy your first website from scratch in the third course.
           </H2>
           <form className="flex flex-col items-center w-96">
-            <Input value={email} onChange={e => setEmail(e.target.value)} id='email-input' type="email" placeholder="Email" className="mb-4 text-center text-black font-bold text-lg" required />
-            <Button secondary className="text-lg lg:text-2xl mb-4 w-full">Get Started</Button>
+            <Link passHref href="/courses">
+              <Button secondary className="text-lg lg:text-2xl mb-4 w-full">Get Started</Button>
+            </Link>
           </form>
         </div>
       </section>
@@ -48,16 +49,14 @@ const Home: NextPage= () => {
               <br className="hidden sm:block" />
               which helps you learn better than hand-holding.
             </p>
+            <Link passHref href="/courses">
           <Button 
             className="text-lg lg:text-2xl" 
             secondary 
-            onClick={e => {
-              document.getElementById('app-scroll-container')?.scroll({ top: 0, behavior: 'smooth' })
-              setTimeout(() => document.getElementById('email-input')?.focus(), 500)
-            }}
-          >
+            >
             Get Started
           </Button>
+          </Link>
           </div>
         </div>
       </section>

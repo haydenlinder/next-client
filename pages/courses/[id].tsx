@@ -11,13 +11,15 @@ import { refresh } from "../api/next-client";
 import { GET_POST_BY_ID } from "../../graphql/posts";
 import { Post as TPost } from "../../types/entities";
 import { Post } from "../../components/Post";
+import LoginForm from "../../components/LoginForm";
+import { H1 } from "../../components/H1";
+import { H2 } from "../../components/H2";
 
-type Props = { post?: TPost, error?: string }
+type Props = { post?: TPost, error?: number }
 
 export const getServerSideProps: GetServerSideProps<Props> = async ({ req, params }) => {
     const response = await refresh(req?.headers.cookie);
     const accessToken = response?.data?.access_token;
-
 
     let post: TPost | null;
 
@@ -40,13 +42,20 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({ req, param
     } else {
         return {
             props: {
-                error: 'Please sign in to view this content'
+                error: 401
             }
         }
     }
 }
 
 const Course: NextPage<Props> = ({ post, error }) => {
+
+    if (error === 401) return (
+        <div className="pt-36 flex flex-col items-center">
+            <H2 className="text-center">Please sign in to view this content</H2>
+            <LoginForm />
+        </div>
+    )
     return (
         <div className="pt-36 container">
             {(!post || error) ? 
