@@ -7,7 +7,7 @@ import { serverClient } from "../api/apollo-client";
 import { refresh } from "../api/next-client";
 import { GET_POST_BY_ID } from "../../graphql/posts";
 import { Post as TPost } from "../../types/entities";
-import { Post } from "../../components/Post";
+import { PostPreview } from "../../components/PostPreview";
 import LoginForm from "../../components/LoginForm";
 import { H2 } from "../../components/H2";
 
@@ -57,7 +57,7 @@ const Course: NextPage<Props> = ({ post, error }) => {
             {(!post || error) ? 
                 <div>{error || "Post not found"}</div> 
                 :
-                <Post post={post}/>
+                <PostPreview post={post}/>
             }
         </div>
     );

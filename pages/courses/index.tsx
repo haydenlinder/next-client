@@ -3,7 +3,7 @@ import {
     GetPostsQuery,
 } from "../../types/generated/graphql";
 import { GET_POSTS } from "../../graphql/posts";
-import { Post } from "../../components/Post";
+import { PostPreview } from "../../components/PostPreview";
 import { serverClient } from "../api/apollo-client";
 import { H1 } from "../../components/H1";
 import { useQuery } from "@apollo/client";
@@ -33,7 +33,7 @@ const Courses: NextPage<Props> = ({ posts }) => {
         <section className="w-full pt-36 container">
             <H1 className="mb-10 text-center">Courses</H1>
             {loading && <div>loading...</div>}
-            {(clientPosts || posts)?.map(post => <Post key={post.id} post={post} />)}
+            {(clientPosts || posts)?.map(post => <PostPreview key={post.id} post={post} />)}
         </section>
     );
 };

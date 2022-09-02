@@ -3,7 +3,7 @@ import {
     GetPostsQuery,
 } from "../types/generated/graphql";
 import { GET_POSTS } from "../graphql/posts";
-import { Post } from "../components/Post";
+import { PostPreview } from "../components/PostPreview";
 import { serverClient } from "./api/apollo-client";
 import { getCookieParser } from "next/dist/server/api-utils";
 import { getCurrentUser } from "./api/apollo_functions/users";
@@ -46,7 +46,7 @@ const Admin: NextPage<Props> = ({ posts, user }) => {
             <PostForm user={user}/>
             <div>
                 <H1>Courses</H1>
-                {(clientPosts || posts)?.map(post => <Post user={user} key={post.id} post={post} />)}
+                {(clientPosts || posts)?.map(post => <PostPreview user={user} key={post.id} post={post} />)}
             </div>
         </section>
     );

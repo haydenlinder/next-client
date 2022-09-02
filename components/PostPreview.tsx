@@ -12,12 +12,12 @@ import PostForm from "./PostForm";
 type Post = GetPostsQuery['posts_connection']['edges'][0]['node']
 type User = GetUserByIdQuery['users_connection']['edges'][0]['node']
 
-type PostProps = {
+type Props = {
     post: Post
     user?: User
 }
 
-export const Post = ({post, user}: PostProps) => {
+export const PostPreview = ({post, user}: Props) => {
 
     const [isEdit, setIsEdit] = useState(false)
 
