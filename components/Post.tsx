@@ -51,7 +51,7 @@ export const Post = ({post, user}: PostProps) => {
     )
 
     return (
-        <div className="flex flex-col items-center rounded overflow-hidden mb-4 drop-shadow-2xl">
+        <div className="flex flex-col items-center rounded overflow-hidden min-h-fit mb-4 drop-shadow-2xl">
             {/* PHOTO */}
             <div className="p-6 z-0 h-52 w-full bg-white shadow-md">
                 <div className="relative w-full h-full">
