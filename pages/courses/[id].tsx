@@ -2,17 +2,13 @@ import type { GetServerSideProps, NextPage } from "next";
 import {
     GetPostByIdQuery,
     GetPostByIdQueryVariables,
-    GetUserByIdQuery, GetUserByIdQueryVariables,
 } from "../../types/generated/graphql";
-import { GET_USER_BY_ID } from "../../graphql/users";
-import { useRouter } from "next/router";
 import { serverClient } from "../api/apollo-client";
 import { refresh } from "../api/next-client";
 import { GET_POST_BY_ID } from "../../graphql/posts";
 import { Post as TPost } from "../../types/entities";
 import { Post } from "../../components/Post";
 import LoginForm from "../../components/LoginForm";
-import { H1 } from "../../components/H1";
 import { H2 } from "../../components/H2";
 
 type Props = { post?: TPost, error?: number }
