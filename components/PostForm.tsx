@@ -141,13 +141,12 @@ const PostForm: NextPage<Props> = ({
                                 const match = /language-(\w+)/.exec(className || '')
                                 return !inline && match ? (
                                 <SyntaxHighlighter
-                                    children={String(children).replace(/\n$/, '')}
                                     // @ts-ignore-error - no idea why TS doesn't allow this, even with type assertion
                                     style={vscDarkPlus}
                                     language={match[1]}
                                     PreTag="div"
                                     {...props}
-                                />
+                                    >{String(children).replace(/\n$/, '')}</SyntaxHighlighter>
                                 ) : (
                                 <code className={className} {...props}>
                                     {children}
