@@ -67,8 +67,8 @@ export const PostPreview = ({post, user}: Props) => {
                 {/* BUTTONS */}
                 <div className="ml-4">
                     <Link passHref href={`/courses/${post.post_id}`}><Button className=" w-24">{post.price <= 0 ? "FREE!" : post.price}</Button></Link>
-                    {user?.is_admin &&  <Button className="ml-4" onClick={handleDelete}>{deleting ? "Deleting" : "Delete"}</Button>}
-                    {user?.is_admin &&  <Button className="ml-4" onClick={e => setIsEdit(true)}>Edit</Button>}
+                    {user?.is_admin &&  <Button className="my-4" onClick={handleDelete}>{deleting ? "Deleting" : "Delete"}</Button>}
+                    {user?.is_admin &&  <Button className="mb-4" onClick={e => setIsEdit(true)}>Edit</Button>}
                 </div>
             </div>
         </div>

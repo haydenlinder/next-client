@@ -55,7 +55,7 @@ const Admin: NextPage<Props> = ({ posts, user }) => {
                 {showForm ? "Cancel" : "New Post"}
             </Button>
             <div>
-                <H1>Courses</H1>
+                <H1 className="my-6">Courses</H1>
                 {(clientPosts || posts)?.map(post => <PostPreview user={user} key={post.id} post={post} />)}
             </div>
         </section>
