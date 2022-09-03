@@ -46,7 +46,7 @@ const Admin: NextPage<Props> = ({ posts, user }) => {
     const clientPosts = data?.posts_connection.edges.map(e => e.node);
 
     return (
-        <section className="container pt-36">
+        <section className="container py-36">
             {showForm && <PostForm user={user}/>}
             <Button
                 secondary={showForm}
