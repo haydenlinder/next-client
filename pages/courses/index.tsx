@@ -33,7 +33,7 @@ const Courses: NextPage<Props> = ({ posts }) => {
         <section className="w-full pt-36 container">
             <H1 className="mb-10 text-center">Courses</H1>
             {loading && <div>loading...</div>}
-            {(clientPosts || posts)?.map(post => <PostPreview key={post.id} post={post} />)}
+            {(clientPosts || posts)?.map((post, i) => <PostPreview priority={i == 0} key={post.id} post={post} />)}
         </section>
     );
 };

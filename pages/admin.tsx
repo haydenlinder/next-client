@@ -56,7 +56,7 @@ const Admin: NextPage<Props> = ({ posts, user }) => {
             </Button>
             <div>
                 <H1 className="my-6">Courses</H1>
-                {(clientPosts || posts)?.map(post => <PostPreview user={user} key={post.id} post={post} />)}
+                {(clientPosts || posts)?.map((post, i) => <PostPreview priority={i == 0} user={user} key={post.id} post={post} />)}
             </div>
         </section>
     );

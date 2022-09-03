@@ -15,9 +15,10 @@ type User = GetUserByIdQuery['users_connection']['edges'][0]['node']
 type Props = {
     post: Post
     user?: User
+    priority?: boolean
 }
 
-export const PostPreview = ({post, user}: Props) => {
+export const PostPreview = ({post, user, priority}: Props) => {
 
     const [isEdit, setIsEdit] = useState(false)
 
@@ -55,7 +56,7 @@ export const PostPreview = ({post, user}: Props) => {
             {/* PHOTO */}
             <div className="p-6 z-0 h-52 w-full bg-white shadow-md">
                 <div className="relative w-full h-full">
-                    {post.photo_url && <Image src={`/api/images/${post.photo_url}`} alt="" layout="fill" objectFit='scale-down' />}
+                    {post.photo_url && <Image priority={priority} src={`/api/images/${post.photo_url}`} alt="" layout="fill" objectFit='scale-down' />}
                 </div>
             </div>
             {/* POST INFO */}
