@@ -15,8 +15,9 @@ export const Markdown = ({ body }: Props) => {
             components={{
                 h1: ({ node, className, ...props }) => <H1 {...props} />,
                 h2: ({ node, className, ...props }) => <H2 {...props} />,
-                a: ({ node, ...props }) => <a className='text-blue-600 hover:underline text-lg' {...props} />,
+                a: ({ node, ...props }) => <a className='text-blue-600 hover:underline' {...props} />,
                 code: ({ node, inline, className, children, ...props }) => {
+                    console.log({className})
                     const match = /language-(\w+)/.exec(className || '')
                     return !inline && match ? (
                         <SyntaxHighlighter
@@ -27,7 +28,7 @@ export const Markdown = ({ body }: Props) => {
                             {...props}
                         >{String(children).replace(/\n$/, '')}</SyntaxHighlighter>
                     ) : (
-                        <code className={className} {...props}>
+                        <code className='bg-yellow-800 text-yellow-200 px-1.5 py-0.5 rounded' {...props}>
                             {children}
                         </code>
                     )

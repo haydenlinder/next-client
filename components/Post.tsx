@@ -64,8 +64,10 @@ export const Post = ({ post, user, preview }: Props) => {
                     {post.photo_url && <Image className=" p-6" src={!preview ? `/api/images/${post.photo_url}` : post.photo_url} alt="" layout="fill" objectFit='scale-down' />}
                 </div>
             </div>
-            <div className="p-6">
+            <div className="p-6 bg-black text-white">
                 <H1>{post.title}</H1>
+            </div>
+            <div className="p-6">
                 <Markdown {...{ body }} />
             </div>
         </div>
