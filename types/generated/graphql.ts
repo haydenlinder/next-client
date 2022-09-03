@@ -647,10 +647,11 @@ export type CreatePostMutationVariables = Exact<{
   title?: InputMaybe<Scalars['String']>;
   user_id?: InputMaybe<Scalars['Int']>;
   photo_url?: InputMaybe<Scalars['String']>;
+  price?: InputMaybe<Scalars['numeric']>;
 }>;
 
 
-export type CreatePostMutation = { __typename?: 'mutation_root', insert_posts_one?: { __typename?: 'posts', id: string, post_id: number, description: string, title: string } | null };
+export type CreatePostMutation = { __typename?: 'mutation_root', insert_posts_one?: { __typename?: 'posts', id: string } | null };
 
 export type GetPostsQueryVariables = Exact<{
   _gte?: InputMaybe<Scalars['Int']>;
@@ -724,14 +725,11 @@ export type VerifyUserMutation = { __typename?: 'mutation_root', update_users_by
 
 
 export const CreatePostDocument = gql`
-    mutation createPost($body: String = "", $description: String = "", $title: String = "", $user_id: Int = 10, $photo_url: String = "") {
+    mutation createPost($body: String = "", $description: String = "", $title: String = "", $user_id: Int = 10, $photo_url: String = "", $price: numeric = 0) {
   insert_posts_one(
-    object: {body: $body, user_id: $user_id, photo_url: $photo_url, title: $title, description: $description}
+    object: {body: $body, user_id: $user_id, photo_url: $photo_url, title: $title, description: $description, price: $price}
   ) {
     id
-    post_id
-    description
-    title
   }
 }
     `;

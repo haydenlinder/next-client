@@ -16,9 +16,10 @@ type Props = {
     post: Post
     user?: User
     priority?: boolean
+    preview?: boolean
 }
 
-export const PostPreview = ({post, user, priority}: Props) => {
+export const PostPreview = ({post, user, priority, preview}: Props) => {
 
     const [isEdit, setIsEdit] = useState(false)
 
@@ -56,7 +57,7 @@ export const PostPreview = ({post, user, priority}: Props) => {
             {/* PHOTO */}
             <div className="p-6 z-0 h-52 w-full bg-white shadow-md">
                 <div className="relative w-full h-full">
-                    {post.photo_url && <Image priority={priority} src={`/api/images/${post.photo_url}`} alt="" layout="fill" objectFit='scale-down' />}
+                    {post.photo_url && <Image priority={priority} src={!preview ? `/api/images/${post.photo_url}`: post.photo_url} alt="" layout="fill" objectFit='scale-down' />}
                 </div>
             </div>
             {/* POST INFO */}
@@ -67,7 +68,7 @@ export const PostPreview = ({post, user, priority}: Props) => {
                 </div>
                 {/* BUTTONS */}
                 <div className="ml-4">
-                    <Link passHref href={`/courses/${post.post_id}`}><Button className=" w-24">{post.price <= 0 ? "FREE!" : post.price}</Button></Link>
+                    <Link passHref href={`/courses/${post.post_id}`}><Button>{post.price <= 0 ? "FREE!" : post.price}</Button></Link>
                     {user?.is_admin &&  <Button className="my-4" onClick={handleDelete}>{deleting ? "Deleting" : "Delete"}</Button>}
                     {user?.is_admin &&  <Button className="mb-4" onClick={e => setIsEdit(true)}>Edit</Button>}
                 </div>

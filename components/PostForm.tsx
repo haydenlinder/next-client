@@ -2,16 +2,17 @@ import { useMutation } from "@apollo/client";
 import { NextPage } from "next";
 import { ComponentProps, CSSProperties, FormEventHandler, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import ReactMarkdown from "react-markdown";
 import { CREATE_POST, GET_POSTS, UPDATE_POST } from "../graphql/posts";
 import { FileResponse } from "../pages/api/images/upload";
 import { User } from "../types/entities";
 import { CreatePostMutation, CreatePostMutationVariables, UpdatePostMutation, UpdatePostMutationVariables } from "../types/generated/graphql";
 import { Button } from "./Button";
 import { H1 } from "./H1";
-import { H2 } from "./H2";
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import vscDarkPlus  from 'react-syntax-highlighter/dist/cjs/styles/prism/vsc-dark-plus';
+import { Input } from "./Input";
+
+import { Markdown } from "./Markdown";
+import { Post } from "./Post";
+import { PostPreview } from "./PostPreview";
 
 type Props = {
     user: User
@@ -55,6 +56,7 @@ const PostForm: NextPage<Props> = ({
     const [body, setBody] = useState(originalBody || "");
     const [description, setDescription] = useState(originalDescription || "");
     const [title, setTitle] = useState(originalTitle || "");
+    const [price, setPrice] = useState(originalPrice || "");
     const [files, setFiles] = useState<FilePreview[]>([]);
 
     const [savePost, { loading: saving }] = useMutation<CreatePostMutation, CreatePostMutationVariables>(CREATE_POST, {
@@ -77,6 +79,7 @@ const PostForm: NextPage<Props> = ({
                     body,
                     description,
                     title,
+                    price,
                     user_id: user?.user_id,
                     photo_url: imageKeys[0],
                 }
@@ -109,55 +112,45 @@ const PostForm: NextPage<Props> = ({
         onAfterSave()
     }
 
+    const post = {
+        photo_url:  files[0]?.preview || originalPhoto,
+        title,
+        description,
+        price,
+        created_at: Date.now(),
+        id: "1eserkjh4.mnasdfw==",
+        body,
+        post_id: 1
+    }
+
     return (
-        <form className="mb-8" onSubmit={handleSubmit}>
-            <H1>Make an entry</H1>
-            {/* title */}
-            <label htmlFor="title">Title</label>
-            <input placeholder="title" className="p-2 border border-black rounded w-full" onChange={e => setTitle(e.target.value)} value={title} name="title" id="title" />
-            {/* description */}
-            <label htmlFor="description">Description</label>
-            <textarea placeholder="description" className="p-2 border border-black rounded w-full" onChange={e => setDescription(e.target.value)} value={description} name="description" id="description" cols={30} rows={5} />
-            {/* body */}
-            <label htmlFor="body">Body</label>
-            <textarea placeholder="body" className="p-2 border border-black rounded w-full" onChange={e => setBody(e.target.value)} value={body} name="body" id="body" cols={30} rows={10} />
-            {/* photos */}
-            <DropzoneWithPreview files={files} setFiles={setFiles} />
+        <div className="">
+            <form className="mb-10" onSubmit={handleSubmit}>
+                <H1>Make an entry</H1>
+                {/* title */}
+                <label htmlFor="title">Title</label>
+                <input placeholder="title" className="p-2 border border-black rounded w-full" onChange={e => setTitle(e.target.value)} value={title} name="title" id="title" />
+                {/* description */}
+                <label htmlFor="description">Description</label>
+                <textarea placeholder="description" className="p-2 border border-black rounded w-full" onChange={e => setDescription(e.target.value)} value={description} name="description" id="description" cols={30} rows={5} />
+                <label htmlFor="price">Price</label>
+                <Input placeholder="price" onChange={e => setPrice(e.target.value)} value={price} name="price" id="price" />
+                {/* body */}
+                <label htmlFor="body">Body</label>
+                <textarea placeholder="body" className="p-2 mb-4 border border-black rounded w-full" onChange={e => setBody(e.target.value)} value={body} name="body" id="body" cols={30} rows={10} />
+                {/* photos */}
+                <DropzoneWithPreview files={files} setFiles={setFiles} />
+                <br />
+                <PostPreview preview={files.length > 0} post={post} />
+                <br />
+                <Post 
+                    preview={files.length > 0}
+                    post={post}
+                />
+                <Button className="my-6">{saving ? "Saving" : "Post"}</Button>
+            </form>
             {/* preview */}
-            {body &&
-                <>
-                    <H1 className="my-2">Preview:</H1>
-                    <H1 className="my-2">{title}</H1>
-                    <p>{description}</p>
-                    <ReactMarkdown 
-                        className="p-2 my-2 rounded border border-black" 
-                        components={{
-                            // pre: ({ children, node, ...props }) => <pre className="bg-black text-white rounded p-4" {...props}>{children}</pre>,
-                            br: ({node, ...props}) => <br {...props}/>,
-                            h1: ({ node, ...props }) => <H1 {...props} />,
-                            h2: ({ node, ...props }) => <H2 {...props} />,
-                            a: ({ node, ...props }) => <a className='text-blue-600 hover:underline text-lg' {...props} />,
-                            code: ({node, inline, className, children, ...props}) =>{
-                                const match = /language-(\w+)/.exec(className || '')
-                                return !inline && match ? (
-                                <SyntaxHighlighter
-                                    // @ts-ignore-error - no idea why TS doesn't allow this, even with type assertion
-                                    style={vscDarkPlus}
-                                    language={match[1]}
-                                    PreTag="div"
-                                    {...props}
-                                    >{String(children).replace(/\n$/, '')}</SyntaxHighlighter>
-                                ) : (
-                                <code className={className} {...props}>
-                                    {children}
-                                </code>
-                                )
-                            }
-                        }}
-                    >{body}</ReactMarkdown>
-                    <Button className="">{saving ? "Saving" : "Post"}</Button>
-                </>}
-        </form>
+        </div>
     )
 }
 
@@ -224,6 +217,7 @@ function DropzoneWithPreview({ setFiles, files }: DropzoneProps) {
         color: "#bdbdbd",
         outline: "none",
         transition: "border .24s ease-in-out",
+        cursor: "pointer"
     };
 
     const thumbs = files.map((file) => (

@@ -9,6 +9,7 @@ import { DeletePostMutation, DeletePostMutationVariables, GetPostsQuery, GetUser
 import { Button } from "./Button";
 import { H1 } from "./H1";
 import { H2 } from "./H2";
+import { Markdown } from "./Markdown";
 import PostForm from "./PostForm";
 
 type Post = GetPostsQuery['posts_connection']['edges'][0]['node']
@@ -17,9 +18,10 @@ type User = GetUserByIdQuery['users_connection']['edges'][0]['node']
 type Props = {
     post: Post
     user?: User
+    preview?: boolean
 }
 
-export const Post = ({ post, user }: Props) => {
+export const Post = ({ post, user, preview }: Props) => {
 
     const [isEdit, setIsEdit] = useState(false)
 
@@ -59,18 +61,12 @@ export const Post = ({ post, user }: Props) => {
             {user?.is_admin && <Button className="ml-4" onClick={e => setIsEdit(true)}>Edit</Button>}
             <div className="p-6 z-0 h-52 w-full bg-white shadow-md">
                 <div className="relative w-full h-full">
-                    {post.photo_url && <Image className=" p-6" src={`/api/images/${post.photo_url}`} alt="" layout="fill" objectFit='scale-down' />}
+                    {post.photo_url && <Image className=" p-6" src={!preview ? `/api/images/${post.photo_url}` : post.photo_url} alt="" layout="fill" objectFit='scale-down' />}
                 </div>
             </div>
             <div className="p-6">
-                <H2>{post.title}</H2>
-                <ReactMarkdown className="p-2 my-2 whitespace-pre-wrap" components={{
-                    code: ({children, node, ...props}) => <code className="bg-black text-white" {...props}>{children}</code>,
-                    br: () => <br />,
-                    h1: ({ node, ...props }) => <H1 {...props} />,
-                    h2: ({ node, ...props }) => <H2 {...props} />,
-                    a: ({ node, ...props }) => <a className='text-blue-600 hover:underline text-lg' {...props} />
-                }}>{body}</ReactMarkdown>
+                <H1>{post.title}</H1>
+                <Markdown {...{ body }} />
             </div>
         </div>
     )

@@ -49,6 +49,7 @@ const Admin: NextPage<Props> = ({ posts, user }) => {
         <section className="container pt-36">
             {showForm && <PostForm user={user}/>}
             <Button
+                secondary={showForm}
                 className="pt-4" 
                 onClick={() => setShowForm(s => !s)}
             >
