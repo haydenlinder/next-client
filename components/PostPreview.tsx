@@ -51,14 +51,15 @@ export const PostPreview = ({post, user}: Props) => {
     )
 
     return (
-        <div className="flex flex-col items-center rounded overflow-hidden min-h-fit mb-4 drop-shadow-2xl">
+        <div className="flex flex-col w-full items-center rounded overflow-hidden min-h-fit mb-4 drop-shadow-2xl">
             {/* PHOTO */}
             <div className="p-6 z-0 h-52 w-full bg-white shadow-md">
                 <div className="relative w-full h-full">
-                    {post.photo_url && <Image className=" p-6" src={`/api/images/${post.photo_url}`} alt="" layout="fill" objectFit='scale-down' />}
+                    {post.photo_url && <Image src={`/api/images/${post.photo_url}`} alt="" layout="fill" objectFit='scale-down' />}
                 </div>
             </div>
-            <div className="flex justify-between items-center bg-gradient-to-r  from-purple-100 to-blue-100 p-10">
+            {/* POST INFO */}
+            <div className="w-full flex justify-between items-center bg-gradient-to-r  from-purple-100 to-blue-100 p-10">
                 <div>
                     <H2>{post.title}</H2>
                     <p>{post.description}</p>
