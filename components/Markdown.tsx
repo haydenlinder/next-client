@@ -11,7 +11,7 @@ type Props = {
 export const Markdown = ({ body }: Props) => {
     return (
         <ReactMarkdown
-            className="p-2 my-2 whitespace-pre-wrap"
+            className="my-2 whitespace-pre-wrap"
             components={{
                 h1: ({ node, className, ...props }) => <H1 {...props} />,
                 h2: ({ node, className, ...props }) => <H2 {...props} />,
