@@ -11,12 +11,10 @@ type Props = {
 export const Markdown = ({ body }: Props) => {
     return (
         <ReactMarkdown
-            className="p-2 my-2"
+            className="p-2 my-2 whitespace-pre-wrap"
             components={{
-                // pre: ({ children, node, ...props }) => <pre className="bg-black text-white rounded p-4" {...props}>{children}</pre>,
-                br: ({ node, ...props }) => <br {...props} />,
-                h1: ({ node, ...props }) => <H1 {...props} />,
-                h2: ({ node, ...props }) => <H2 {...props} />,
+                h1: ({ node, className, ...props }) => <H1 {...props} />,
+                h2: ({ node, className, ...props }) => <H2 {...props} />,
                 a: ({ node, ...props }) => <a className='text-blue-600 hover:underline text-lg' {...props} />,
                 code: ({ node, inline, className, children, ...props }) => {
                     const match = /language-(\w+)/.exec(className || '')
