@@ -11,6 +11,8 @@ import { H1 } from "../components/H1";
 import PostForm from "../components/PostForm";
 import { Post as TPost, User } from "../types/entities";
 import { useQuery } from "@apollo/client";
+import { useState } from "react";
+import { Button } from "../components/Button";
 
 type Props = {
     posts: TPost[]
@@ -40,10 +42,18 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({ req }) => 
 
 const Admin: NextPage<Props> = ({ posts, user }) => {
     const { data, loading } = useQuery<GetPostsQuery>(GET_POSTS)
+    const [showForm, setShowForm] = useState(false)
     const clientPosts = data?.posts_connection.edges.map(e => e.node);
+
     return (
         <section className="container pt-36">
-            <PostForm user={user}/>
+            {showForm && <PostForm user={user}/>}
+            <Button
+                className="pt-4" 
+                onClick={() => setShowForm(s => !s)}
+            >
+                {showForm ? "Cancel" : "New Post"}
+            </Button>
             <div>
                 <H1>Courses</H1>
                 {(clientPosts || posts)?.map(post => <PostPreview user={user} key={post.id} post={post} />)}
