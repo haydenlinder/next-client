@@ -28,10 +28,9 @@ export const serverClient = new ApolloClient({
   link: from([errorLink, httpLink]),
   defaultOptions: {
     watchQuery: {
-      nextFetchPolicy: 'no-cache',
+      nextFetchPolicy: 'network-only',
     },
   },
-  
 });
 
 const client = new ApolloClient({
