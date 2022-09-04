@@ -15,7 +15,7 @@ export const Markdown = ({ body }: Props) => {
             className="my-2 whitespace-pre-wrap"
             components={{
                 h1: ({ node, className, ...props }) => {
-                    const id = typeof props.children[0] === 'string' ? props.children[0]?.split(" ").join('-') : ''
+                    const id = typeof props.children?.[0] === 'string' ? props.children?.[0]?.split(" ").join('-') : ''
                     return (
                         <a className='hover:underline relative' href={'#'+id}>
                             <div id={id} className='absolute top-[-100px]'></div>
@@ -24,7 +24,7 @@ export const Markdown = ({ body }: Props) => {
                     )
                 },
                 h2: ({ node, className, ...props }) => {
-                    const id = typeof props.children[0] === 'string' ? props.children[0]?.split(" ").join('-') : ''
+                    const id = typeof props.children?.[0] === 'string' ? props.children?.[0]?.split(" ").join('-') : ''
                     return (
                         <a className='hover:underline relative' href={'#' + id}>
                             <div id={id} className='absolute top-[-100px]'></div>
