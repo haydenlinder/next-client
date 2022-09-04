@@ -12,11 +12,9 @@ type Props = {
 export const Markdown = ({ body }: Props) => {
     return (
         <ReactMarkdown
-            // remarkPlugins={[remarkGfm]}
             className="my-2 whitespace-pre-wrap"
             components={{
                 h1: ({ node, className, ...props }) => {
-                    console.log(props, node)
                     const id = typeof props.children[0] === 'string' ? props.children[0]?.split(" ").join('-') : ''
                     return (
                         <a className='hover:underline relative' href={'#'+id}>
@@ -25,7 +23,15 @@ export const Markdown = ({ body }: Props) => {
                         </a>
                     )
                 },
-                h2: ({ node, className, ...props }) => <H2 {...props} />,
+                h2: ({ node, className, ...props }) => {
+                    const id = typeof props.children[0] === 'string' ? props.children[0]?.split(" ").join('-') : ''
+                    return (
+                        <a className='hover:underline relative' href={'#' + id}>
+                            <div id={id} className='absolute top-[-100px]'></div>
+                            <H2 {...props} />
+                        </a>
+                    )
+                },
                 a: ({ node, ...props }) => <a className='text-blue-600 hover:underline' {...props} />,
                 code: ({ node, inline, className, children, ...props }) => {
                     const match = /language-(\w+)/.exec(className || '')
