@@ -25,7 +25,13 @@ export const serverClient = new ApolloClient({
   cache: new InMemoryCache({
     resultCaching: false
   }),
-  link: from([errorLink, httpLink])
+  link: from([errorLink, httpLink]),
+  defaultOptions: {
+    watchQuery: {
+      nextFetchPolicy: 'no-cache',
+    },
+  },
+  
 });
 
 const client = new ApolloClient({
