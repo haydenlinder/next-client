@@ -1,5 +1,6 @@
 import Link from "next/link"
 import Router from "next/router";
+import { useEffect, useRef } from "react";
 import { GetUserByIdQuery } from "../types/generated/graphql";
 import { Button } from "./Button";
 
@@ -15,9 +16,22 @@ const logout = async () => {
 }
 
 export const Header = ({ accessToken, user }: HeaderProps) => {
-
+    const ref = useRef<HTMLElement | null>(null)
+    useEffect(() => {
+        const listener = (e: Event) => {
+            const cl = ref.current?.classList
+            const ev = e as unknown as React.KeyboardEvent<HTMLDivElement>
+            if (ev.currentTarget?.scrollTop <= 0) {
+                cl?.contains("drop-shadow-md") && cl?.remove("drop-shadow-md")
+            } else {
+                !cl?.contains("drop-shadow-md") && cl?.add("drop-shadow-md")
+            }
+        }
+        document.getElementById('app-scroll-container')?.addEventListener('scroll', listener)
+        return () => document.removeEventListener('scroll', listener)
+    })
     return (
-        <header className="p-4 flex justify-center bg-black text-white absolute w-screen top-0 right-0 z-10">
+        <header ref={ref} className="p-4 flex justify-center bg-gradient-to-r from-blue-300 to-purple-300 absolute w-screen top-0 right-0 z-10">
             <nav className="container flex items-center justify-between">
                 <Link passHref href="/">
                     <a className="mr-2 text-5xl">
@@ -40,9 +54,9 @@ export const Header = ({ accessToken, user }: HeaderProps) => {
                     </div>
                     : 
                     <Link passHref href='/login'>
-                        <a className="mr-2 hover:underline">
+                        <Button className="mr-2 w-20">
                             Log In
-                        </a>
+                        </Button>
                     </Link>
                 }
             </nav>
