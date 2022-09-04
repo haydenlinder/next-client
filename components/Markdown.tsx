@@ -20,7 +20,7 @@ export const Markdown = ({ body }: Props) => {
                     const id = typeof props.children[0] === 'string' ? props.children[0]?.split(" ").join('-') : ''
                     return (
                         <a className='hover:underline relative' href={'#'+id}>
-                            <div id={id} className='absolute top-[-100px]'>BOO</div>
+                            <div id={id} className='absolute top-[-100px]'></div>
                             <H1 {...props} />
                         </a>
                     )
