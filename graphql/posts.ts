@@ -10,7 +10,7 @@ export const CREATE_POST = gql`
 
 export const GET_POSTS = gql`
     query getPosts($_gte: Int = 0) {
-        posts_connection(first: 10, order_by: {post_id: desc}, where: {post_id: {_gte: $_gte}}) {
+        posts_connection(first: 10, order_by: {post_id: asc}, where: {post_id: {_gte: $_gte}}) {
             edges {
                 node {
                     photo_url

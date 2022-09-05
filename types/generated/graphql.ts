@@ -740,7 +740,7 @@ export const GetPostsDocument = gql`
     query getPosts($_gte: Int = 0) {
   posts_connection(
     first: 10
-    order_by: {post_id: desc}
+    order_by: {post_id: asc}
     where: {post_id: {_gte: $_gte}}
   ) {
     edges {
