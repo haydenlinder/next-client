@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { DELETE_POST, GET_POSTS } from "../graphql/posts";
+import { TokenPayload } from "../pages/api/session/types";
 
 import { DeletePostMutation, DeletePostMutationVariables, GetPostsQuery, GetUserByIdQuery } from "../types/generated/graphql";
 import { Button } from "./Button";
@@ -10,11 +11,10 @@ import { H2 } from "./H2";
 import PostForm from "./PostForm";
 
 type Post = GetPostsQuery['posts_connection']['edges'][0]['node']
-type User = GetUserByIdQuery['users_connection']['edges'][0]['node']
 
 type Props = {
     post: Post
-    user?: User
+    user?: TokenPayload | undefined
     priority?: boolean
     preview?: boolean
 }
@@ -38,7 +38,7 @@ export const PostPreview = ({post, user, priority, preview}: Props) => {
 
     if (isEdit) return (
         <div>
-            <PostForm 
+            {user && <PostForm 
                 originalBody={body}
                 user={user} 
                 originalPrice={price}
@@ -47,7 +47,7 @@ export const PostPreview = ({post, user, priority, preview}: Props) => {
                 originalPhoto={photo_url}
                 originalTitle={title}
                 postId={post_id}
-            />
+            />}
             <Button onClick={e => setIsEdit(false)}>Cancel</Button>
         </div>
     )

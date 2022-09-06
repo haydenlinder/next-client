@@ -11,7 +11,11 @@ import App from "next/app";
 import { GetUserByIdQuery, GetUserByIdQueryVariables } from "../types/generated/graphql";
 import { GET_USER_BY_ID } from "../graphql/users";
 import { refresh } from "./api/next-client";
-
+import { TokenPayload } from "./api/session/types";
+import { getCookieParser } from "next/dist/server/api-utils";
+import cookie from 'cookie'
+import jwt from 'jsonwebtoken'
+import { useState } from "react";
 
 function MyApp({ Component, pageProps }: AppProps) {
   
@@ -29,10 +33,12 @@ function MyApp({ Component, pageProps }: AppProps) {
 
 const Main = ({ Component, pageProps }: Pick<AppProps, 'Component' | 'pageProps'>) => {
   client.setLink(from([errorLink, authLink(pageProps.accessToken), httpLink]))
+  const [token] = useState(pageProps.accessToken)
+  const [user] = useState<TokenPayload>(pageProps.user)
 
   return (
     <div id='app-scroll-container' className="flex flex-col items-center h-screen max-h-screen overflow-y-scroll bg-gradient-to-r from-blue-300 to-purple-300">
-      <Header user={pageProps.user} accessToken={pageProps.accessToken}/>
+      <Header user={user} accessToken={token}/>
       <Component {...pageProps} />
     </div>
   )
@@ -52,32 +58,31 @@ const redirect = (res: AppContext['ctx']['res'], location: string) => {
 export const sessionConditionRedirect = async (context: AppContext): Promise<AppInitialProps> => {
   // these will be available on the server
   const { req, res } = context.ctx;
-
+  
   const path = (req?.url || context.ctx.pathname).split('?')[0] || '';
-
+  
   const isAdminRoute = (path === '/admin');
   const isLoginRoute = (path === '/login');
   const isHomeRoute = (path === '/');
-
-  const response = await refresh(req?.headers.cookie);
-  const accessToken = response?.data?.access_token;
-  const user_id = response?.data?.user_id;
-
-  let user: GetUserByIdQuery['users_connection']['edges'][0]['node'] | undefined
-  if (accessToken) {
-    const { data } = await serverClient.query<GetUserByIdQuery, GetUserByIdQueryVariables>({
-      query: GET_USER_BY_ID, 
-      variables: {
-        _eq: user_id
-      },
-      context: { headers: { authorization: `Bearer ${accessToken}` } }
-    });
-    user = data.users_connection.edges[0].node
-  }
-
+  
+  // const response = await refresh(req?.headers.cookie);
+  // const accessToken = response?.data?.access_token;
+  // const user_id = response?.data?.user_id;
+  const cookies = cookie.parse(req?.headers.cookie || '');
   const appProps = await App.getInitialProps(context)
+  if (typeof window !== 'undefined') return appProps;
+
+  console.log({cookies})
+
+  let user: TokenPayload | undefined;
+  const accessToken = cookies.access_token
+  try {
+    user = jwt.verify(accessToken, process.env.ACCESS_SECRET!) as TokenPayload;
+  } catch (e) {
+    console.error("auth error: ", e)
+  }
   // logged out and requests '/admin'
-  if (!accessToken && isAdminRoute) {
+  if (!user && isAdminRoute) {
     redirect(res, '/login')
     return appProps
   }

@@ -13,22 +13,32 @@ import { Post as TPost, User } from "../types/entities";
 import { useQuery } from "@apollo/client";
 import { useState } from "react";
 import { Button } from "../components/Button";
+import { TokenPayload } from "./api/session/types";
+import jwt from 'jsonwebtoken'
 
 type Props = {
     posts: TPost[]
-    user: User
+    user: TokenPayload | undefined
 }
 
 export const getServerSideProps: GetServerSideProps<Props> = async ({ req }) => {
     const cookies = getCookieParser(req.headers)()
     const token = cookies.access_token
 
+    let user: TokenPayload | undefined;
+    const accessToken = cookies.access_token
+    try {
+        user = jwt.verify(accessToken, process.env.ACCESS_SECRET!) as TokenPayload;
+    } catch (e) {
+        console.error("auth error: ", e)
+    }
+
     const { data } = await serverClient.query<GetPostsQuery>({
         query: GET_POSTS,
         context: { headers: { authorization: `Bearer ${token}` } }
     })
 
-    const user = await getCurrentUser(req);
+    // const user = await getCurrentUser(req);
 
     return (
         {
@@ -47,7 +57,7 @@ const Admin: NextPage<Props> = ({ posts, user }) => {
 
     return (
         <section className="container py-36">
-            {showForm && <PostForm user={user}/>}
+            {showForm && user && <PostForm user={user}/>}
             <Button
                 secondary={showForm}
                 className="pt-4" 

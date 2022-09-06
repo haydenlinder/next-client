@@ -1,12 +1,12 @@
 import Link from "next/link"
 import Router from "next/router";
 import { useEffect, useRef } from "react";
-import { GetUserByIdQuery } from "../types/generated/graphql";
+import { TokenPayload } from "../pages/api/session/types";
 import { Button } from "./Button";
 
 type HeaderProps = {
     accessToken: string | undefined
-    user: GetUserByIdQuery['users_connection']['edges'][0]['node']
+    user: TokenPayload | undefined
 }
 
 const logout = async () => {
@@ -42,10 +42,10 @@ export const Header = ({ accessToken, user }: HeaderProps) => {
                     <div className="flex items-center">
                         <Link passHref href={`/users/${user?.user_id}`}>
                             <a className="mr-2 hover:underline">
-                                {user?.username || "Profile"}
+                                Profile
                             </a>
                         </Link>
-                        {user.is_admin && <Link passHref href='/admin'>
+                        {user?.is_admin && <Link passHref href='/admin'>
                             <a className="mr-2 hover:underline">
                                 Admin
                             </a>

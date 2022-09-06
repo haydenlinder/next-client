@@ -4,6 +4,7 @@ import { ComponentProps, CSSProperties, FormEventHandler, useEffect, useState } 
 import { useDropzone } from "react-dropzone";
 import { CREATE_POST, GET_POSTS, UPDATE_POST } from "../graphql/posts";
 import { FileResponse } from "../pages/api/images/upload";
+import { TokenPayload } from "../pages/api/session/types";
 import { User } from "../types/entities";
 import { CreatePostMutation, CreatePostMutationVariables, UpdatePostMutation, UpdatePostMutationVariables } from "../types/generated/graphql";
 import { Button } from "./Button";
@@ -15,7 +16,7 @@ import { Post } from "./Post";
 import { PostPreview } from "./PostPreview";
 
 type Props = {
-    user: User
+    user: TokenPayload
     onAfterSave?: () => void
     originalBody?: string;
     originalTitle?: string;
