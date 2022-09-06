@@ -61,7 +61,7 @@ export const PostPreview = ({post, user, priority, preview}: Props) => {
                 </div>
             </div>
             {/* POST INFO */}
-            <div className="w-full flex justify-between items-center bg-gradient-to-r from-purple-100 to-blue-100 p-10">
+            <div className="w-full flex min-h-[200px] justify-between items-center bg-gradient-to-r from-purple-100 to-blue-100 p-10">
                 <div>
                     <H2>{post.title}</H2>
                     <p>{post.description}</p>
