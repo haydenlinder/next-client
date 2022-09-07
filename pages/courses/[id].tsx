@@ -11,12 +11,12 @@ import { PostPreview } from "../../components/PostPreview";
 import LoginForm from "../../components/LoginForm";
 import { H2 } from "../../components/H2";
 import { Post } from "../../components/Post";
+import { getCookieParser } from "next/dist/server/api-utils";
 
 type Props = { post?: TPost, error?: number }
 
 export const getServerSideProps: GetServerSideProps<Props> = async ({ req, params }) => {
-    const response = await refresh(req?.headers.cookie);
-    const accessToken = response?.data?.access_token;
+    const accessToken = getCookieParser(req.headers)().access_token
 
     let post: TPost | null;
 

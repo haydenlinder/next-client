@@ -6,16 +6,26 @@ import { GET_USER_BY_ID } from "../../graphql/users";
 import { serverClient } from "../api/apollo-client";
 import { refresh } from "../api/next-client";
 import { Button } from "../../components/Button";
+import { getCookieParser } from "next/dist/server/api-utils";
+import { TokenPayload } from "../api/session/types";
+import jwt from 'jsonwebtoken'
+import { User } from "../../types/entities";
 
-type Props = { user: GetUserByIdQuery['users_connection']['edges'][0]['node'] }
+type Props = { user: User }
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-    const response = await refresh(req?.headers.cookie);
-    const accessToken = response?.data?.access_token;
-    const user_id = response?.data?.user_id;
-
-    let user: GetUserByIdQuery['users_connection']['edges'][0]['node'] | undefined
-
+    const cookies = getCookieParser(req.headers)()
+    const accessToken = cookies.access_token
+    
+    let payload: TokenPayload | undefined;
+    try {
+        payload = jwt.verify(accessToken, process.env.ACCESS_SECRET!) as TokenPayload;
+    } catch (e) {
+        console.error("auth error: ", e)
+    }
+    const user_id = payload?.user_id;
+    
+    let user: User;
     if (accessToken) {
         const { data } = await serverClient.query<GetUserByIdQuery, GetUserByIdQueryVariables>({
             query: GET_USER_BY_ID,
@@ -26,6 +36,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
         });
         user = data.users_connection.edges[0].node
     }
+
     return ({
         props: {
             user

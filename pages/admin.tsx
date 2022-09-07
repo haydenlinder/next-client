@@ -6,7 +6,6 @@ import { GET_POSTS } from "../graphql/posts";
 import { PostPreview } from "../components/PostPreview";
 import { serverClient } from "./api/apollo-client";
 import { getCookieParser } from "next/dist/server/api-utils";
-import { getCurrentUser } from "./api/apollo_functions/users";
 import { H1 } from "../components/H1";
 import PostForm from "../components/PostForm";
 import { Post as TPost, User } from "../types/entities";
@@ -15,6 +14,7 @@ import { useState } from "react";
 import { Button } from "../components/Button";
 import { TokenPayload } from "./api/session/types";
 import jwt from 'jsonwebtoken'
+import { logout } from "../components/Header";
 
 type Props = {
     posts: TPost[]
@@ -37,8 +37,6 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({ req }) => 
         query: GET_POSTS,
         context: { headers: { authorization: `Bearer ${token}` } }
     })
-
-    // const user = await getCurrentUser(req);
 
     return (
         {

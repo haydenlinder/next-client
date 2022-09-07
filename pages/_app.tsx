@@ -3,16 +3,14 @@ import Head from "next/head";
 import Router from "next/router";
 import { ApolloProvider, from } from "@apollo/client";
 
-import client, { authLink, errorLink, httpLink, serverClient } from "./api/apollo-client";
-import { Header } from "../components/Header";
+import client, { authLink, errorLink, httpLink } from "./api/apollo-client";
+import { Header, logout } from "../components/Header";
 
 import "../styles/build.css";
 import App from "next/app";
-import { GetUserByIdQuery, GetUserByIdQueryVariables } from "../types/generated/graphql";
-import { GET_USER_BY_ID } from "../graphql/users";
-import { refresh } from "./api/next-client";
+
+
 import { TokenPayload } from "./api/session/types";
-import { getCookieParser } from "next/dist/server/api-utils";
 import cookie from 'cookie'
 import jwt from 'jsonwebtoken'
 import { useState } from "react";
@@ -65,9 +63,6 @@ export const sessionConditionRedirect = async (context: AppContext): Promise<App
   const isLoginRoute = (path === '/login');
   const isHomeRoute = (path === '/');
   
-  // const response = await refresh(req?.headers.cookie);
-  // const accessToken = response?.data?.access_token;
-  // const user_id = response?.data?.user_id;
   const cookies = cookie.parse(req?.headers.cookie || '');
   const appProps = await App.getInitialProps(context)
   if (typeof window !== 'undefined') return appProps;

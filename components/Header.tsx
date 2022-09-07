@@ -9,7 +9,7 @@ type HeaderProps = {
     user: TokenPayload | undefined
 }
 
-const logout = async () => {
+export const logout = async () => {
     const response = await fetch('/api/session/logout', { method: 'POST' });
     await response.json();
     Router.replace('/login')
