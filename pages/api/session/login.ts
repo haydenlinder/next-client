@@ -71,7 +71,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     return res.json({
         data: {
             user_id: user.user_id,
-            access_token
+            access_token,
+            is_admin: user.is_admin || false
         }
     });
 }
