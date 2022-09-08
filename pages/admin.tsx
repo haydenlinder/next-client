@@ -14,7 +14,6 @@ import { useState } from "react";
 import { Button } from "../components/Button";
 import { TokenPayload } from "./api/session/types";
 import jwt from 'jsonwebtoken'
-import { logout } from "../components/Header";
 
 type Props = {
     posts: TPost[]

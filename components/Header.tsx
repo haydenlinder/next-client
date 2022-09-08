@@ -1,7 +1,8 @@
 import Link from "next/link"
-import Router from "next/router";
 import { useEffect, useRef } from "react";
 import { TokenPayload } from "../pages/api/session/types";
+import { logout } from "../pages/api/session_functions";
+import { useStore } from "../state/store";
 import { Button } from "./Button";
 
 type HeaderProps = {
@@ -9,14 +10,12 @@ type HeaderProps = {
     user: TokenPayload | undefined
 }
 
-export const logout = async () => {
-    const response = await fetch('/api/session/logout', { method: 'POST' });
-    await response.json();
-    Router.replace('/login')
-}
 
-export const Header = ({ accessToken, user }: HeaderProps) => {
+
+export const Header = () => {
     const ref = useRef<HTMLElement | null>(null)
+    const { setAccessToken, setUser, user, accessToken } = useStore()
+    // fancy header shadow on scroll
     useEffect(() => {
         const listener = (e: Event) => {
             const cl = ref.current?.classList
@@ -50,7 +49,7 @@ export const Header = ({ accessToken, user }: HeaderProps) => {
                                 Admin
                             </a>
                         </Link>}
-                        <Button className="mr-2 border-white" onClick={e => logout()}>Logout</Button>
+                        <Button className="mr-2 border-white" onClick={e => logout({ setAccessToken, setUser })}>Logout</Button>
                     </div>
                     : 
                     <Link passHref href='/login'>

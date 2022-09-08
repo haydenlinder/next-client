@@ -1,11 +1,13 @@
 import { NextApiRequest, NextApiResponse } from "next"
 import cookie from 'cookie'
 import jwt from 'jsonwebtoken';
+import { TokenPayload } from "./types";
 
 export type RefreshResponse = {
     data?: {
         user_id: number | undefined;
         access_token: string;
+        is_admin: boolean
     },
     errors?: string
 }
@@ -16,9 +18,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     // If no token, throw 401
     if (!refreshToken) return res.status(401).json({ errors: 'No token.' });
     // Otherwise, verify the token
-    let payload;
+    let payload: TokenPayload | undefined;
     try {
-        payload = jwt.verify(refreshToken, process.env.REFRESH_SECRET!)
+        payload = jwt.verify(refreshToken, process.env.REFRESH_SECRET!) as TokenPayload
     } catch(e) {
         console.error("refresh server error: ", {e})
     }
@@ -58,7 +60,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     }
     // Get the user id
     let user_id: number | undefined;
-    let is_admin: boolean | undefined;
+    let is_admin: boolean = false;
     if (typeof payload !== "string") {
         user_id = payload.user_id;
         is_admin = payload.is_admin
@@ -111,7 +113,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     return res.json({
         data: {
             user_id,
-            access_token
+            access_token,
+            is_admin
+
         }
     })
 }

@@ -4,7 +4,7 @@ import Router from "next/router";
 import { ApolloProvider, from } from "@apollo/client";
 
 import client, { authLink, errorLink, httpLink } from "./api/apollo-client";
-import { Header, logout } from "../components/Header";
+import { Header } from "../components/Header";
 
 import "../styles/build.css";
 import App from "next/app";
@@ -13,7 +13,11 @@ import App from "next/app";
 import { TokenPayload } from "./api/session/types";
 import cookie from 'cookie'
 import jwt from 'jsonwebtoken'
-import { useState } from "react";
+import { useEffect } from "react";
+import { useStore } from "../state/store";
+
+
+const store = useStore
 
 function MyApp({ Component, pageProps }: AppProps) {
   
@@ -30,13 +34,21 @@ function MyApp({ Component, pageProps }: AppProps) {
 }
 
 const Main = ({ Component, pageProps }: Pick<AppProps, 'Component' | 'pageProps'>) => {
-  client.setLink(from([errorLink, authLink(pageProps.accessToken), httpLink]))
-  const [token] = useState(pageProps.accessToken)
-  const [user] = useState<TokenPayload>(pageProps.user)
+  const {accessToken: storeToken, setAccessToken, user: storeUser, setUser} = useStore((store) => store)
+  const accessToken = pageProps.accessToken || storeToken
+  const user = pageProps.user || storeUser
+
+  client.setLink(from([errorLink, authLink(accessToken), httpLink]))
+
+
+  useEffect(() => {
+    if (storeToken !== accessToken) setAccessToken(accessToken)
+    if (storeUser !== user) setUser(user)
+  }, [pageProps.accessToken])
 
   return (
     <div id='app-scroll-container' className="flex flex-col items-center h-screen max-h-screen overflow-y-scroll bg-gradient-to-r from-blue-300 to-purple-300">
-      <Header user={user} accessToken={token}/>
+      <Header />
       <Component {...pageProps} />
     </div>
   )
@@ -65,9 +77,13 @@ export const sessionConditionRedirect = async (context: AppContext): Promise<App
   
   const cookies = cookie.parse(req?.headers.cookie || '');
   const appProps = await App.getInitialProps(context)
-  if (typeof window !== 'undefined') return appProps;
-
-  console.log({cookies})
+  
+  if (typeof window !== 'undefined') return {
+    pageProps: {
+      user: undefined,
+      accessToken: undefined
+    }
+  };
 
   let user: TokenPayload | undefined;
   const accessToken = cookies.access_token
@@ -79,7 +95,12 @@ export const sessionConditionRedirect = async (context: AppContext): Promise<App
   // logged out and requests '/admin'
   if (!user && isAdminRoute) {
     redirect(res, '/login')
-    return appProps
+    return {
+      pageProps: {
+        user: undefined,
+        accessToken: undefined
+      }
+    }
   }
   // logged in and requests '/login' or requests '/admin' without being an admin user
   else if (accessToken && (isLoginRoute || isHomeRoute || (isAdminRoute && !user?.is_admin))) {
@@ -90,7 +111,7 @@ export const sessionConditionRedirect = async (context: AppContext): Promise<App
   else return {
     pageProps: {
       accessToken,
-      user
+      user,
     },
   }
 
