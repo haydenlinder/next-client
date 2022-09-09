@@ -24,7 +24,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ApolloProvider client={client}>
       <Head>
-        <title>Ship Code</title>
+        <title>World Code Camp</title>
         <meta name="description" content="Learn to code online" />
         <link rel="icon" href="/favicon.ico" />
       </Head> 

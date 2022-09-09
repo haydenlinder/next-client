@@ -7,6 +7,7 @@ import { PostPreview } from "../../components/PostPreview";
 import { serverClient } from "../api/apollo-client";
 import { H1 } from "../../components/H1";
 import { useQuery } from "@apollo/client";
+import Head from "next/head";
 
 type Props = {
     posts: GetPostsQuery['posts_connection']['edges'][0]['node'][]
@@ -30,11 +31,20 @@ const Courses: NextPage<Props> = ({ posts }) => {
     const { data, loading } = useQuery<GetPostsQuery>(GET_POSTS)
     const clientPosts = data?.posts_connection.edges.map(e => e.node);
     return (
-        <section className="w-full py-20 container pb-36">
-            <H1 className="mb-10 text-center">Courses</H1>
-            {loading && <div>loading...</div>}
-            {(clientPosts || posts)?.map((post, i) => <PostPreview priority={i == 0} key={post.id} post={post} />)}
-        </section>
+        <>
+            <Head>
+                <title>Learn to Code | Courses</title>
+                <meta
+                    name="description"
+                    content="Courses" 
+                />
+            </Head>
+            <section className="w-full py-20 container pb-36">
+                <H1 className="mb-10 text-center">Courses</H1>
+                {loading && <div>loading...</div>}
+                {(clientPosts || posts)?.map((post, i) => <PostPreview priority={i == 0} key={post.id} post={post} />)}
+            </section>
+        </>
     );
 };
 

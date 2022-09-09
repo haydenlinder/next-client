@@ -12,6 +12,7 @@ import LoginForm from "../../components/LoginForm";
 import { H2 } from "../../components/H2";
 import { Post } from "../../components/Post";
 import { getCookieParser } from "next/dist/server/api-utils";
+import Head from "next/head";
 
 type Props = { post?: TPost, error?: number }
 
@@ -31,6 +32,11 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({ req, param
             context: { headers: { authorization: `Bearer ${accessToken}` } }
         });
         post = data.posts_connection.edges[0]?.node || null
+        if (!post) return ({
+            props: {
+                error: 404
+            }
+        })
         return ({
             props: {
                 post: post
@@ -54,14 +60,25 @@ const Course: NextPage<Props> = ({ post, error }) => {
         </div>
     )
 
-    return (
-        <div className="container">
-            {(!post || error) ? 
-                <div className="pt-36">{error || "Post not found"}</div> 
-                :
-                <Post post={post}/>
-            }
+    if (!post || error) return (
+        <div className="pt-36 flex flex-col items-center">
+            <H2 className="text-center">{error || "Error"}</H2>
         </div>
+    )
+
+    return (
+        <>
+            <Head>
+                <title>Learn to Code | {post.title}</title>
+                <meta
+                    name="description"
+                    content={post.description}
+                />
+            </Head>
+            <div className="container">
+                <Post post={post}/>
+            </div>
+        </>
     );
 };
 
