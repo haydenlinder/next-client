@@ -8,9 +8,10 @@ import { Organization, WithContext } from 'schema-dts'
 
 const jsonLd: WithContext<Organization> = {
   "@context": "https://schema.org",
-  "@type": 'Organization',
-  name: "World Code Camp",
-  url: 'https://www.worldcodecamp.com'
+  "@type": "Organization",
+  "name": "World Code Camp",
+  "url": "https://www.worldcodecamp.com",
+  "logo": "https://www.worldcodecamp.com/favicon.ico"
 } 
 
 const Home: NextPage= () => {
