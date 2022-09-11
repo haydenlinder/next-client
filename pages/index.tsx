@@ -3,8 +3,14 @@ import { H1 } from "../components/H1";
 import { Button } from "../components/Button";
 import Link from "next/link";
 import { H2 } from "../components/H2";
-import { useState } from "react";
 import Head from "next/head";
+import { Organization } from 'schema-dts'
+
+const jsonLd: Organization = {
+  "@type": 'Organization',
+  name: "World Code Camp",
+  url: 'https://www.worldcodecamp.com'
+} 
 
 const Home: NextPage= () => {
 
@@ -16,6 +22,9 @@ const Home: NextPage= () => {
           name="description"
           content="Don't just learn to code, learn to ship it. Deploy your first website in the third course." 
         />
+        <script type="application/ld+json">
+          {JSON.stringify(jsonLd)}
+        </script>
       </Head>
       <main className="w-full">
         <section className="drop-shadow-lg z-10 h-screen pt-28 w-full flex flex-col items-center">
