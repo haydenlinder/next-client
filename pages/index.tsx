@@ -24,9 +24,7 @@ const Home: NextPage= () => {
           name="description"
           content="Don't just learn to code, learn to ship it. Deploy your first website in the third course." 
         />
-        <script type="application/ld+json">
-          {JSON.stringify(jsonLd)}
-        </script>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}/>
       </Head>
       <main className="w-full">
         <section className="drop-shadow-lg z-10 h-screen pt-28 w-full flex flex-col items-center">
