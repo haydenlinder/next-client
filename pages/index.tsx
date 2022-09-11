@@ -4,9 +4,10 @@ import { Button } from "../components/Button";
 import Link from "next/link";
 import { H2 } from "../components/H2";
 import Head from "next/head";
-import { Organization } from 'schema-dts'
+import { Organization, WithContext } from 'schema-dts'
 
-const jsonLd: Organization = {
+const jsonLd: WithContext<Organization> = {
+  "@context": "https://schema.org",
   "@type": 'Organization',
   name: "World Code Camp",
   url: 'https://www.worldcodecamp.com'
