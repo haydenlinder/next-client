@@ -26,6 +26,6 @@ const ButtonLink = React.forwardRef<HTMLAnchorElement, Props>(({ children, secon
     )
 })
 
-Button.displayName = 'Button'
+ButtonLink.displayName = 'ButtonLink'
 
 export { Button, ButtonLink}
