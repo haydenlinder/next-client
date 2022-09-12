@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 import { TokenPayload } from "../pages/api/session/types";
 import { logout } from "../pages/api/session_functions";
 import { useStore } from "../state/store";
-import { Button } from "./Button";
+import { Button, ButtonLink } from "./Button";
 
 type HeaderProps = {
     accessToken: string | undefined
@@ -53,9 +53,9 @@ export const Header = () => {
                     </div>
                     : 
                     <Link passHref href='/login'>
-                        <Button className="mr-2 w-20">
+                        <ButtonLink className="mr-2 w-20">
                             Log In
-                        </Button>
+                        </ButtonLink>
                     </Link>
                 }
             </nav>

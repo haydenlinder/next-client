@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import { H1 } from "../components/H1";
-import { Button } from "../components/Button";
+import { Button, ButtonLink } from "../components/Button";
 import Link from "next/link";
 import { H2 } from "../components/H2";
 import Head from "next/head";
@@ -34,11 +34,9 @@ const Home: NextPage= () => {
             <H2 className="text-center my-10">
               Deploy your first website from scratch in the third course.
             </H2>
-            <form className="flex flex-col items-center w-96">
-              <Link passHref href="/courses">
-                <Button secondary className="text-lg lg:text-2xl mb-4 w-full">View Courses</Button>
-              </Link>
-            </form>
+            <Link passHref href="/courses">
+              <ButtonLink secondary className="text-lg lg:text-2xl mb-4 w-72">View Courses</ButtonLink>
+            </Link>
           </div>
         </section>
         <section className="text-center bg-white pt-16 h-screen w-full flex flex-col items-center">
@@ -61,13 +59,13 @@ const Home: NextPage= () => {
                 which helps you learn better than hand-holding.
               </p>
               <Link passHref href="/courses">
-            <Button 
-              className="text-lg mt-4 lg:text-2xl" 
-              secondary 
-              >
-              Get Started
-            </Button>
-            </Link>
+                <ButtonLink 
+                  className="text-lg mt-4 lg:text-2xl" 
+                  secondary 
+                  >
+                  Get Started
+                </ButtonLink>
+              </Link>
             </div>
           </div>
         </section>

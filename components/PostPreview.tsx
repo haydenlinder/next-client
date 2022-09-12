@@ -6,7 +6,7 @@ import { DELETE_POST, GET_POSTS } from "../graphql/posts";
 import { TokenPayload } from "../pages/api/session/types";
 
 import { DeletePostMutation, DeletePostMutationVariables, GetPostsQuery, GetUserByIdQuery } from "../types/generated/graphql";
-import { Button } from "./Button";
+import { Button, ButtonLink } from "./Button";
 import { H2 } from "./H2";
 import PostForm from "./PostForm";
 
@@ -68,7 +68,7 @@ export const PostPreview = ({post, user, priority, preview}: Props) => {
                 </div>
                 {/* BUTTONS */}
                 <div className="ml-4">
-                    <Link passHref href={`/courses/${post.post_id}`}><Button>{post.price <= 0 ? "FREE!" : post.price}</Button></Link>
+                    <Link passHref href={`/courses/${post.post_id}`}><ButtonLink>{post.price <= 0 ? "FREE!" : post.price}</ButtonLink></Link>
                     {user?.is_admin &&  <Button className="my-4" onClick={handleDelete}>{deleting ? "Deleting" : "Delete"}</Button>}
                     {user?.is_admin &&  <Button className="mb-4" onClick={e => setIsEdit(true)}>Edit</Button>}
                 </div>

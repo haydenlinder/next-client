@@ -3,7 +3,7 @@ import { NextPage } from "next";
 import Link from "next/link";
 import Router from "next/router";
 import { useEffect, useState } from "react";
-import { Button } from "../components/Button";
+import { Button, ButtonLink } from "../components/Button";
 import { VerifyResponse } from "./api/session/verify";
 
 const verify = async () => {
@@ -37,7 +37,7 @@ const Verify: NextPage = () => {
     return (
         <section className="pt-36">
             <h1>Success!</h1>
-            <Link href="/login" passHref><Button>Log In</Button></Link>
+            <Link href="/login" passHref><ButtonLink>Log In</ButtonLink></Link>
         </section>
     )
 };
