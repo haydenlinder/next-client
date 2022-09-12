@@ -13,6 +13,7 @@ import { getCookieParser } from "next/dist/server/api-utils";
 import Head from "next/head";
 import Modal from 'react-modal'
 import { useState } from "react";
+import { WithContext, Course } from "schema-dts";
 
 type Props = { post?: TPost | null, error?: number }
 
@@ -63,6 +64,18 @@ const Course: NextPage<Props> = ({ post, error }) => {
         </div>
     )
 
+    const jsonLd: WithContext<Course> = {
+        "@context": "https://schema.org",
+        "@type": "Course",
+        "name": post?.title,
+        "description": post?.description,
+        "provider": {
+            "@type": "Organization",
+            "name": "World Code Camp",
+            "sameAs": "http://www.worldcodecamp.com"
+        }
+    }
+
     return (
         <>
             <Head>
@@ -71,6 +84,7 @@ const Course: NextPage<Props> = ({ post, error }) => {
                     name="description"
                     content={post?.description}
                 />
+                <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
             </Head>
             <div className="container">
                 <Modal
