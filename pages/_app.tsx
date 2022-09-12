@@ -28,6 +28,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta name="description" content="Learn to code online" />
         <link rel="icon" href="/favicon.ico" />
       </Head> 
+      <div id='modal-container'></div>
       <Main {...{Component, pageProps}}/>
     </ApolloProvider>
   );

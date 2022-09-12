@@ -8,9 +8,10 @@ import { RefreshResponse } from "../pages/api/session/refresh";
 type Props = {
     isNewUser?: boolean
     heading?: (isNewUser: boolean) => JSX.Element | null
+    onSuccess?: () => void
 }
 
-const LoginForm = ({ isNewUser: isNew, heading = () => null}: Props) => {
+const LoginForm = ({ isNewUser: isNew, onSuccess = () => null, heading = () => null}: Props) => {
     const [isNewUser, setIsNewUser] = useState(isNew || false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -36,12 +37,15 @@ const LoginForm = ({ isNewUser: isNew, heading = () => null}: Props) => {
         } catch (e) {
             console.error("LOGIN ERROR: ", e)
         }
-        Router.replace('/courses')
     };
 
-    const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
+    const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
         e.preventDefault();
-        isNewUser ? signup() : login()
+        (
+            isNewUser ? 
+            signup() : 
+            login()
+        ).then(() => onSuccess())
     }
 
     return (
