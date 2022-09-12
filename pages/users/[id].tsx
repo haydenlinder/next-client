@@ -4,7 +4,6 @@ import {
 } from "../../types/generated/graphql";
 import { GET_USER_BY_ID } from "../../graphql/users";
 import { serverClient } from "../api/apollo-client";
-import { refresh } from "../api/next-client";
 import { Button } from "../../components/Button";
 import { getCookieParser } from "next/dist/server/api-utils";
 import { TokenPayload } from "../api/session/types";

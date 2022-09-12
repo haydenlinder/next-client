@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import { H1 } from "../components/H1";
-import { Button, ButtonLink } from "../components/Button";
+import { ButtonLink } from "../components/Button";
 import Link from "next/link";
 import { H2 } from "../components/H2";
 import Head from "next/head";

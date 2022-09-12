@@ -8,7 +8,7 @@ import { serverClient } from "../api/apollo-client";
 import { H1 } from "../../components/H1";
 import { useQuery } from "@apollo/client";
 import Head from "next/head";
-import { Course, ItemList, WithContext } from "schema-dts";
+import { ItemList, WithContext } from "schema-dts";
 
 type Props = {
     posts: GetPostsQuery['posts_connection']['edges'][0]['node'][]
