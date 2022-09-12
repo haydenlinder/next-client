@@ -34,10 +34,10 @@ const Courses: NextPage<Props> = ({ posts }) => {
     const jsonLd: WithContext<ItemList> = {
         "@context": "https://schema.org",
         "@type": "ItemList",
-        itemListElement: posts.map(post =>
+        itemListElement: posts.map((post,i) =>
             ({
                 "@type": "ListItem",
-                "position": 1,
+                "position": i+1,
                 "item": {
                     "@type": "Course",
                     "url": `https://www.worldcodecamp.com/courses/${post.post_id}`,
