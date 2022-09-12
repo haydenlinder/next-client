@@ -8,6 +8,7 @@ import { serverClient } from "../api/apollo-client";
 import { H1 } from "../../components/H1";
 import { useQuery } from "@apollo/client";
 import Head from "next/head";
+import { Course, ItemList, WithContext } from "schema-dts";
 
 type Props = {
     posts: GetPostsQuery['posts_connection']['edges'][0]['node'][]
@@ -30,6 +31,27 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({ req }) => 
 const Courses: NextPage<Props> = ({ posts }) => {
     const { data, loading } = useQuery<GetPostsQuery>(GET_POSTS)
     const clientPosts = data?.posts_connection.edges.map(e => e.node);
+    const jsonLd: WithContext<ItemList> = {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        itemListElement: posts.map(post =>
+            ({
+                "@type": "ListItem",
+                "position": 1,
+                "item": {
+                    "@type": "Course",
+                    "url": `https://www.worldcodecamp.com/courses/${post.post_id}`,
+                    "name": post.title,
+                    "description": post.description,
+                    "provider": {
+                        "@type": "Organization",
+                        "name": "World Code Camp",
+                        "sameAs": "https://www.worldcodecamp.com"
+                    }
+                }
+            })
+        )
+    }
     return (
         <>
             <Head>
@@ -38,6 +60,7 @@ const Courses: NextPage<Props> = ({ posts }) => {
                     name="description"
                     content="Courses" 
                 />
+                <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
             </Head>
             <section className="w-full py-20 container pb-36">
                 <H1 className="mb-10 text-center">Courses</H1>

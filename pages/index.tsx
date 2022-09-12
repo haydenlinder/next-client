@@ -36,7 +36,7 @@ const Home: NextPage= () => {
             </H2>
             <form className="flex flex-col items-center w-96">
               <Link passHref href="/courses">
-                <Button secondary className="text-lg lg:text-2xl mb-4 w-full">Get Started</Button>
+                <Button secondary className="text-lg lg:text-2xl mb-4 w-full">View Courses</Button>
               </Link>
             </form>
           </div>
