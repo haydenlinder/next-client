@@ -17,10 +17,7 @@ import { useEffect } from "react";
 import { useStore } from "../state/store";
 
 
-const store = useStore
-
 function MyApp({ Component, pageProps }: AppProps) {
-  
   return (
     <ApolloProvider client={client}>
       <Head>
@@ -40,7 +37,6 @@ const Main = ({ Component, pageProps }: Pick<AppProps, 'Component' | 'pageProps'
   const user = pageProps.user || storeUser
 
   client.setLink(from([errorLink, authLink(accessToken), httpLink]))
-
 
   useEffect(() => {
     if (storeToken !== accessToken) setAccessToken(accessToken)
@@ -77,7 +73,9 @@ export const sessionConditionRedirect = async (context: AppContext): Promise<App
   const isHomeRoute = (path === '/');
   
   const cookies = cookie.parse(req?.headers.cookie || '');
-  const appProps = await App.getInitialProps(context)
+  const appProps = {
+    pageProps: {}
+  }
   
   if (typeof window !== 'undefined') return {
     pageProps: {
