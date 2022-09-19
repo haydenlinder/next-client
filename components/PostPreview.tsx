@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { DELETE_POST, GET_POSTS } from "../graphql/posts";
 import { SessionData } from "../pages/api/session/types";
+import { useStore } from "../state/store";
 
 import { DeletePostMutation, DeletePostMutationVariables, GetPostsQuery, GetUserByIdQuery } from "../types/generated/graphql";
 import { Button, ButtonLink } from "./Button";
@@ -19,8 +20,8 @@ type Props = {
     preview?: boolean
 }
 
-export const PostPreview = ({post, session, priority, preview}: Props) => {
-
+export const PostPreview = ({post, priority, preview}: Props) => {
+    const { session } = useStore()
     const [isEdit, setIsEdit] = useState(false)
 
     const [deletePost, { loading: deleting }] = useMutation<DeletePostMutation, DeletePostMutationVariables>(DELETE_POST, {

@@ -127,7 +127,7 @@ const PostForm: NextPage<Props> = ({
     return (
         <div className="">
             <form className="mb-10" onSubmit={handleSubmit}>
-                <H1>Make an entry</H1>
+                <H1>{isEdit ? "Edit" : "New Post"}</H1>
                 {/* title */}
                 <label htmlFor="title">Title</label>
                 <input placeholder="title" className="p-2 border border-black rounded w-full" onChange={e => setTitle(e.target.value)} value={title} name="title" id="title" />
