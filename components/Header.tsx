@@ -45,11 +45,18 @@ export const Header = () => {
                         <Button className="mr-2 border-white" onClick={e => logout({ setAccessToken, setSession })}>Logout</Button>
                     </div>
                     : 
-                    <Link passHref href='/login'>
-                        <ButtonLink className="mr-2 w-20">
-                            Log In
-                        </ButtonLink>
-                    </Link>
+                    <div className="flex items-center">
+                        <Link passHref href="courses">
+                            <a className="mr-2 hover:underline">
+                                Courses
+                            </a>
+                        </Link>
+                        <Link passHref href='/login'>
+                            <ButtonLink className="mr-2 w-20">
+                                Log In
+                            </ButtonLink>
+                        </Link>
+                    </div>
                 }
             </nav>
         </header>

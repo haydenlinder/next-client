@@ -141,6 +141,7 @@ const PostForm: NextPage<Props> = ({
                 <textarea placeholder="body" className="p-2 mb-4 border border-black rounded w-full" onChange={e => setBody(e.target.value)} value={body} name="body" id="body" cols={30} rows={10} />
                 {/* photos */}
                 <DropzoneWithPreview files={files} setFiles={setFiles} />
+                <Button className="my-6">{saving ? "Saving" : "Post"}</Button>
                 <br />
                 <PostPreview preview={files.length > 0} post={post} />
                 <br />
@@ -148,7 +149,6 @@ const PostForm: NextPage<Props> = ({
                     preview={files.length > 0}
                     post={post}
                 />
-                <Button className="my-6">{saving ? "Saving" : "Post"}</Button>
             </form>
             {/* preview */}
         </div>
