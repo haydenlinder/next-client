@@ -40,7 +40,6 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta name="description" content="Learn to code online" />
         <link rel="icon" href="/favicon.ico" />
         {/* <!-- Google tag (gtag.js) --> */}
-        <Script async src="https://www.googletagmanager.com/gtag/js?id=G-4E4D0055ZT"></Script>
         {analytics()}
       </Head> 
       <div id='modal-container'></div>
@@ -62,6 +61,7 @@ const Main = ({ Component, pageProps }: Pick<AppProps, 'Component' | 'pageProps'
 
   return (
     <div id='app-scroll-container' className="flex flex-col items-center h-screen max-h-screen overflow-y-scroll bg-gradient-to-r from-blue-300 to-purple-300">
+      <Script async src="https://www.googletagmanager.com/gtag/js?id=G-4E4D0055ZT"></Script>
       <Header />
       <Component {...pageProps} />
     </div>
