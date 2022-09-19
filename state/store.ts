@@ -1,18 +1,18 @@
 import create from 'zustand'
-import { TokenPayload } from '../pages/api/session/types'
+import { SessionData } from '../pages/api/session/types'
 
 export type AppState = {
     accessToken: string | undefined
     setAccessToken: (accessToken: string | undefined) => void
-    setUser: (user: TokenPayload | undefined) => void
-    user: TokenPayload | undefined
+    session: SessionData | undefined
+    setSession: (session: SessionData | undefined) => void
 }
 
-export const useStore = create<AppState>((set) => ({
-    user: undefined,
+export let useStore = create<AppState>((set) => ({
+    session: undefined,
     accessToken: '',
-    setUser: (user) => {
-        set(() => ({ user }))
+    setSession: (session) => {
+        set(() => ({ session }))
     },
     setAccessToken: (accessToken) => {
         set(() => ({ accessToken }))

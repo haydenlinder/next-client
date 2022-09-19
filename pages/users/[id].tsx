@@ -6,7 +6,7 @@ import { GET_USER_BY_ID } from "../../graphql/users";
 import { serverClient } from "../api/apollo-client";
 import { Button } from "../../components/Button";
 import { getCookieParser } from "next/dist/server/api-utils";
-import { TokenPayload } from "../api/session/types";
+import { SessionData } from "../api/session/types";
 import jwt from 'jsonwebtoken'
 import { User } from "../../types/entities";
 
@@ -16,13 +16,13 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     const cookies = getCookieParser(req.headers)()
     const accessToken = cookies.access_token
     
-    let payload: TokenPayload | undefined;
+    let session: SessionData | undefined;
     try {
-        payload = jwt.verify(accessToken, process.env.ACCESS_SECRET!) as TokenPayload;
+        session = jwt.verify(accessToken, process.env.ACCESS_SECRET!) as SessionData;
     } catch (e) {
         console.error("auth error: ", e)
     }
-    const user_id = payload?.user_id;
+    const user_id = session?.user_id;
     
     let user: User;
     if (accessToken) {

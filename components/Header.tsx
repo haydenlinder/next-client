@@ -1,20 +1,13 @@
 import Link from "next/link"
 import { useEffect, useRef } from "react";
-import { TokenPayload } from "../pages/api/session/types";
+import { SessionData } from "../pages/api/session/types";
 import { logout } from "../pages/api/session_functions";
 import { useStore } from "../state/store";
 import { Button, ButtonLink } from "./Button";
 
-type HeaderProps = {
-    accessToken: string | undefined
-    user: TokenPayload | undefined
-}
-
-
-
 export const Header = () => {
     const ref = useRef<HTMLElement | null>(null)
-    const { setAccessToken, setUser, user, accessToken } = useStore()
+    const { setAccessToken, setSession, session, accessToken } = useStore()
     // fancy header shadow on scroll
     useEffect(() => {
         const listener = (e: Event) => {
@@ -39,17 +32,17 @@ export const Header = () => {
                 </Link>
                 {Boolean(accessToken) ?
                     <div className="flex items-center">
-                        <Link passHref href={`/users/${user?.user_id}`}>
+                        <Link passHref href={`/users/${session?.user_id}`}>
                             <a className="mr-2 hover:underline">
                                 Profile
                             </a>
                         </Link>
-                        {user?.is_admin && <Link passHref href='/admin'>
+                        {session?.is_admin && <Link passHref href='/admin'>
                             <a className="mr-2 hover:underline">
                                 Admin
                             </a>
                         </Link>}
-                        <Button className="mr-2 border-white" onClick={e => logout({ setAccessToken, setUser })}>Logout</Button>
+                        <Button className="mr-2 border-white" onClick={e => logout({ setAccessToken, setSession })}>Logout</Button>
                     </div>
                     : 
                     <Link passHref href='/login'>

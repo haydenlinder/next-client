@@ -4,8 +4,6 @@ const baseUrl = typeof window === 'undefined' ? process.env.BASE_URL : window.lo
 
 export const refresh = async (cookie?: string) => {
     const response = await fetch(baseUrl + "/api/session/refresh", cookie ? { headers: { cookie } } : undefined);
-    const data: RefreshResponse = await response.json();
-    if (response.status !== 200) return undefined
-    return data;
+    const res: RefreshResponse = await response.json();
+    return res;
 };
-

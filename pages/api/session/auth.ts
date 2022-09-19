@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import jwt from 'jsonwebtoken'
-import { TokenPayload } from './types';
+import { SessionData } from './types';
 // This is a hasura auth webhook. See https://hasura.io/docs/latest/graphql/core/auth/authentication/webhook/
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     // access token from Authorization header
@@ -13,21 +13,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         "x-hasura-role": "anon"
     });
     // Otherwise, verify the token
-    let payload: TokenPayload | undefined;
+    let session: SessionData | undefined;
     try {
-        payload = jwt.verify(access_token, process.env.ACCESS_SECRET!) as TokenPayload;
+        session = jwt.verify(access_token, process.env.ACCESS_SECRET!) as SessionData;
     } catch (e) {
         console.error("auth error: ",e)
     }
-    if (payload === undefined) return res.status(200).json({
+    if (session === undefined) return res.status(200).json({
         "x-hasura-role": "anon"
     });
     // Get the user id
     let user_id: number = -1;
     let is_admin: boolean = false;
-    if (typeof payload !== "string") {
-        user_id = payload.user_id;
-        is_admin = payload.is_admin;
+    if (typeof session !== "string") {
+        user_id = session.user_id;
+        is_admin = session.is_admin;
     }
     // admin user
     if (is_admin) return res.status(200).json({

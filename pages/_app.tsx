@@ -8,14 +8,29 @@ import { Header } from "../components/Header";
 
 import "../styles/build.css";
 import App from "next/app";
-
-
-import { TokenPayload } from "./api/session/types";
 import cookie from 'cookie'
-import jwt from 'jsonwebtoken'
 import { useEffect } from "react";
 import { useStore } from "../state/store";
+import { refresh } from "./api/next-client";
+import { logout } from "./api/session_functions";
+import Script from "next/script";
+declare global {
+  interface Window { 
+    dataLayer: {
+      push: (args: unknown) => []
+    }; 
+  }
+}
 
+const analytics = () => {
+  if (typeof window === 'undefined') return;
+  window.dataLayer = window.dataLayer || [];
+  function gtag(lang: string, id: Date | string) { window.dataLayer.push(arguments); }
+  gtag('js', new Date());
+
+  gtag('config', 'G-4E4D0055ZT');
+  return null
+}
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -24,6 +39,9 @@ function MyApp({ Component, pageProps }: AppProps) {
         <title>World Code Camp</title>
         <meta name="description" content="Learn to code online" />
         <link rel="icon" href="/favicon.ico" />
+        {/* <!-- Google tag (gtag.js) --> */}
+        <Script async src="https://www.googletagmanager.com/gtag/js?id=G-4E4D0055ZT"></Script>
+        {analytics()}
       </Head> 
       <div id='modal-container'></div>
       <Main {...{Component, pageProps}}/>
@@ -32,15 +50,14 @@ function MyApp({ Component, pageProps }: AppProps) {
 }
 
 const Main = ({ Component, pageProps }: Pick<AppProps, 'Component' | 'pageProps'>) => {
-  const {accessToken: storeToken, setAccessToken, user: storeUser, setUser} = useStore((store) => store)
-  const accessToken = pageProps.accessToken || storeToken
-  const user = pageProps.user || storeUser
-
-  client.setLink(from([errorLink, authLink(accessToken), httpLink]))
-
+  const { setAccessToken, setSession } = useStore((store) => store)
+  const accessToken = pageProps.accessToken
   useEffect(() => {
-    if (storeToken !== accessToken) setAccessToken(accessToken)
-    if (storeUser !== user) setUser(user)
+    refresh().then((r) => {
+      setAccessToken(r?.data?.access_token)
+      setSession(r?.data?.session)
+      client.setLink(from([errorLink, authLink(r?.data?.access_token || ""), httpLink]))
+    }).catch(() => logout({ setAccessToken, setSession }))
   }, [pageProps.accessToken])
 
   return (
@@ -60,39 +77,27 @@ const redirect = (res: AppContext['ctx']['res'], location: string) => {
   } else { // client
     Router.push(location)
   }
-}
+};
 
-export const sessionConditionRedirect = async (context: AppContext): Promise<AppInitialProps> => {
+MyApp.getInitialProps = async (context: AppContext): Promise<AppInitialProps> => {
   // these will be available on the server
   const { req, res } = context.ctx;
-  
+
   const path = (req?.url || context.ctx.pathname).split('?')[0] || '';
-  
+
   const isAdminRoute = (path === '/admin');
   const isLoginRoute = (path === '/login');
   const isHomeRoute = (path === '/');
-  
-  const cookies = cookie.parse(req?.headers.cookie || '');
-  const appProps = {
-    pageProps: {}
-  }
-  
-  if (typeof window !== 'undefined') return {
-    pageProps: {
-      user: undefined,
-      accessToken: undefined
-    }
-  };
 
-  let user: TokenPayload | undefined;
+  const cookies = cookie.parse(req?.headers.cookie || '');
   const accessToken = cookies.access_token
-  try {
-    user = jwt.verify(accessToken, process.env.ACCESS_SECRET!) as TokenPayload;
-  } catch (e) {
-    console.error("auth error: ", e)
-  }
+
+  const appProps = App.getInitialProps(context);
+
+  if (typeof window !== 'undefined') return appProps
+
   // logged out and requests '/admin'
-  if (!user && isAdminRoute) {
+  if (!cookies.user_id && isAdminRoute) {
     redirect(res, '/login')
     return {
       pageProps: {
@@ -101,8 +106,8 @@ export const sessionConditionRedirect = async (context: AppContext): Promise<App
       }
     }
   }
-  // logged in and requests '/login' or requests '/admin' without being an admin user
-  else if (accessToken && (isLoginRoute || isHomeRoute || (isAdminRoute && !user?.is_admin))) {
+  // logged in and requests '/login' or '/' or requests '/admin' without being an admin user
+  else if (accessToken && (isLoginRoute || isHomeRoute || (isAdminRoute && (String(false) === cookies.is_admin)))) {
     redirect(res, '/courses')
     return appProps
   }
@@ -110,12 +115,10 @@ export const sessionConditionRedirect = async (context: AppContext): Promise<App
   else return {
     pageProps: {
       accessToken,
-      user,
     },
   }
 
 }
 
-MyApp.getInitialProps = sessionConditionRedirect;
 
 export default MyApp;

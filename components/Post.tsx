@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { DELETE_POST, GET_POSTS } from "../graphql/posts";
-import { TokenPayload } from "../pages/api/session/types";
+import { SessionData } from "../pages/api/session/types";
 
 import { DeletePostMutation, DeletePostMutationVariables, GetPostsQuery, GetUserByIdQuery } from "../types/generated/graphql";
 import { Button } from "./Button";
@@ -14,15 +14,14 @@ import { Markdown } from "./Markdown";
 import PostForm from "./PostForm";
 
 type Post = GetPostsQuery['posts_connection']['edges'][0]['node']
-type User = GetUserByIdQuery['users_connection']['edges'][0]['node']
 
 type Props = {
     post: Post
-    user?: TokenPayload
+    session?: SessionData
     preview?: boolean
 }
 
-export const Post = ({ post, user, preview }: Props) => {
+export const Post = ({ post, session, preview }: Props) => {
 
     const [isEdit, setIsEdit] = useState(false)
 
@@ -41,9 +40,9 @@ export const Post = ({ post, user, preview }: Props) => {
 
     if (isEdit) return (
         <div>
-            {user && <PostForm
+            {session && <PostForm
                 originalBody={body}
-                user={user}
+                session={session}
                 originalPrice={price}
                 onAfterSave={() => setIsEdit(false)}
                 originalDescription={description}
@@ -57,8 +56,8 @@ export const Post = ({ post, user, preview }: Props) => {
 
     return (
         <div className="container flex flex-col py-36 bg-white min-h-screen">
-            {user?.is_admin && <Button className="ml-4" onClick={handleDelete}>{deleting ? "Deleting" : "Delete"}</Button>}
-            {user?.is_admin && <Button className="ml-4" onClick={e => setIsEdit(true)}>Edit</Button>}
+            {session?.is_admin && <Button className="ml-4" onClick={handleDelete}>{deleting ? "Deleting" : "Delete"}</Button>}
+            {session?.is_admin && <Button className="ml-4" onClick={e => setIsEdit(true)}>Edit</Button>}
             {/* PHOTO */}
             <div className="p-6 z-0 h-52 w-full bg-white shadow-md">
                 <div className="relative w-full h-full">

@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { DELETE_POST, GET_POSTS } from "../graphql/posts";
-import { TokenPayload } from "../pages/api/session/types";
+import { SessionData } from "../pages/api/session/types";
 
 import { DeletePostMutation, DeletePostMutationVariables, GetPostsQuery, GetUserByIdQuery } from "../types/generated/graphql";
 import { Button, ButtonLink } from "./Button";
@@ -14,12 +14,12 @@ type Post = GetPostsQuery['posts_connection']['edges'][0]['node']
 
 type Props = {
     post: Post
-    user?: TokenPayload | undefined
+    session?: SessionData | undefined
     priority?: boolean
     preview?: boolean
 }
 
-export const PostPreview = ({post, user, priority, preview}: Props) => {
+export const PostPreview = ({post, session, priority, preview}: Props) => {
 
     const [isEdit, setIsEdit] = useState(false)
 
@@ -38,9 +38,9 @@ export const PostPreview = ({post, user, priority, preview}: Props) => {
 
     if (isEdit) return (
         <div>
-            {user && <PostForm 
+            {session && <PostForm 
                 originalBody={body}
-                user={user} 
+                session={session} 
                 originalPrice={price}
                 onAfterSave={() => setIsEdit(false)} 
                 originalDescription={description}
@@ -69,8 +69,8 @@ export const PostPreview = ({post, user, priority, preview}: Props) => {
                 {/* BUTTONS */}
                 <div className="ml-4">
                     <Link passHref href={`/courses/${post.post_id}`}><ButtonLink>{post.price <= 0 ? "FREE!" : post.price}</ButtonLink></Link>
-                    {user?.is_admin &&  <Button className="my-4" onClick={handleDelete}>{deleting ? "Deleting" : "Delete"}</Button>}
-                    {user?.is_admin &&  <Button className="mb-4" onClick={e => setIsEdit(true)}>Edit</Button>}
+                    {session?.is_admin &&  <Button className="my-4" onClick={handleDelete}>{deleting ? "Deleting" : "Delete"}</Button>}
+                    {session?.is_admin &&  <Button className="mb-4" onClick={e => setIsEdit(true)}>Edit</Button>}
                 </div>
             </div>
         </div>

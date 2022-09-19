@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next"
 import jwt from 'jsonwebtoken';
 import { verifyUser } from "../apollo_functions/users";
-import { TokenPayload } from "./types";
+import { SessionData } from "./types";
 
 export type VerifyResponse = {
     data?: string;
@@ -15,7 +15,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     // Otherwise, verify the token
     let payload;
     try {
-        payload = jwt.verify(token, process.env.REFRESH_SECRET!) as TokenPayload;
+        payload = jwt.verify(token, process.env.REFRESH_SECRET!) as SessionData;
     } catch (e) {
         console.error("refresh server error: ", { e })
     }

@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next"
 import { getUserByEmail } from "../apollo_functions/users"
-import cookie from 'cookie'
-import { RefreshResponse } from "./refresh"
+import { RefreshResponse, setCookies } from "./refresh"
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<RefreshResponse>) {
     const b = JSON.parse(req.body)
@@ -38,41 +37,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         { expiresIn: '15m' }
     );
     // Add refresh token to cookies
-    res.setHeader(
-        "Set-Cookie",
-        [
-            cookie.serialize(
-                'refresh_token',
-                refresh_token,
-                {
-                    path: '/',
-                    // signed: true,
-                    httpOnly: true,
-                    // https only v
-                    secure: true,
-                    sameSite: 'none'
-                }
-            ),
-            cookie.serialize(
-                'access_token',
-                access_token,
-                {
-                    path: '/',
-                    // signed: true,
-                    httpOnly: true,
-                    // https only v
-                    secure: true,
-                    sameSite: 'none'
-                }
-            ),
-    ]
-    );
+    const cookies = {
+        refresh_token,
+        access_token,
+        user_id: String(user.user_id),
+        is_admin: String(user.is_admin)
+    }
+    setCookies(cookies, res)
     // Return access_token to be stored in memory
     return res.json({
         data: {
-            user_id: user.user_id,
             access_token,
-            is_admin: user.is_admin || false
+            refresh_token,
+            session: {
+                user_id: user.user_id,
+                is_admin: user.is_admin || false,
+                iat: Date.now(),
+                exp: Date.now() + 15 * 60_000 // 15m
+            },
         }
     });
 }

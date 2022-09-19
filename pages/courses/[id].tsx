@@ -56,7 +56,6 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({ req, param
 
 const Course: NextPage<Props> = ({ post, error }) => {
     const [isModalOpen, setIsModalOpen] = useState(error === 401)
-    console.log({ post, isModalOpen })
 
     if (!post && (!isModalOpen)) return (
         <div className="pt-36 flex flex-col items-center">
