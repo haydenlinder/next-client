@@ -24,6 +24,7 @@ const LoginForm = ({ isNewUser: isNew, onSuccess = () => null, heading = () => n
             const data = await response.json();
             if (response.status !== 200) return setError(data.errors)
         } catch (e) {
+            setError("Unexpected error")
             console.error("SIGNUP ERROR: ", e)
         }
     };
@@ -37,6 +38,7 @@ const LoginForm = ({ isNewUser: isNew, onSuccess = () => null, heading = () => n
             if (response.status !== 200) return setError(data.errors);
 
         } catch (e) {
+            setError("Unexpected error")
             console.error("LOGIN ERROR: ", e)
         }
     };
@@ -46,8 +48,8 @@ const LoginForm = ({ isNewUser: isNew, onSuccess = () => null, heading = () => n
         (
             isNewUser ? 
             signup() : 
-            login()
-        ).then(() => !error && onSuccess())
+            login().then(() => !error && onSuccess())
+        )
     }
 
     return (
