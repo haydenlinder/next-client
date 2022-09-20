@@ -6,7 +6,14 @@ import sgMail, { ResponseError } from '@sendgrid/mail';
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY || "");
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+export type SignupResponse = {
+  data?: {
+    message: string
+  },
+  errors?: string
+}
+
+export default async (req: NextApiRequest, res: NextApiResponse<SignupResponse>) => {
   const b = JSON.parse(req.body)
   // These better be available
   const {email, password} = b

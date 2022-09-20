@@ -4,6 +4,7 @@ import React, { FormEventHandler, useState } from "react";
 import { Button } from "../components/Button";
 import { Input } from "../components/Input";
 import { RefreshResponse } from "../pages/api/session/refresh";
+import { SignupResponse } from "../pages/api/session/signup";
 
 type Props = {
     isNewUser?: boolean
@@ -21,8 +22,9 @@ const LoginForm = ({ isNewUser: isNew, onSuccess = () => null, heading = () => n
         try {
             setError(undefined)
             const response = await fetch("/api/session/signup", { method: "POST", body: JSON.stringify({ email, password }) });
-            const data = await response.json();
-            if (response.status !== 200) return setError(data.errors)
+            const data: SignupResponse = await response.json();
+            if (response.status !== 200) setError(data.errors)
+            return data
         } catch (e) {
             setError("Unexpected error")
             console.error("SIGNUP ERROR: ", e)
@@ -47,7 +49,7 @@ const LoginForm = ({ isNewUser: isNew, onSuccess = () => null, heading = () => n
         e.preventDefault();
         (
             isNewUser ? 
-            signup() : 
+            signup().then(r => r && setError(r.data?.message || r.errors)) : 
             login().then(() => !error && onSuccess())
         )
     }
@@ -56,7 +58,7 @@ const LoginForm = ({ isNewUser: isNew, onSuccess = () => null, heading = () => n
         <div className="w-96">
             {heading(isNewUser)}
             <form onSubmit={handleSubmit} className="flex flex-col items-center w-96">
-                <p className="h-4 m-4 font-bold text-red-600">{error}</p>
+                <p className="h-10 m-4 font-bold text-red-600">{error}</p>
                 <Input
                     required
                     className="border border-solid rounded mb-4"
