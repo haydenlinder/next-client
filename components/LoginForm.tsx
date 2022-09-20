@@ -19,6 +19,7 @@ const LoginForm = ({ isNewUser: isNew, onSuccess = () => null, heading = () => n
 
     const signup = async () => {
         try {
+            setError(undefined)
             const response = await fetch("/api/session/signup", { method: "POST", body: JSON.stringify({ email, password }) });
             const data = await response.json();
             if (response.status !== 200) return setError(data.errors)
@@ -29,6 +30,7 @@ const LoginForm = ({ isNewUser: isNew, onSuccess = () => null, heading = () => n
 
     const login = async () => {
         try {
+            setError(undefined)
             const response = await fetch("/api/session/login", { method: "POST", body: JSON.stringify({ email, password }) });
             const data: RefreshResponse = await response.json();
 
@@ -45,7 +47,7 @@ const LoginForm = ({ isNewUser: isNew, onSuccess = () => null, heading = () => n
             isNewUser ? 
             signup() : 
             login()
-        ).then(() => onSuccess())
+        ).then(() => !error && onSuccess())
     }
 
     return (
