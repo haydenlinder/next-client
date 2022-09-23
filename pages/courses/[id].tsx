@@ -1,47 +1,49 @@
-import type { GetServerSideProps, NextPage } from "next";
+import type { GetStaticProps, NextPage } from "next";
 import {
     GetPostByIdQuery,
     GetPostByIdQueryVariables,
+    GetPostsQuery,
 } from "../../types/generated/graphql";
 import { serverClient } from "../api/apollo-client";
-import { GET_POST_BY_ID } from "../../graphql/posts";
+import { GET_POSTS, GET_POST_BY_ID } from "../../graphql/posts";
 import { Post as TPost } from "../../types/entities";
 import LoginForm from "../../components/LoginForm";
 import { H2 } from "../../components/H2";
 import { Post } from "../../components/Post";
-import { getCookieParser } from "next/dist/server/api-utils";
 import Head from "next/head";
 import Modal from 'react-modal'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { WithContext, Course } from "schema-dts";
+import { useStore } from "../../state/store";
 
 type Props = { post?: TPost | null, error?: number }
 
-export const getServerSideProps: GetServerSideProps<Props> = async ({ req, params }) => {
-    const accessToken = getCookieParser(req.headers)().access_token
+export async function getStaticPaths() {
+    const { data } = await serverClient.query<GetPostsQuery>({
+        query: GET_POSTS
+    })
+    const ids = data.posts_connection.edges.map(e => e.node.post_id)
+    return {
+        paths: ids.map(id => `/courses/${id}`),
+        fallback: true,
+    }
+}
 
+export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
     let post: TPost | null = null
 
-    // if (accessToken) {
-        const { data } = await serverClient.query<GetPostByIdQuery, GetPostByIdQueryVariables>({
-            query: GET_POST_BY_ID,
-            variables: {
-                post_id: {
-                    _eq: Number(params?.id)
-                }
-            },
-            context: { headers: { 'x-hasura-admin-secret': process.env.HASURA_ADMIN_SECRET } }
-        });
-        post = data.posts_connection.edges[0]?.node || null
-    // } 
-    if (!accessToken) {
-        return {
-            props: {
-                error: 401,
-                post: post
+    const { data } = await serverClient.query<GetPostByIdQuery, GetPostByIdQueryVariables>({
+        query: GET_POST_BY_ID,
+        variables: {
+            post_id: {
+                _eq: Number(params?.id)
             }
-        }
-    }
+        },
+        context: { headers: { 'x-hasura-admin-secret': process.env.HASURA_ADMIN_SECRET } }
+    });
+
+    post = data.posts_connection.edges[0]?.node || null
+
     if (!post) return ({
         props: {
             error: 404
@@ -55,7 +57,12 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({ req, param
 }
 
 const Course: NextPage<Props> = ({ post, error }) => {
-    const [isModalOpen, setIsModalOpen] = useState(error === 401)
+    const { session } = useStore()
+    const [isModalOpen, setIsModalOpen] = useState(!session)
+
+    useEffect(() => {
+        setIsModalOpen(!session)
+    }, [session])
 
     if (!post && (!isModalOpen)) return (
         <div className="pt-36 flex flex-col items-center">

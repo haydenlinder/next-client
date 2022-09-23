@@ -1,50 +1,25 @@
-import type { GetServerSideProps, NextPage } from "next";
+import type { NextPage } from "next";
 import {
     GetUserByIdQuery, GetUserByIdQueryVariables,
 } from "../../types/generated/graphql";
 import { GET_USER_BY_ID } from "../../graphql/users";
-import { serverClient } from "../api/apollo-client";
 import { Button } from "../../components/Button";
-import { getCookieParser } from "next/dist/server/api-utils";
-import { SessionData } from "../api/session/types";
-import jwt from 'jsonwebtoken'
-import { User } from "../../types/entities";
+import { useStore } from "../../state/store";
+import { useQuery } from "@apollo/client";
 
-type Props = { user: User }
+const User: NextPage = () => {
+    const { session } = useStore()
 
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-    const cookies = getCookieParser(req.headers)()
-    const accessToken = cookies.access_token
-    
-    let session: SessionData | undefined;
-    try {
-        session = jwt.verify(accessToken, process.env.ACCESS_SECRET!) as SessionData;
-    } catch (e) {
-        console.error("auth error: ", e)
-    }
-    const user_id = session?.user_id;
-    
-    let user: User;
-    if (accessToken) {
-        const { data } = await serverClient.query<GetUserByIdQuery, GetUserByIdQueryVariables>({
-            query: GET_USER_BY_ID,
+    const { data } = useQuery<GetUserByIdQuery, GetUserByIdQueryVariables>(
+        GET_USER_BY_ID,
+        {
             variables: {
-                _eq: user_id
+                _eq: session?.user_id
             },
-            context: { headers: { authorization: `Bearer ${accessToken}` } }
-        });
-        user = data.users_connection.edges[0].node
-    }
-
-    return ({
-        props: {
-            user
         }
-    })
-}
+    );
 
-
-const User: NextPage<Props> = ({ user }) => {
+    const user = data?.users_connection.edges[0].node
 
     if (!user) return <div>User Not Found</div>
 

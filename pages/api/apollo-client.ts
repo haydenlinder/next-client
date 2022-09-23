@@ -21,11 +21,16 @@ export const authLink = (token: string) => new ApolloLink((operation, forward) =
   return forward(operation);
 });
 
+const adminLink = new ApolloLink((operation, forward) => {
+  operation.setContext({ headers: { "x-hasura-admin-secret": process.env.HASURA_ADMIN_SECRET || "" } });
+  return forward(operation);
+});
+
 export const serverClient = new ApolloClient({
   cache: new InMemoryCache({
     resultCaching: false
   }),
-  link: from([errorLink, httpLink])
+  link: from([errorLink, adminLink, httpLink]),
 });
 
 const client = new ApolloClient({

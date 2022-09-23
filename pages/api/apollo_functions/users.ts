@@ -1,8 +1,6 @@
-import { GetServerSidePropsContext, NextApiRequest } from "next"
 import { CREATE_USER, GET_USERS, GET_USER_BY_EMAIL, GET_USER_BY_ID, VERIFY_USER } from "../../../graphql/users"
 import { CreateUserMutation, CreateUserMutationVariables, GetUserByEmailQuery, GetUserByEmailQueryVariables, GetUserByIdQuery, GetUserByIdQueryVariables, GetUsersPaginatedQuery, GetUsersPaginatedQueryResult, VerifyUserMutation, VerifyUserMutationVariables } from "../../../types/generated/graphql"
 import client, { serverClient } from "../apollo-client"
-import { refresh } from "../next-client"
 
 export const getUserById = async (id: string | undefined) => {
     return await client.query<

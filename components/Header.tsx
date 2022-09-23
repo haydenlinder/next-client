@@ -46,7 +46,7 @@ export const Header = () => {
                     </div>
                     : 
                     <div className="flex items-center">
-                        <Link passHref href="courses">
+                        <Link passHref href="/courses">
                             <a className="mr-2 hover:underline">
                                 Courses
                             </a>

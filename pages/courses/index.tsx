@@ -1,4 +1,4 @@
-import type { GetServerSideProps, NextPage } from "next";
+import type { GetStaticProps, NextPage } from "next";
 import {
     GetPostsQuery,
 } from "../../types/generated/graphql";
@@ -14,7 +14,7 @@ type Props = {
     posts: GetPostsQuery['posts_connection']['edges'][0]['node'][]
 }
 
-export const getServerSideProps: GetServerSideProps<Props> = async ({ req }) => {
+export const getStaticProps: GetStaticProps<Props> = async ({  }) => {
     const { data } = await serverClient.query<GetPostsQuery>({
         query: GET_POSTS,
         context: { headers: { 'x-hasura-admin-secret': process.env.HASURA_ADMIN_SECRET } }
