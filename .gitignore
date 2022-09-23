@@ -38,3 +38,4 @@ yarn-error.log*
 # drafts
 
 /draft.md
+/test.sh

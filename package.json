@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "npm run tailwind:build && next build",
+    "build": "npm run tailwind:build && next build && next export",
     "start": "next start",
     "lint": "next lint",
     "tailwind:build": "touch ./styles/build.css && tailwindcss -o ./styles/build.css --minify",
