@@ -50,14 +50,14 @@ function MyApp({ Component, pageProps }: AppProps) {
 
 const Main = ({ Component, pageProps }: Pick<AppProps, 'Component' | 'pageProps'>) => {
   const { setAccessToken, setSession } = useStore((store) => store)
-  const accessToken = pageProps.accessToken
+  
   useEffect(() => {
     refresh().then((r) => {
       setAccessToken(r?.data?.access_token)
       setSession(r?.data?.session)
       client.setLink(from([errorLink, authLink(r?.data?.access_token || ""), httpLink]))
     }).catch(() => logout({ setAccessToken, setSession }))
-  }, [pageProps.accessToken])
+  }, [])
 
   return (
     <div id='app-scroll-container' className="flex flex-col items-center h-screen max-h-screen overflow-y-scroll bg-gradient-to-r from-blue-300 to-purple-300">
@@ -67,58 +67,5 @@ const Main = ({ Component, pageProps }: Pick<AppProps, 'Component' | 'pageProps'
     </div>
   )
 }
-
-const redirect = (res: AppContext['ctx']['res'], location: string) => {
-  if (res) { // server
-    res.writeHead(302, {
-      Location: location
-    }).end();
-
-  } else { // client
-    Router.push(location)
-  }
-};
-
-MyApp.getInitialProps = async (context: AppContext): Promise<AppInitialProps> => {
-  // these will be available on the server
-  const { req, res } = context.ctx;
-
-  const path = (req?.url || context.ctx.pathname).split('?')[0] || '';
-
-  const isAdminRoute = (path === '/admin');
-  const isLoginRoute = (path === '/login');
-  const isHomeRoute = (path === '/');
-
-  const cookies = cookie.parse(req?.headers.cookie || '');
-  const accessToken = cookies.access_token
-
-  const appProps = App.getInitialProps(context);
-
-  if (typeof window !== 'undefined') return appProps
-
-  // logged out and requests '/admin'
-  if (!cookies.user_id && isAdminRoute) {
-    redirect(res, '/login')
-    return {
-      pageProps: {
-        user: undefined,
-        accessToken: undefined
-      }
-    }
-  }
-  // logged in and requests '/login' or '/' or requests '/admin' without being an admin user
-  else if (accessToken && (isLoginRoute || isHomeRoute || (isAdminRoute && (String(false) === cookies.is_admin)))) {
-    redirect(res, '/courses')
-    return appProps
-  }
-  // they are in the right place
-  else return {
-    pageProps: {
-      accessToken,
-    },
-  }
-
-}
-
 
 export default MyApp;

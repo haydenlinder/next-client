@@ -5,6 +5,7 @@ import { Button } from "../components/Button";
 import { Input } from "../components/Input";
 import { RefreshResponse } from "../pages/api/session/refresh";
 import { SignupResponse } from "../pages/api/session/signup";
+import { useStore } from "../state/store";
 
 type Props = {
     isNewUser?: boolean
@@ -13,6 +14,7 @@ type Props = {
 }
 
 const LoginForm = ({ isNewUser: isNew, onSuccess = () => null, heading = () => null}: Props) => {
+    const { setSession, setAccessToken } = useStore()
     const [isNewUser, setIsNewUser] = useState(isNew || false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -38,7 +40,8 @@ const LoginForm = ({ isNewUser: isNew, onSuccess = () => null, heading = () => n
             const data: RefreshResponse = await response.json();
 
             if (response.status !== 200) return setError(data.errors);
-
+            setSession(data.data?.session)
+            setAccessToken(data.data?.access_token)
         } catch (e) {
             setError("Unexpected error")
             console.error("LOGIN ERROR: ", e)
