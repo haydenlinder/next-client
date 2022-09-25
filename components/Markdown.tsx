@@ -3,7 +3,6 @@ import vscDarkPlus from 'react-syntax-highlighter/dist/cjs/styles/prism/vsc-dark
 // import ReactMarkdown from "react-markdown";
 import { H1 } from './H1';
 import { H2 } from './H2';
-import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
 
 
@@ -15,6 +14,7 @@ type Props = {
 export const Markdown = ({ body }: Props) => {
     const [content, setContent] = useState(<>Loading</>)
     useEffect(() => {
+        if (typeof window === undefined) return;
         import('react-markdown').then(({ default: ReactMarkdown }) => {
             setContent(
                 <ReactMarkdown
