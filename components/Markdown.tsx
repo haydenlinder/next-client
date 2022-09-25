@@ -2,11 +2,9 @@ import { H1 } from './H1';
 import { H2 } from './H2';
 import { useEffect, useState } from 'react';
 
-
 type Props = {
     body: string
 }
-
 
 export const Markdown = ({ body }: Props) => {
     const [content, setContent] = useState(<>Loading</>)
@@ -17,8 +15,8 @@ export const Markdown = ({ body }: Props) => {
             import('react-markdown'),
             import('react-syntax-highlighter'),
         ]).then(([
-            {default: vscDarkPlus},
-            {default: ReactMarkdown},
+            { default: vscDarkPlus },
+            { default: ReactMarkdown },
             { default: SyntaxHighlighter }
         ]) => {
             setContent(
