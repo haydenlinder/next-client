@@ -1,5 +1,3 @@
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import vscDarkPlus from 'react-syntax-highlighter/dist/cjs/styles/prism/vsc-dark-plus';
 import { H1 } from './H1';
 import { H2 } from './H2';
 import { useEffect, useState } from 'react';
@@ -14,7 +12,15 @@ export const Markdown = ({ body }: Props) => {
     const [content, setContent] = useState(<>Loading</>)
     useEffect(() => {
         if (typeof window === undefined) return;
-        import('react-markdown').then(({ default: ReactMarkdown }) => {
+        Promise.all([
+            import('react-syntax-highlighter/dist/cjs/styles/prism/vsc-dark-plus'),
+            import('react-markdown'),
+            import('react-syntax-highlighter'),
+        ]).then(([
+            {default: vscDarkPlus},
+            {default: ReactMarkdown},
+            { default: SyntaxHighlighter }
+        ]) => {
             setContent(
                 <ReactMarkdown
                     className="my-2 whitespace-pre-wrap"
@@ -58,7 +64,8 @@ export const Markdown = ({ body }: Props) => {
                 >{body}</ReactMarkdown>
             )
         })
-    })
+    }); 
+
     return (
         content
     )
