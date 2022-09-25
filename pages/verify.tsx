@@ -31,9 +31,12 @@ const Verify: NextPage = () => {
 
     if (loading) return <div className="pt-36">Loading...</div>
     if (error) return <p className="pt-36">error</p>
-        
+
+    typeof window !== undefined && window.gtag('config', 'AW-10993707250')
+    
     return (
         <section className="pt-36">
+            {}
             <h1>Success!</h1>
             <Link href="/login" passHref><ButtonLink>Log In</ButtonLink></Link>
         </section>

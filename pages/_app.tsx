@@ -12,22 +12,14 @@ import { refresh } from "./api/next-client";
 import { logout } from "./api/session_functions";
 import App from "next/app";
 import Router from "next/router";
-
-declare global {
-  interface Window { 
-    dataLayer: {
-      push: (args: unknown) => []
-    }; 
-  }
-}
+import '../globals'
 
 const analytics = () => {
   if (typeof window === 'undefined') return;
   window.dataLayer = window.dataLayer || [];
-  function gtag(lang: string, id: Date | string) { window.dataLayer.push(arguments); }
-  gtag('js', new Date());
+  window.gtag('js', new Date());
 
-  gtag('config', 'G-4E4D0055ZT');
+  window.gtag('config', 'G-4E4D0055ZT');
   return null
 }
 
