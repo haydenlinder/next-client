@@ -1,8 +1,7 @@
 import { NextPage } from "next";
 import Link from "next/link";
-import Router from "next/router";
 import { useEffect, useState } from "react";
-import { Button, ButtonLink } from "../components/Button";
+import { ButtonLink } from "../components/Button";
 import { VerifyResponse } from "./api/session/verify";
 
 const verify = async () => {

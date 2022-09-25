@@ -43,8 +43,6 @@ function MyApp({ Component, pageProps }: AppProps) {
         <title>World Code Camp</title>
         <meta name="description" content="Learn to code online" />
         <link rel="icon" href="/favicon.ico" />
-        {/* <!-- Google tag (gtag.js) --> */}
-        {analytics()}
       </Head> 
       <div id='modal-container'></div>
       <Main {...{Component, pageProps}}/>
@@ -57,16 +55,25 @@ const Main = ({ Component, pageProps }: Pick<AppProps, 'Component' | 'pageProps'
 
   useEffect(() => {
     setAccessToken(pageProps.accessToken)
-    // refresh().then((r) => {
-    //   setAccessToken(r?.data?.access_token)
-    //   setSession(r?.data?.session)
-    //   client.setLink(from([errorLink, authLink(r?.data?.access_token || ""), httpLink]))
-    // }).catch(() => logout({ setAccessToken, setSession }))
+    refresh().then((r) => {
+      setAccessToken(r?.data?.access_token)
+      setSession(r?.data?.session)
+      client.setLink(from([errorLink, authLink(r?.data?.access_token || ""), httpLink]))
+    }).catch(() => logout({ setAccessToken, setSession }))
   }, [pageProps.accessToken])
+
+  useEffect(() => {
+    const script = document.createElement('script')
+    script.src = "https://www.googletagmanager.com/gtag/js?id=G-4E4D0055ZT"
+    script.async = true
+    script.defer = true
+    script.onload = analytics
+    document.body.append(script)
+  }, [])
 
   return (
     <div id='app-scroll-container' className="flex flex-col items-center h-screen max-h-screen overflow-y-scroll bg-gradient-to-r from-blue-300 to-purple-300">
-      <Script async defer src="https://www.googletagmanager.com/gtag/js?id=G-4E4D0055ZT"></Script>
+      {/* <Script async defer src="https://www.googletagmanager.com/gtag/js?id=G-4E4D0055ZT"></Script> */}
       <Header />
       <Component {...pageProps} />
     </div>
