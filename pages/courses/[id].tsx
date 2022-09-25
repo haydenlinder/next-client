@@ -57,12 +57,12 @@ export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
 }
 
 const Course: NextPage<Props> = ({ post, error }) => {
-    const { session } = useStore()
+    const { accessToken } = useStore()
     const [isModalOpen, setIsModalOpen] = useState(false)
 
     useEffect(() => {
-        setIsModalOpen(!session)
-    }, [session])
+        setIsModalOpen(!accessToken)
+    }, [accessToken])
 
     if (!post && (!isModalOpen)) return (
         <div className="pt-36 flex flex-col items-center">
