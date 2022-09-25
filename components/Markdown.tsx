@@ -10,7 +10,7 @@ type Props = {
     body: string
 }
 //@ts-ignore-error
-const ReactMarkdown = dynamic(() => import('react-markdown').then(m => m.default), {
+const ReactMarkdown = dynamic(import('react-markdown').then(m => m.default), {
     ssr: false,
     loading: () => <>Loading...</>,
 });
