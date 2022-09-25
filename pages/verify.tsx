@@ -32,8 +32,11 @@ const Verify: NextPage = () => {
     if (loading) return <div className="pt-36">Loading...</div>
     if (error) return <p className="pt-36">error</p>
 
-    typeof window !== undefined && window.gtag('config', 'AW-10993707250')
-    
+    if (typeof window !== "undefined") {
+        window.gtag('config', 'AW-10993707250');
+        window.gtag('event', 'conversion', {'send_to': 'AW-10993707250/re80COKluuEDEPLRmvoo'});
+    }
+
     return (
         <section className="pt-36">
             {}
