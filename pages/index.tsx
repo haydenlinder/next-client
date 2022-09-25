@@ -10,6 +10,7 @@ const jsonLd: WithContext<Organization> = {
   "@context": "https://schema.org",
   "@type": "Organization",
   "name": "World Code Camp",
+  "description": "Learn to code online. Our coding classes will teach you the fundamentals of programming and software without the pricetag of a traditional bootcamp.",
   "url": "https://www.worldcodecamp.com",
   "logo": "https://www.worldcodecamp.com/favicon.ico"
 } 
