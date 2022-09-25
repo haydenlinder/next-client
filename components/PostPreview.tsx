@@ -6,7 +6,7 @@ import { DELETE_POST, GET_POSTS } from "../graphql/posts";
 import { SessionData } from "../pages/api/session/types";
 import { useStore } from "../state/store";
 
-import { DeletePostMutation, DeletePostMutationVariables, GetPostsQuery, GetUserByIdQuery } from "../types/generated/graphql";
+import { DeletePostMutation, DeletePostMutationVariables, GetPostsQuery } from "../types/generated/graphql";
 import { Button, ButtonLink } from "./Button";
 import { H2 } from "./H2";
 import PostForm from "./PostForm";

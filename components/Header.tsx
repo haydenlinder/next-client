@@ -1,6 +1,5 @@
 import Link from "next/link"
 import { useEffect, useRef } from "react";
-import { SessionData } from "../pages/api/session/types";
 import { logout } from "../pages/api/session_functions";
 import { useStore } from "../state/store";
 import { Button, ButtonLink } from "./Button";
