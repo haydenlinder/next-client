@@ -21,7 +21,7 @@ type Props = {
     preview?: boolean
 }
 
-const MD = dynamic(import('./Markdown').then(m => m.Markdown), {
+const MD = dynamic<{ body: string }>(import('./Markdown').then(m => m.Markdown), {
     loading: () => <>Loading...</>,
 })
 
