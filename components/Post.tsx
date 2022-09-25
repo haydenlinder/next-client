@@ -9,8 +9,6 @@ import { SessionData } from "../pages/api/session/types";
 import { DeletePostMutation, DeletePostMutationVariables, GetPostsQuery, GetUserByIdQuery } from "../types/generated/graphql";
 import { Button } from "./Button";
 import { H1 } from "./H1";
-import { H2 } from "./H2";
-import { Markdown } from "./Markdown";
 import PostForm from "./PostForm";
 import dynamic from 'next/dynamic'
 type Post = GetPostsQuery['posts_connection']['edges'][0]['node']
