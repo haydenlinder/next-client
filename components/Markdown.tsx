@@ -1,6 +1,5 @@
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import vscDarkPlus from 'react-syntax-highlighter/dist/cjs/styles/prism/vsc-dark-plus';
-// import ReactMarkdown from "react-markdown";
 import { H1 } from './H1';
 import { H2 } from './H2';
 import { useEffect, useState } from 'react';
