@@ -15,7 +15,7 @@ import Router from "next/router";
 
 const analytics = () => {
   if (typeof window === 'undefined') return;
-  window.gtag = window.dataLayer.push(arguments)
+  window.gtag = function() {window.dataLayer.push(arguments)}
   window.dataLayer = window.dataLayer || [];
   window.gtag('js', new Date());
 
