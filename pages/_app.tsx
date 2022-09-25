@@ -13,6 +13,7 @@ import { logout } from "./api/session_functions";
 import Script from "next/script";
 import App from "next/app";
 import Router from "next/router";
+
 declare global {
   interface Window { 
     dataLayer: {
@@ -29,6 +30,10 @@ const analytics = () => {
 
   gtag('config', 'G-4E4D0055ZT');
   return null
+}
+
+export function reportWebVitals(metric: unknown) {
+  console.log(metric)
 }
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -49,14 +54,14 @@ function MyApp({ Component, pageProps }: AppProps) {
 
 const Main = ({ Component, pageProps }: Pick<AppProps, 'Component' | 'pageProps'>) => {
   const { setAccessToken, setSession } = useStore((store) => store)
-  
+
   useEffect(() => {
     setAccessToken(pageProps.accessToken)
-    refresh().then((r) => {
-      setAccessToken(r?.data?.access_token)
-      setSession(r?.data?.session)
-      client.setLink(from([errorLink, authLink(r?.data?.access_token || ""), httpLink]))
-    }).catch(() => logout({ setAccessToken, setSession }))
+    // refresh().then((r) => {
+    //   setAccessToken(r?.data?.access_token)
+    //   setSession(r?.data?.session)
+    //   client.setLink(from([errorLink, authLink(r?.data?.access_token || ""), httpLink]))
+    // }).catch(() => logout({ setAccessToken, setSession }))
   }, [pageProps.accessToken])
 
   return (
