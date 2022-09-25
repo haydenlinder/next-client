@@ -8,7 +8,7 @@ import { DeletePostMutation, DeletePostMutationVariables, GetPostsQuery, GetUser
 import { Button } from "./Button";
 import { H1 } from "./H1";
 import PostForm from "./PostForm";
-import dynamic from 'next/dynamic'
+// import dynamic from 'next/dynamic'
 type Post = GetPostsQuery['posts_connection']['edges'][0]['node']
 
 type Props = {
@@ -17,9 +17,9 @@ type Props = {
     preview?: boolean
 }
 
-const MD = dynamic<{ body: string }>(import('./Markdown').then(m => m.Markdown), {
-    loading: () => <>Loading...</>,
-})
+// const MD = dynamic<{ body: string }>(import('./Markdown').then(m => m.Markdown), {
+//     loading: () => <>Loading...</>,
+// })
 
 export const Post = ({ post, session, preview }: Props) => {
 
@@ -68,7 +68,8 @@ export const Post = ({ post, session, preview }: Props) => {
                 <H1>{post.title}</H1>
             </div>
             <div className="p-6">
-                <MD {...{ body }} />
+                {/* <MD {...{ body }} /> */}
+                {body}
             </div>
         </div>
     )
