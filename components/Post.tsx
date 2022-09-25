@@ -12,7 +12,7 @@ import { H1 } from "./H1";
 import { H2 } from "./H2";
 import { Markdown } from "./Markdown";
 import PostForm from "./PostForm";
-
+import dynamic from 'next/dynamic'
 type Post = GetPostsQuery['posts_connection']['edges'][0]['node']
 
 type Props = {
@@ -20,6 +20,10 @@ type Props = {
     session?: SessionData
     preview?: boolean
 }
+
+const MD = dynamic(import('./Markdown').then(m => m.Markdown), {
+    loading: () => <>Loading...</>,
+})
 
 export const Post = ({ post, session, preview }: Props) => {
 
@@ -68,7 +72,7 @@ export const Post = ({ post, session, preview }: Props) => {
                 <H1>{post.title}</H1>
             </div>
             <div className="p-6">
-                <Markdown {...{ body }} />
+                <MD {...{ body }} />
             </div>
         </div>
     )

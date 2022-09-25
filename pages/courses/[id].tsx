@@ -58,7 +58,7 @@ export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
 
 const Course: NextPage<Props> = ({ post, error }) => {
     const { session } = useStore()
-    const [isModalOpen, setIsModalOpen] = useState(!session)
+    const [isModalOpen, setIsModalOpen] = useState(false)
 
     useEffect(() => {
         setIsModalOpen(!session)
