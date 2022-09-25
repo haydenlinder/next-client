@@ -12,7 +12,6 @@ import { refresh } from "./api/next-client";
 import { logout } from "./api/session_functions";
 import App from "next/app";
 import Router from "next/router";
-import '../globals'
 
 const analytics = () => {
   if (typeof window === 'undefined') return;
