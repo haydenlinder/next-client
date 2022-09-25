@@ -31,10 +31,6 @@ const analytics = () => {
   return null
 }
 
-export function reportWebVitals(metric: unknown) {
-  console.log(metric)
-}
-
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ApolloProvider client={client}>
