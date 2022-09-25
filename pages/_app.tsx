@@ -63,12 +63,16 @@ const Main = ({ Component, pageProps }: Pick<AppProps, 'Component' | 'pageProps'
   }, [pageProps.accessToken])
 
   useEffect(() => {
-    const script = document.createElement('script')
-    script.src = "https://www.googletagmanager.com/gtag/js?id=G-4E4D0055ZT"
-    script.async = true
-    script.defer = true
-    script.onload = analytics
-    document.body.append(script)
+    if (document.getElementById('gtag')) return;
+    setTimeout(() => {
+      const script = document.createElement('script')
+      script.src = "https://www.googletagmanager.com/gtag/js?id=G-4E4D0055ZT"
+      script.async = true
+      script.defer = true
+      script.id = 'gtag'
+      script.onload = analytics
+      document.body.append(script)
+    }, 5000)
   }, [])
 
   return (
