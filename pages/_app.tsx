@@ -10,7 +10,6 @@ import { useEffect } from "react";
 import { useStore } from "../state/store";
 import { refresh } from "./api/next-client";
 import { logout } from "./api/session_functions";
-import Script from "next/script";
 import App from "next/app";
 import Router from "next/router";
 
@@ -77,7 +76,6 @@ const Main = ({ Component, pageProps }: Pick<AppProps, 'Component' | 'pageProps'
 
   return (
     <div id='app-scroll-container' className="flex flex-col items-center h-screen max-h-screen overflow-y-scroll bg-gradient-to-r from-blue-300 to-purple-300">
-      {/* <Script async defer src="https://www.googletagmanager.com/gtag/js?id=G-4E4D0055ZT"></Script> */}
       <Header />
       <Component {...pageProps} />
     </div>
