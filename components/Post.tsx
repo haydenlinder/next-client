@@ -1,8 +1,6 @@
 import { useMutation } from "@apollo/client";
 import Image from "next/image";
-import Link from "next/link";
 import { useState } from "react";
-import ReactMarkdown from "react-markdown";
 import { DELETE_POST, GET_POSTS } from "../graphql/posts";
 import { SessionData } from "../pages/api/session/types";
 

@@ -5,13 +5,11 @@ import { useDropzone } from "react-dropzone";
 import { CREATE_POST, GET_POSTS, UPDATE_POST } from "../graphql/posts";
 import { FileResponse } from "../pages/api/images/upload";
 import { SessionData } from "../pages/api/session/types";
-import { User } from "../types/entities";
 import { CreatePostMutation, CreatePostMutationVariables, UpdatePostMutation, UpdatePostMutationVariables } from "../types/generated/graphql";
 import { Button } from "./Button";
 import { H1 } from "./H1";
 import { Input } from "./Input";
 
-import { Markdown } from "./Markdown";
 import { Post } from "./Post";
 import { PostPreview } from "./PostPreview";
 
