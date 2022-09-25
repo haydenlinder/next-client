@@ -49,7 +49,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
 const Main = ({ Component, pageProps }: Pick<AppProps, 'Component' | 'pageProps'>) => {
   const { setAccessToken, setSession } = useStore((store) => store)
-  console.log({pageProps})
+  
   useEffect(() => {
     setAccessToken(pageProps.accessToken)
     refresh().then((r) => {
@@ -61,7 +61,7 @@ const Main = ({ Component, pageProps }: Pick<AppProps, 'Component' | 'pageProps'
 
   return (
     <div id='app-scroll-container' className="flex flex-col items-center h-screen max-h-screen overflow-y-scroll bg-gradient-to-r from-blue-300 to-purple-300">
-      <Script async src="https://www.googletagmanager.com/gtag/js?id=G-4E4D0055ZT"></Script>
+      <Script async defer src="https://www.googletagmanager.com/gtag/js?id=G-4E4D0055ZT"></Script>
       <Header />
       <Component {...pageProps} />
     </div>
