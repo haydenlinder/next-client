@@ -7,4 +7,3 @@ interface Window {
 }
 
 
-window.gtag = window.dataLayer.push(arguments)
