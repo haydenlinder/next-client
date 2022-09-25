@@ -41,7 +41,7 @@ export default async (req: NextApiRequest, res: NextApiResponse<SignupResponse>)
     from: `noreply@${process.env.EMAIL_DOMAIN}`, 
     subject: 'Please verify your email',
     text: `Please use this link to verify your email: ${process.env.BASE_URL}/verify?${params.toString()}`,
-    html: `<p>Please <a href="${process.env.BASE_URL}/verify?token=${token}">verify your email.</a></p>`,
+    html: `<p>Please <a href="${process.env.BASE_URL}/verify?token=${token}" target="_blank" rel="noopener noreferrer">verify your email.</a></p>`,
   };
 
   try {
