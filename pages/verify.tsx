@@ -30,7 +30,7 @@ const Verify: NextPage = () => {
     }, []);
 
     let gtag: any;
-    if (typeof window !== undefined) gtag = window.gtag
+    if (typeof window !== 'undefined') gtag = window.gtag
 
     useEffect(() => {
         if (loading || error) return;
