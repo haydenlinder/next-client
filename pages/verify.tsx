@@ -40,7 +40,7 @@ const Verify: NextPage = () => {
     const convert = () => {
         if (typeof window === "undefined") return
         // ads conversion
-        window.gtag('event', 'conversion', {'send_to': 'AW-10993707250/re80COKluuEDEPLRmvoo'});
+        gtag && gtag('event', 'conversion', {'send_to': 'AW-10993707250/re80COKluuEDEPLRmvoo'});
     }
 
     if (loading) return <div className="pt-36">Loading...</div>
