@@ -33,7 +33,7 @@ const Verify: NextPage = () => {
     if (error) return <p className="pt-36">error</p>
 
     if (typeof window !== "undefined") {
-        window.gtag('config', 'AW-10993707250');
+        // ads conversion
         window.gtag('event', 'conversion', {'send_to': 'AW-10993707250/re80COKluuEDEPLRmvoo'});
     }
 

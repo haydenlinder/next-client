@@ -18,8 +18,10 @@ const analytics = () => {
   window.gtag = function() {window.dataLayer.push(arguments)}
   window.dataLayer = window.dataLayer || [];
   window.gtag('js', new Date());
-
+  // analytics
   window.gtag('config', 'G-4E4D0055ZT');
+  // ads
+  window.gtag('config', 'AW-10993707250');
   return null
 }
 
