@@ -29,13 +29,19 @@ const Verify: NextPage = () => {
         })();
     }, []);
 
-    if (loading) return <div className="pt-36">Loading...</div>
-    if (error) return <p className="pt-36">error</p>
+    useEffect(() => {
+        if (loading || error) return;
+        convert()
+    }, [loading, error])
 
-    if (typeof window !== "undefined") {
+    const convert = () => {
+        if (typeof window === "undefined") return
         // ads conversion
         window.gtag('event', 'conversion', {'send_to': 'AW-10993707250/re80COKluuEDEPLRmvoo'});
     }
+
+    if (loading) return <div className="pt-36">Loading...</div>
+    if (error) return <p className="pt-36">error</p>
 
     return (
         <section className="pt-36">
