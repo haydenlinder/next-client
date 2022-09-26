@@ -29,10 +29,13 @@ const Verify: NextPage = () => {
         })();
     }, []);
 
+    let gtag: any;
+    if (typeof window !== undefined) gtag = window.gtag
+
     useEffect(() => {
         if (loading || error) return;
-        convert()
-    }, [loading, error])
+        gtag && convert()
+    }, [loading, error, gtag])
 
     const convert = () => {
         if (typeof window === "undefined") return
