@@ -13,16 +13,28 @@ import { logout } from "./api/session_functions";
 import App from "next/app";
 import Router from "next/router";
 
-const analytics = () => {
-  if (typeof window === 'undefined') return;
-  window.gtag = function() {window.dataLayer.push(arguments)}
-  window.dataLayer = window.dataLayer || [];
-  window.gtag('js', new Date());
-  // analytics
-  window.gtag('config', 'G-4E4D0055ZT');
-  // ads
-  window.gtag('config', 'AW-10993707250');
-  return null
+
+export const analytics = () => {
+  const init = () => {
+    if (typeof window === 'undefined') return;
+    window.gtag = function() {window.dataLayer.push(arguments)}
+    window.dataLayer = window.dataLayer || [];
+    window.gtag('js', new Date());
+    // analytics
+    window.gtag('config', 'G-4E4D0055ZT');
+    // ads
+    window.gtag('config', 'AW-10993707250');
+  }
+  if (document.getElementById('gtag')) return;
+  setTimeout(() => {
+    const script = document.createElement('script')
+    script.src = "https://www.googletagmanager.com/gtag/js?id=G-4E4D0055ZT"
+    script.async = true
+    script.defer = true
+    script.id = 'gtag'
+    script.onload = init
+    document.body.append(script)
+  })
 }
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -52,16 +64,7 @@ const Main = ({ Component, pageProps }: Pick<AppProps, 'Component' | 'pageProps'
   }, [pageProps.accessToken])
 
   useEffect(() => {
-    if (document.getElementById('gtag')) return;
-    setTimeout(() => {
-      const script = document.createElement('script')
-      script.src = "https://www.googletagmanager.com/gtag/js?id=G-4E4D0055ZT"
-      script.async = true
-      script.defer = true
-      script.id = 'gtag'
-      script.onload = analytics
-      document.body.append(script)
-    }, 5000)
+    analytics()
   }, [])
 
   return (

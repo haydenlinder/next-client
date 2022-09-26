@@ -48,7 +48,6 @@ const Verify: NextPage = () => {
 
     return (
         <section className="pt-36">
-            {}
             <h1>Success!</h1>
             <Link href="/login" passHref><ButtonLink>Log In</ButtonLink></Link>
         </section>
