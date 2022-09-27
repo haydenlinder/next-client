@@ -238,6 +238,7 @@ export type Posts = Node & {
   created_at: Scalars['timestamptz'];
   description: Scalars['String'];
   id: Scalars['ID'];
+  is_blog: Scalars['Boolean'];
   photo_url?: Maybe<Scalars['String']>;
   post_id: Scalars['Int'];
   price: Scalars['numeric'];
@@ -269,6 +270,7 @@ export type Posts_Bool_Exp = {
   body?: InputMaybe<String_Comparison_Exp>;
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   description?: InputMaybe<String_Comparison_Exp>;
+  is_blog?: InputMaybe<Boolean_Comparison_Exp>;
   photo_url?: InputMaybe<String_Comparison_Exp>;
   post_id?: InputMaybe<Int_Comparison_Exp>;
   price?: InputMaybe<Numeric_Comparison_Exp>;
@@ -296,6 +298,7 @@ export type Posts_Insert_Input = {
   body?: InputMaybe<Scalars['String']>;
   created_at?: InputMaybe<Scalars['timestamptz']>;
   description?: InputMaybe<Scalars['String']>;
+  is_blog?: InputMaybe<Scalars['Boolean']>;
   photo_url?: InputMaybe<Scalars['String']>;
   post_id?: InputMaybe<Scalars['Int']>;
   price?: InputMaybe<Scalars['numeric']>;
@@ -326,6 +329,7 @@ export type Posts_Order_By = {
   body?: InputMaybe<Order_By>;
   created_at?: InputMaybe<Order_By>;
   description?: InputMaybe<Order_By>;
+  is_blog?: InputMaybe<Order_By>;
   photo_url?: InputMaybe<Order_By>;
   post_id?: InputMaybe<Order_By>;
   price?: InputMaybe<Order_By>;
@@ -349,6 +353,8 @@ export enum Posts_Select_Column {
   /** column name */
   Description = 'description',
   /** column name */
+  IsBlog = 'is_blog',
+  /** column name */
   PhotoUrl = 'photo_url',
   /** column name */
   PostId = 'post_id',
@@ -367,6 +373,7 @@ export type Posts_Set_Input = {
   body?: InputMaybe<Scalars['String']>;
   created_at?: InputMaybe<Scalars['timestamptz']>;
   description?: InputMaybe<Scalars['String']>;
+  is_blog?: InputMaybe<Scalars['Boolean']>;
   photo_url?: InputMaybe<Scalars['String']>;
   post_id?: InputMaybe<Scalars['Int']>;
   price?: InputMaybe<Scalars['numeric']>;
@@ -383,6 +390,8 @@ export enum Posts_Update_Column {
   CreatedAt = 'created_at',
   /** column name */
   Description = 'description',
+  /** column name */
+  IsBlog = 'is_blog',
   /** column name */
   PhotoUrl = 'photo_url',
   /** column name */
@@ -648,6 +657,7 @@ export type CreatePostMutationVariables = Exact<{
   user_id?: InputMaybe<Scalars['Int']>;
   photo_url?: InputMaybe<Scalars['String']>;
   price?: InputMaybe<Scalars['numeric']>;
+  is_blog?: InputMaybe<Scalars['Boolean']>;
 }>;
 
 
@@ -658,7 +668,7 @@ export type GetPostsQueryVariables = Exact<{
 }>;
 
 
-export type GetPostsQuery = { __typename?: 'query_root', posts_connection: { __typename?: 'postsConnection', edges: Array<{ __typename?: 'postsEdge', cursor: string, node: { __typename?: 'posts', photo_url?: string | null, title: string, description: string, price: any, created_at: any, id: string, body: string, post_id: number, updated_at?: any | null } }> } };
+export type GetPostsQuery = { __typename?: 'query_root', posts_connection: { __typename?: 'postsConnection', edges: Array<{ __typename?: 'postsEdge', cursor: string, node: { __typename?: 'posts', photo_url?: string | null, is_blog: boolean, title: string, description: string, price: any, created_at: any, id: string, body: string, post_id: number, updated_at?: any | null } }> } };
 
 export type DeletePostMutationVariables = Exact<{
   post_id?: InputMaybe<Scalars['Int']>;
@@ -674,6 +684,7 @@ export type UpdatePostMutationVariables = Exact<{
   photo_url?: InputMaybe<Scalars['String']>;
   price?: InputMaybe<Scalars['numeric']>;
   title?: InputMaybe<Scalars['String']>;
+  is_blog?: InputMaybe<Scalars['Boolean']>;
 }>;
 
 
@@ -684,7 +695,7 @@ export type GetPostByIdQueryVariables = Exact<{
 }>;
 
 
-export type GetPostByIdQuery = { __typename?: 'query_root', posts_connection: { __typename?: 'postsConnection', edges: Array<{ __typename?: 'postsEdge', node: { __typename?: 'posts', body: string, created_at: any, description: string, id: string, photo_url?: string | null, post_id: number, price: any, title: string, updated_at?: any | null } }> } };
+export type GetPostByIdQuery = { __typename?: 'query_root', posts_connection: { __typename?: 'postsConnection', edges: Array<{ __typename?: 'postsEdge', node: { __typename?: 'posts', body: string, created_at: any, description: string, id: string, photo_url?: string | null, post_id: number, price: any, title: string, updated_at?: any | null, is_blog: boolean } }> } };
 
 export type GetUsersPaginatedQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']>;
@@ -732,9 +743,9 @@ export type DeleteUserMutation = { __typename?: 'mutation_root', delete_users_by
 
 
 export const CreatePostDocument = gql`
-    mutation createPost($body: String = "", $description: String = "", $title: String = "", $user_id: Int = 10, $photo_url: String = "", $price: numeric = 0) {
+    mutation createPost($body: String = "", $description: String = "", $title: String = "", $user_id: Int = 10, $photo_url: String = "", $price: numeric = 0, $is_blog: Boolean = false) {
   insert_posts_one(
-    object: {body: $body, user_id: $user_id, photo_url: $photo_url, title: $title, description: $description, price: $price}
+    object: {body: $body, user_id: $user_id, photo_url: $photo_url, title: $title, description: $description, price: $price, is_blog: $is_blog}
   ) {
     id
   }
@@ -753,6 +764,7 @@ export const GetPostsDocument = gql`
     edges {
       node {
         photo_url
+        is_blog
         title
         description
         price
@@ -779,10 +791,10 @@ export type DeletePostMutationFn = Apollo.MutationFunction<DeletePostMutation, D
 export type DeletePostMutationResult = Apollo.MutationResult<DeletePostMutation>;
 export type DeletePostMutationOptions = Apollo.BaseMutationOptions<DeletePostMutation, DeletePostMutationVariables>;
 export const UpdatePostDocument = gql`
-    mutation updatePost($post_id: Int = 10, $body: String = "", $description: String = "", $photo_url: String = "", $price: numeric = 0, $title: String = "") {
+    mutation updatePost($post_id: Int = 10, $body: String = "", $description: String = "", $photo_url: String = "", $price: numeric = 0, $title: String = "", $is_blog: Boolean = false) {
   update_posts_by_pk(
     pk_columns: {post_id: $post_id}
-    _set: {body: $body, description: $description, photo_url: $photo_url, price: $price, title: $title}
+    _set: {body: $body, description: $description, photo_url: $photo_url, price: $price, title: $title, is_blog: $is_blog}
   ) {
     post_id
   }
@@ -805,6 +817,7 @@ export const GetPostByIdDocument = gql`
         price
         title
         updated_at
+        is_blog
       }
     }
   }

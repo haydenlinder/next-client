@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client";
 
 export const CREATE_POST = gql`
-    mutation createPost($body: String = "", $description: String = "", $title: String = "", $user_id: Int = 10, $photo_url: String = "", $price: numeric = 0) {
-        insert_posts_one(object: {body: $body, user_id: $user_id, photo_url: $photo_url, title: $title, description: $description, price: $price}) {
+    mutation createPost($body: String = "", $description: String = "", $title: String = "", $user_id: Int = 10, $photo_url: String = "", $price: numeric = 0, $is_blog: Boolean = false) {
+        insert_posts_one(object: {body: $body, user_id: $user_id, photo_url: $photo_url, title: $title, description: $description, price: $price, is_blog: $is_blog}) {
             id
         }
     }
@@ -14,6 +14,7 @@ export const GET_POSTS = gql`
             edges {
                 node {
                     photo_url
+                    is_blog
                     title
                     description
                     price
@@ -38,8 +39,8 @@ export const DELETE_POST = gql`
 `;
 
 export const UPDATE_POST = gql`
-    mutation updatePost($post_id: Int = 10, $body: String = "", $description: String = "", $photo_url: String = "", $price: numeric = 0, $title: String = "") {
-        update_posts_by_pk(pk_columns: {post_id: $post_id}, _set: {body: $body, description: $description, photo_url: $photo_url, price: $price, title: $title}) {
+    mutation updatePost($post_id: Int = 10, $body: String = "", $description: String = "", $photo_url: String = "", $price: numeric = 0, $title: String = "", $is_blog: Boolean = false) {
+        update_posts_by_pk(pk_columns: {post_id: $post_id}, _set: {body: $body, description: $description, photo_url: $photo_url, price: $price, title: $title, is_blog: $is_blog}) {
             post_id
         }
     }
@@ -59,6 +60,7 @@ export const GET_POST_BY_ID = gql`
                     price
                     title
                     updated_at
+                    is_blog
                 }
             }
         }

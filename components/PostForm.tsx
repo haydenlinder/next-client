@@ -57,6 +57,7 @@ const PostForm: NextPage<Props> = ({
     const [title, setTitle] = useState(originalTitle || "");
     const [price, setPrice] = useState(originalPrice || "");
     const [files, setFiles] = useState<FilePreview[]>([]);
+    const [isBlog, setIsBlog] = useState(false);
 
     const [savePost, { loading: saving }] = useMutation<CreatePostMutation, CreatePostMutationVariables>(CREATE_POST, {
         refetchQueries: [
@@ -81,6 +82,7 @@ const PostForm: NextPage<Props> = ({
                     price,
                     user_id: session?.user_id,
                     photo_url: imageKeys[0],
+                    is_blog: isBlog
                 }
             });
         } catch (e) {
@@ -98,6 +100,7 @@ const PostForm: NextPage<Props> = ({
                     description,
                     title,
                     photo_url: imageKeys[0] || originalPhoto,
+                    is_blog: isBlog
                 }
             });
         } catch (e) {
@@ -119,7 +122,8 @@ const PostForm: NextPage<Props> = ({
         created_at: Date.now(),
         id: "1eserkjh4.mnasdfw==",
         body,
-        post_id: 1
+        post_id: 1,
+        is_blog: isBlog
     }
 
     return (
@@ -132,6 +136,11 @@ const PostForm: NextPage<Props> = ({
                 {/* description */}
                 <label htmlFor="description">Description</label>
                 <textarea placeholder="description" className="p-2 border border-black rounded w-full" onChange={e => setDescription(e.target.value)} value={description} name="description" id="description" cols={30} rows={5} />
+                {/* blog? */}
+                <label htmlFor="blog" className="mr-4">Blog?</label>
+                <input type="checkbox" className="p-8 border border-black rounded" onChange={e => setIsBlog(e.target.checked)} value={description} name="blog" id="blog" />
+                <br />
+                {/* price */}
                 <label htmlFor="price">Price</label>
                 <Input placeholder="price" onChange={e => setPrice(e.target.value)} value={price} name="price" id="price" />
                 {/* body */}
@@ -221,6 +230,12 @@ function DropzoneWithPreview({ setFiles, files }: DropzoneProps) {
 
     const thumbs = files.map((file) => (
         <div style={{ ...thumb }} key={file.name}>
+            <button onClick={() => {
+                setFiles(files => {
+                    URL.revokeObjectURL(file.preview)
+                    return files.filter(f => f.preview !== file.preview)
+                })
+            }}>X</button>
             <div style={thumbInner}>
                 <img src={file.preview} style={img} />
             </div>
