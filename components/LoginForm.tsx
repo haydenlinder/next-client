@@ -61,7 +61,7 @@ const LoginForm = ({ isNewUser: isNew, onSuccess = () => null, heading = () => n
         <div className="w-96">
             {heading(isNewUser)}
             <form onSubmit={handleSubmit} className="flex flex-col items-center w-96">
-                <p className="m-4 font-bold text-red-600">{error}</p>
+                <p className="text-center m-4 font-bold text-red-600">{error}</p>
                 <Input
                     required
                     className="border border-solid rounded mb-4"
