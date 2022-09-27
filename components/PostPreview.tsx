@@ -69,7 +69,7 @@ export const PostPreview = ({post, priority, preview}: Props) => {
                 </div>
                 {/* BUTTONS */}
                 <div className="ml-4">
-                    <Link passHref href={`/courses/${post.post_id}`}><ButtonLink>{post.is_blog ? "Read" : post.price <= 0 ? "FREE!" : post.price}</ButtonLink></Link>
+                    <Link passHref href={`/blog/${post.post_id}`}><ButtonLink>{post.is_blog ? "Read" : post.price <= 0 ? "FREE!" : post.price}</ButtonLink></Link>
                     {session?.is_admin &&  <Button className="my-4" onClick={handleDelete}>{deleting ? "Deleting" : "Delete"}</Button>}
                     {session?.is_admin &&  <Button className="mb-4" onClick={e => setIsEdit(true)}>Edit</Button>}
                 </div>
