@@ -665,6 +665,7 @@ export type CreatePostMutation = { __typename?: 'mutation_root', insert_posts_on
 
 export type GetPostsQueryVariables = Exact<{
   _gte?: InputMaybe<Scalars['Int']>;
+  is_blog?: InputMaybe<Boolean_Comparison_Exp>;
 }>;
 
 
@@ -755,11 +756,11 @@ export type CreatePostMutationFn = Apollo.MutationFunction<CreatePostMutation, C
 export type CreatePostMutationResult = Apollo.MutationResult<CreatePostMutation>;
 export type CreatePostMutationOptions = Apollo.BaseMutationOptions<CreatePostMutation, CreatePostMutationVariables>;
 export const GetPostsDocument = gql`
-    query getPosts($_gte: Int = 0) {
+    query getPosts($_gte: Int = 0, $is_blog: Boolean_comparison_exp = {_eq: false}) {
   posts_connection(
     first: 10
     order_by: {post_id: asc}
-    where: {post_id: {_gte: $_gte}}
+    where: {post_id: {_gte: $_gte}, is_blog: $is_blog}
   ) {
     edges {
       node {

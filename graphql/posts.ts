@@ -9,8 +9,8 @@ export const CREATE_POST = gql`
 `;
 
 export const GET_POSTS = gql`
-    query getPosts($_gte: Int = 0) {
-        posts_connection(first: 10, order_by: {post_id: asc}, where: {post_id: {_gte: $_gte}}) {
+    query getPosts($_gte: Int = 0, $is_blog: Boolean_comparison_exp = {_eq: false}) {
+        posts_connection(first: 10, order_by: {post_id: asc}, where: {post_id: {_gte: $_gte}, is_blog: $is_blog}) {
             edges {
                 node {
                     photo_url
@@ -24,7 +24,7 @@ export const GET_POSTS = gql`
                     post_id
                     updated_at
                 }
-            cursor
+                cursor
             }
         }
     }
