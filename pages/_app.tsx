@@ -13,6 +13,8 @@ import { logout } from "./api/session_functions";
 import App from "next/app";
 import Router from "next/router";
 
+import '../styles/global.css'
+
 
 export const analytics = () => {
   const init = () => {
