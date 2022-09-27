@@ -83,4 +83,12 @@ export const VERIFY_USER = gql`
       user_id
     }
   }
+`;
+
+export const DELETE_USER = gql`
+  mutation deleteUser($user_id: Int = 10) {
+    delete_users_by_pk(user_id: $user_id) {
+      id
+    }
+  }
 `

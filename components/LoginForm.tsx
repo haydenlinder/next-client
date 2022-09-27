@@ -15,10 +15,11 @@ type Props = {
 
 const LoginForm = ({ isNewUser: isNew, onSuccess = () => null, heading = () => null}: Props) => {
     const { setSession, setAccessToken } = useStore()
-    const [isNewUser, setIsNewUser] = useState(isNew || false);
+    const [isNewUser, setIsNewUser] = useState<boolean>(isNew || true);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState<undefined | string>(undefined);
+    const [loading, setLoading] = useState(false);
 
     const signup = async () => {
         try {
@@ -34,32 +35,35 @@ const LoginForm = ({ isNewUser: isNew, onSuccess = () => null, heading = () => n
     };
 
     const login = async () => {
-        try {
-            setError(undefined)
-            const response = await fetch("/api/session/login", { method: "POST", body: JSON.stringify({ email, password }) });
-            const data: RefreshResponse = await response.json();
+        setError(undefined)
+        const response = await fetch("/api/session/login", { method: "POST", body: JSON.stringify({ email, password }) });
+        const data: RefreshResponse = await response.json();
 
-            if (response.status !== 200) return setError(data.errors);
-            setSession(data.data?.session)
-            setAccessToken(data.data?.access_token)
-        } catch (e) {
-            setError("Unexpected error")
-            console.error("LOGIN ERROR: ", e)
-        }
+        if (response.status !== 200) throw setError(data.errors);
+        setSession(data.data?.session)
+        setAccessToken(data.data?.access_token)
     };
 
     const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
         e.preventDefault();
-        (
+        setLoading(true);
+        await (
             isNewUser ? 
             signup().then(r => r && setError(r.data?.message || r.errors)) : 
             login().then(() => !error && onSuccess())
-        )
+        ).catch(e => console.log(e))
+        setLoading(false)
+    }
+
+    const handleSwitch = () => {
+        setError(undefined)
+        setIsNewUser(bool => !bool)
     }
 
     return (
         <div className="w-96">
             {heading(isNewUser)}
+            {isNewUser && <p className="text-center text-2xl">Delete your account any time</p>}
             <form onSubmit={handleSubmit} className="flex flex-col items-center w-96">
                 <p className="text-center m-4 font-bold text-red-600">{error}</p>
                 <Input
@@ -77,12 +81,13 @@ const LoginForm = ({ isNewUser: isNew, onSuccess = () => null, heading = () => n
                     onChange={e => setPassword(e.target.value)}
                 />
                 <Button className="my-4">
-                    {isNewUser ? "Get Started" : "Log In"}
+
+                    {loading ? "loading" : isNewUser ? "Get Started" : "Log In"}
                 </Button>
             </form>
             <Button
                 secondary
-                onClick={() => setIsNewUser(bool => !bool)}
+                onClick={handleSwitch}
             >
                 Switch to {isNewUser ? `Login` : `Signup`}
             </Button>

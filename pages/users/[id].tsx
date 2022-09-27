@@ -1,14 +1,17 @@
 import type { NextPage } from "next";
 import {
+    DeleteUserMutation,
+    DeleteUserMutationVariables,
     GetUserByIdQuery, GetUserByIdQueryVariables,
 } from "../../types/generated/graphql";
-import { GET_USER_BY_ID } from "../../graphql/users";
+import { DELETE_USER, GET_USER_BY_ID } from "../../graphql/users";
 import { Button } from "../../components/Button";
 import { useStore } from "../../state/store";
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
+import { logout } from "../api/session_functions";
 
 const User: NextPage = () => {
-    const { session } = useStore()
+    const { session, setSession, setAccessToken } = useStore()
 
     const { data } = useQuery<GetUserByIdQuery, GetUserByIdQueryVariables>(
         GET_USER_BY_ID,
@@ -18,8 +21,22 @@ const User: NextPage = () => {
             },
         }
     );
+    
+    const [deleteUser, { loading: deleting }] = useMutation<DeleteUserMutation, DeleteUserMutationVariables>(
+        DELETE_USER,
+        {
+            variables: {
+                user_id: session?.user_id
+            }
+        }
+    )
 
-    const user = data?.users_connection.edges[0].node
+    const handleDelete = async () => {
+        await deleteUser();
+        logout({ setAccessToken, setSession })
+    }
+
+    const user = data?.users_connection.edges[0]?.node
 
     if (!user) return <div>User Not Found</div>
 
@@ -30,9 +47,8 @@ const User: NextPage = () => {
                 <div>email: {user.email}</div>
                 <div>joined: {user.created_at}</div>
                 <Button className="mt-6">Edit</Button>
-                <Button className="mt-36" secondary>Delete Acount</Button>
+                <Button onClick={handleDelete} className="mt-36" secondary>{deleting ? "Deleting..." : "Delete Acount"}</Button>
             </div>
-
         </section>
     );
 };

@@ -723,6 +723,13 @@ export type VerifyUserMutationVariables = Exact<{
 
 export type VerifyUserMutation = { __typename?: 'mutation_root', update_users_by_pk?: { __typename?: 'users', is_verified: boolean, email: string, id: string, user_id: number } | null };
 
+export type DeleteUserMutationVariables = Exact<{
+  user_id?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type DeleteUserMutation = { __typename?: 'mutation_root', delete_users_by_pk?: { __typename?: 'users', id: string } | null };
+
 
 export const CreatePostDocument = gql`
     mutation createPost($body: String = "", $description: String = "", $title: String = "", $user_id: Int = 10, $photo_url: String = "", $price: numeric = 0) {
@@ -897,3 +904,13 @@ export const VerifyUserDocument = gql`
 export type VerifyUserMutationFn = Apollo.MutationFunction<VerifyUserMutation, VerifyUserMutationVariables>;
 export type VerifyUserMutationResult = Apollo.MutationResult<VerifyUserMutation>;
 export type VerifyUserMutationOptions = Apollo.BaseMutationOptions<VerifyUserMutation, VerifyUserMutationVariables>;
+export const DeleteUserDocument = gql`
+    mutation deleteUser($user_id: Int = 10) {
+  delete_users_by_pk(user_id: $user_id) {
+    id
+  }
+}
+    `;
+export type DeleteUserMutationFn = Apollo.MutationFunction<DeleteUserMutation, DeleteUserMutationVariables>;
+export type DeleteUserMutationResult = Apollo.MutationResult<DeleteUserMutation>;
+export type DeleteUserMutationOptions = Apollo.BaseMutationOptions<DeleteUserMutation, DeleteUserMutationVariables>;
