@@ -62,10 +62,12 @@ const Courses: NextPage<Props> = ({ posts }) => {
                 />
                 <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
             </Head>
-            <section className="w-full py-20 container pb-36">
+            <section className="w-full py-20 container pb-36 flex flex-col items-center">
                 <H1 className="mb-10 text-center">Courses</H1>
                 {loading && <div>loading...</div>}
-                {(clientPosts || posts)?.map((post, i) => <PostPreview priority={i == 0} key={post.id} post={post} />)}
+                <div className="grid auto-rows-fr md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {(clientPosts || posts)?.map((post, i) => <PostPreview priority={i == 0} key={post.id} post={post} />)}
+                </div>
             </section>
         </>
     );

@@ -54,7 +54,7 @@ export const PostPreview = ({post, priority, preview}: Props) => {
     )
 
     return (
-        <div className="flex flex-col max-w-sm w-full items-center rounded min-h-fit mb-4 drop-shadow-2xl">
+        <div className="flex flex-col max-w-sm w-full items-center rounded min-h-fit drop-shadow-2xl">
             {/* PHOTO */}
             <div className="z-0 h-52 rounded-t w-full bg-white shadow-md">
                 <div className="relative w-full h-full">
@@ -62,7 +62,7 @@ export const PostPreview = ({post, priority, preview}: Props) => {
                 </div>
             </div>
             {/* POST INFO */}
-            <div className="w-full flex min-h-[200px] justify-between items-center bg-white p-10">
+            <div className="w-full flex flex-1 min-h-[200px] justify-between items-center bg-white p-10">
                 <div>
                     <H2>{post.title}</H2>
                     <p>{post.description}</p>
