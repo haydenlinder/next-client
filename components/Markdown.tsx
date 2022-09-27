@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import vscDarkPlus from 'react-syntax-highlighter/dist/cjs/styles/prism/vsc-dark-plus'
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
+import remarkGfm from 'remark-gfm'
 
 type Props = {
     body: string
@@ -15,6 +16,7 @@ export const Markdown = ({ body }: Props) => {
     return (
         <ReactMarkdown
             className="my-2 whitespace-pre-wrap"
+            remarkPlugins={[remarkGfm]}
             components={{
                 h1: ({ node, className, ...props }) => {
                     const id = typeof props.children?.[0] === 'string' ? props.children?.[0]?.split(" ").join('-') : ''
