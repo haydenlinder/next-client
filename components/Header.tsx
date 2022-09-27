@@ -36,6 +36,11 @@ export const Header = () => {
                                 Profile
                             </a>
                         </Link>
+                        <Link passHref href="/blog">
+                            <a className="mr-2 hover:underline">
+                                Blog
+                            </a>
+                        </Link>
                         {session?.is_admin && <Link passHref href='/admin'>
                             <a className="mr-2 hover:underline">
                                 Admin
@@ -48,6 +53,11 @@ export const Header = () => {
                         <Link passHref href="/courses">
                             <a className="mr-2 hover:underline">
                                 Courses
+                            </a>
+                        </Link>
+                        <Link passHref href="/blog">
+                            <a className="mr-2 hover:underline">
+                                Blog
                             </a>
                         </Link>
                         <Link passHref href='/login'>
