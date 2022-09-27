@@ -53,13 +53,13 @@ export const Post = ({ post, session, preview }: Props) => {
     )
 
     return (
-        <div className="container flex flex-col py-36 bg-white min-h-screen">
+        <div className="container flex flex-col mt-36 bg-white min-h-screen">
             {session?.is_admin && <Button className="ml-4" onClick={handleDelete}>{deleting ? "Deleting" : "Delete"}</Button>}
             {session?.is_admin && <Button className="ml-4" onClick={e => setIsEdit(true)}>Edit</Button>}
             {/* PHOTO */}
             <div className="z-0 h-96 w-full bg-white shadow-md">
                 <div className="relative w-full h-full">
-                    {post.photo_url && <Image priority className=" p-6" src={!preview ? `/api/images/${post.photo_url}` : post.photo_url} alt="" layout="fill" objectFit='cover' />}
+                    {post.photo_url && <Image priority className=" p-6" src={!preview ? `/api/images/${post.photo_url}` : post.photo_url} alt="" layout="fill" objectFit={post.is_blog ? 'cover' : "scale-down"} />}
                 </div>
             </div>
             <div className="p-6 bg-gradient-to-r from-blue-200 to-purple-200">

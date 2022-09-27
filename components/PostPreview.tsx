@@ -58,7 +58,7 @@ export const PostPreview = ({post, priority, preview}: Props) => {
             {/* PHOTO */}
             <div className="z-0 h-52 rounded-t w-full bg-white shadow-md">
                 <div className="relative w-full h-full">
-                    {post.photo_url && <Image className="rounded-t" priority={priority} src={!preview ? `/api/images/${post.photo_url}`: post.photo_url} alt="" layout="fill" objectFit="cover" />}
+                    {post.photo_url && <Image className="rounded-t" priority={priority} src={!preview ? `/api/images/${post.photo_url}`: post.photo_url} alt="" layout="fill" objectFit={post.is_blog ? "cover" : "scale-down"} />}
                 </div>
             </div>
             {/* POST INFO */}
