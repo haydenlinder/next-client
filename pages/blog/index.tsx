@@ -51,6 +51,13 @@ const Courses: NextPage<Props> = ({ posts }) => {
                 "position": i+1,
                 "item": {
                     "@type": "Article",
+                    "author": {
+                        "@type": "Person",
+                        "name": "Hayden Linder",
+                        "jobTitle": "Web Developer"
+                    },
+                    "headline": post.title,
+                    "image": `${process.env.BASE_URL}/api/images/${post.photo_url}`,
                     "url": `https://www.worldcodecamp.com/blog/${post.post_id}`,
                     "name": post.title,
                     "description": post.description,

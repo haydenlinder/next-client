@@ -13,7 +13,6 @@ import { H2 } from "../../components/H2";
 import { Post } from "../../components/Post";
 import Head from "next/head";
 import Modal from 'react-modal'
-import { useEffect, useState } from "react";
 import { WithContext, Article } from "schema-dts";
 import { useStore } from "../../state/store";
 
@@ -74,12 +73,19 @@ const Course: NextPage<Props> = ({ post, error }) => {
     const jsonLd: WithContext<Article> = {
         "@context": "https://schema.org",
         "@type": "Article",
+        "author": {
+            "@type": "Person",
+            "name": "Hayden Linder",
+            "jobTitle": "Web Developer"
+        },
+        "headline": post.title,
+        "image": `${process.env.BASE_URL}/api/images/${post.photo_url}`,
         "name": post?.title,
         "description": post?.description,
         "provider": {
             "@type": "Organization",
             "name": "World Code Camp",
-            "sameAs": "http://www.worldcodecamp.com"
+            "sameAs": "https://www.worldcodecamp.com"
         }
     }
 
