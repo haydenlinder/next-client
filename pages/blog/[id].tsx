@@ -76,10 +76,11 @@ const Course: NextPage<Props> = ({ post, error }) => {
         "author": {
             "@type": "Person",
             "name": "Hayden Linder",
-            "jobTitle": "Web Developer"
+            "jobTitle": "Web Developer",
+            "url": "http://haydenlinder.com"
         },
         "headline": post.title,
-        "image": `${process.env.BASE_URL}/api/images/${post.photo_url}`,
+        "image": `/api/images/${post.photo_url}`,
         "name": post?.title,
         "description": post?.description,
         "provider": {
