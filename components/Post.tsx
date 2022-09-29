@@ -53,7 +53,7 @@ export const Post = ({ post, session, preview }: Props) => {
     )
 
     return (
-        <div className="container flex flex-col mt-36 bg-white min-h-screen">
+        <div className="container flex flex-col mt-36 pb-96 bg-white min-h-screen">
             {session?.is_admin && <Button className="ml-4" onClick={handleDelete}>{deleting ? "Deleting" : "Delete"}</Button>}
             {session?.is_admin && <Button className="ml-4" onClick={e => setIsEdit(true)}>Edit</Button>}
             {/* PHOTO */}
